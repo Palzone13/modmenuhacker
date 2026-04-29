@@ -895,6 +895,55 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     {name:'disable all CSS',desc:'Remove all stylesheets from page',tag:'page',code:`document.querySelectorAll('link[rel="stylesheet"],style').forEach(s=>s.remove())`},
     {name:'asteroids 3D',desc:'Fullscreen 3D asteroid shooter overlay — ESC to quit',tag:'game',toggle:true,
       run:(el2)=>{const on=!!asteroidOverlay;launchAsteroids();el2.classList.toggle('mm-cmd-on',!on);el2.querySelector('.mm-ctag').textContent=!on?'PLAYING':'#game';el2.querySelector('.mm-cdesc').textContent=!on?'Running — ESC or click again to quit':'Fullscreen 3D asteroid shooter overlay — ESC to quit';}},
+    // ── dom ──
+    {name:'show all passwords',desc:'Reveal all password input fields as plain text',tag:'dom',code:`document.querySelectorAll('input[type="password"]').forEach(i=>{i.type='text'});alert('Passwords revealed')`},
+    {name:'click all checkboxes',desc:'Check every checkbox on the page',tag:'dom',code:`document.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(c=>c.click())`},
+    {name:'remove all popups',desc:'Remove fixed/sticky overlays and modals',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if((s.position==='fixed'||s.position==='sticky')&&e!==document.getElementById('__modmenu__'))e.remove()})`},
+    {name:'remove cookie banners',desc:'Nuke common cookie consent banners',tag:'dom',code:`['cookie','consent','gdpr','banner','popup','overlay','modal'].forEach(w=>document.querySelectorAll('[id*="'+w+'"],[class*="'+w+'"]').forEach(e=>{if(e!==document.getElementById('__modmenu__'))e.remove()}))`},
+    {name:'show hidden elements',desc:'Make all hidden elements visible',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if(s.display==='none'||s.visibility==='hidden'||s.opacity==='0')e.style.cssText+='display:block!important;visibility:visible!important;opacity:1!important'})`},
+    {name:'dump all links',desc:'Log every hyperlink href to console',tag:'dom',code:`Array.from(document.querySelectorAll('a[href]')).forEach(a=>console.log(a.href));alert('Logged '+document.querySelectorAll('a[href]').length+' links — check browser console')`},
+    {name:'dump all images',desc:'Log every image src to console',tag:'dom',code:`Array.from(document.images).forEach(i=>console.log(i.src));alert('Logged '+document.images.length+' images')`},
+    {name:'outline all elements',desc:'Draw a coloured outline around every DOM element',tag:'dom',code:`document.querySelectorAll('*').forEach((e,i)=>{e.style.outline='1px solid hsl('+(i*37%360)+',80%,55%)'})`},
+    {name:'remove all outlines',desc:'Strip all inline outlines added by debug tools',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>e.style.outline='')`},
+    {name:'freeze page',desc:'Disable all pointer events — page becomes unclickable',tag:'dom',code:`document.body.style.pointerEvents='none';alert('Page frozen — refresh to undo')`},
+    // ── nav ──
+    {name:'go back',desc:'Navigate to previous page in history',tag:'nav',code:`history.back()`},
+    {name:'go forward',desc:'Navigate forward in history',tag:'nav',code:`history.forward()`},
+    {name:'copy page title',desc:'Copy the current page title to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.title).then(()=>alert('Copied: '+document.title))`},
+    {name:'copy all text',desc:'Copy the entire visible page text to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.body.innerText).then(()=>alert('Page text copied'))`},
+    {name:'print page',desc:'Open the browser print dialog',tag:'nav',code:`window.print()`},
+    // ── net ──
+    {name:'block all images',desc:'Intercept future image requests and block them',tag:'net',code:`const _o=window.open;const s=document.createElement('style');s.textContent='img{display:none!important}';document.head.appendChild(s);alert('Images blocked')`},
+    {name:'dump network timing',desc:'Log resource load times to console',tag:'net',code:`performance.getEntriesByType('resource').sort((a,b)=>b.duration-a.duration).slice(0,20).forEach(r=>console.log(r.duration.toFixed(0)+'ms',r.name));alert('Top 20 slowest resources logged')`},
+    {name:'intercept XHR',desc:'Patch XMLHttpRequest to log all requests',tag:'net',code:`const _open=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u,...a){console.log('[XHR]',m,u);return _open.call(this,m,u,...a)};alert('XHR patched')`},
+    // ── storage ──
+    {name:'dump localStorage JSON',desc:'Pretty-print all localStorage to console',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch{d[k]=localStorage.getItem(k)}}console.log(JSON.stringify(d,null,2));alert('localStorage dumped to console')`},
+    {name:'backup localStorage',desc:'Copy localStorage as JSON to clipboard',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch{d[k]=localStorage.getItem(k)}}navigator.clipboard.writeText(JSON.stringify(d,null,2)).then(()=>alert('Backup copied to clipboard'))`},
+    {name:'clear all cookies',desc:'Expire every cookie on the current domain',tag:'storage',code:`document.cookie.split(';').forEach(c=>{const k=c.split('=')[0].trim();document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname});alert('Cookies cleared')`},
+    // ── page ──
+    {name:'focus mode',desc:'Dim everything except the element you hover over',tag:'page',toggle:true,
+      run:(el2)=>{
+        const on=!!document.getElementById('__focus_style__');
+        if(on){document.getElementById('__focus_style__').remove();document.getElementById('__focus_overlay__')?.remove();el2.classList.remove('mm-cmd-on');el2.querySelector('.mm-ctag').textContent='#page';return;}
+        const s=document.createElement('style');s.id='__focus_style__';
+        s.textContent='.__focus_dim__{opacity:.08!important;transition:opacity .2s} .__focus_bright__{outline:2px solid #22d3ee!important}';
+        document.head.appendChild(s);
+        document.addEventListener('mouseover',function fn(e){if(document.getElementById('__modmenu__').contains(e.target))return;document.querySelectorAll('.__focus_dim__').forEach(x=>x.classList.remove('__focus_dim__'));document.querySelectorAll('*').forEach(x=>{if(x!==e.target&&!x.contains(e.target)&&!e.target.contains(x))x.classList.add('__focus_dim__');});});
+        el2.classList.add('mm-cmd-on');el2.querySelector('.mm-ctag').textContent='ON';
+        log('Focus mode ON — hover elements to highlight','i');
+      }
+    },
+    {name:'reading mode',desc:'Strip page to just main text content',tag:'page',code:`const main=document.querySelector('article,main,[role="main"],.post,.entry-content')||document.body;const clone=main.cloneNode(true);document.body.innerHTML='';document.body.style.cssText='max-width:720px;margin:40px auto;padding:20px;font:18px/1.7 Georgia,serif;color:#111;background:#fff';document.body.appendChild(clone)`},
+    {name:'night mode',desc:'Dark background, light text, low contrast',tag:'page',code:`document.body.style.cssText+='background:#111!important;color:#ccc!important;filter:brightness(.85)'`},
+    {name:'sepia mode',desc:'Apply warm sepia tone to the page',tag:'page',code:`document.body.style.filter='sepia(0.7) brightness(0.95)'`},
+    {name:'font size up',desc:'Increase all text size by 20%',tag:'page',code:`document.body.style.fontSize=(parseFloat(getComputedStyle(document.body).fontSize||'16')*1.2)+'px'`},
+    {name:'font size down',desc:'Decrease all text size by 20%',tag:'page',code:`document.body.style.fontSize=(parseFloat(getComputedStyle(document.body).fontSize||'16')*0.8)+'px'`},
+    {name:'take screenshot',desc:'Capture page to canvas and open in new tab',tag:'page',code:`import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js').then(m=>m.default(document.body)).then(c=>window.open(c.toDataURL(),'_blank')).catch(()=>alert('html2canvas not available on this page'))`},
+    {name:'word count',desc:'Count all visible words on the page',tag:'page',code:`const txt=document.body.innerText;const words=txt.trim().split(/\s+/).filter(Boolean);alert('Words: '+words.length+'\nChars: '+txt.length+'\nLines: '+txt.split('\n').length)`},
+    {name:'find & highlight',desc:'Highlight all occurrences of a word',tag:'page',code:"const q=prompt('Highlight word or phrase:');if(q){document.body.innerHTML=document.body.innerHTML.replace(new RegExp(q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&'),'gi'),'<mark style=\"background:#facc15;color:#000\">$&</mark>')}"},
+    {name:'full screen',desc:'Toggle fullscreen mode for the page',tag:'page',code:`document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()`},
+    {name:'page to grayscale',desc:'Render entire page in black and white',tag:'page',code:`document.body.style.filter=(document.body.style.filter.includes('grayscale')?'':'grayscale(1)')`},
+    {name:'confetti',desc:'Drop confetti animation on the page',tag:'page',code:`(()=>{const c=document.createElement('canvas');Object.assign(c.style,{position:'fixed',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:2147483645});document.body.appendChild(c);const ctx=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:Math.random()*-c.height,v:2+Math.random()*4,a:Math.random()*Math.PI*2,r:4+Math.random()*6,col:'hsl('+(Math.random()*360)+',80%,60%)'}));let frames=0;(function loop(){if(frames++>300){c.remove();return}ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.y+=q.v;q.a+=0.05;ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a);ctx.fillStyle=q.col;ctx.fillRect(-q.r/2,-q.r/2,q.r,q.r);ctx.restore();if(q.y>c.height)q.y=-20});requestAnimationFrame(loop)})()})()`},
   ];
   const tagCls={dom:'t-dom',nav:'t-nav',net:'t-net',storage:'t-storage',page:'t-page',edit:'t-edit',game:'t-game'};
   function renderCommands(filter=''){
@@ -996,23 +1045,316 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
   })();
 
   // ── blooket ──
-  function blStatus(msg,type='ok'){const s=$m('bl-status');s.textContent=msg;s.className=type;s.style.display='block';setTimeout(()=>s.style.display='none',3500);}
+  function blStatus(msg,type='ok'){const s=$m('bl-status');s.textContent=msg;s.className=type;s.style.display='block';setTimeout(()=>s.style.display='none',4000);}
+
+  // Deep React fiber walker — finds the root game state store
+  function blFindReactState(rootKey,maxDepth=60){
+    const results=[];
+    document.querySelectorAll('*').forEach(node=>{
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber')||k.startsWith('__reactInternalInstance'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<maxDepth&&fiber;i++){
+        // Check memoizedProps
+        try{
+          const p=fiber.memoizedProps;
+          if(p&&typeof p==='object'){
+            if(rootKey in p)results.push({obj:p,key:rootKey,src:'props'});
+            Object.keys(p).forEach(k=>{if(p[k]&&typeof p[k]==='object'&&rootKey in p[k])results.push({obj:p[k],key:rootKey,src:'props.'+k});});
+          }
+        }catch(e){}
+        // Check memoizedState chain
+        try{
+          let s=fiber.memoizedState;
+          while(s){
+            if(s.memoizedState&&typeof s.memoizedState==='object'&&rootKey in s.memoizedState)results.push({obj:s.memoizedState,key:rootKey,src:'state'});
+            s=s.next;
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    return results;
+  }
+
+  // Patch numeric fields in React fiber state — returns patch count
+  function blPatchNumbers(targetKey,addAmt){
+    let count=0;
+    document.querySelectorAll('*').forEach(node=>{
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber')||k.startsWith('__reactInternalInstance'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<80&&fiber;i++){
+        try{
+          let s=fiber.memoizedState;
+          while(s){
+            if(s.memoizedState&&typeof s.memoizedState==='object'){
+              const obj=s.memoizedState;
+              if(targetKey in obj&&typeof obj[targetKey]==='number'&&obj[targetKey]>=0&&obj[targetKey]<500000){
+                obj[targetKey]+=addAmt;count++;
+              }
+              Object.keys(obj).forEach(k=>{
+                if(obj[k]&&typeof obj[k]==='object'&&targetKey in obj[k]&&typeof obj[k][targetKey]==='number'&&obj[k][targetKey]>=0&&obj[k][targetKey]<500000){
+                  obj[k][targetKey]+=addAmt;count++;
+                }
+              });
+            }
+            s=s.next;
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    return count;
+  }
+
+  // Token/coin injection — tries localStorage, React state, and window globals
+  function blAddTokens(amt){
+    let patched=0;
+    // 1. localStorage sweep
+    const tokenKeys=['coins','tokens','gold','bucks','currency','balance','points','xp','gems','credits'];
+    tokenKeys.forEach(k=>{
+      const v=localStorage.getItem(k);
+      if(v!==null&&!isNaN(Number(v))){localStorage.setItem(k,String(Number(v)+amt));patched++;}
+    });
+    // 2. All localStorage keys that have numeric values
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      try{
+        const v=JSON.parse(localStorage.getItem(k));
+        if(typeof v==='number'&&v>=0&&v<500000){localStorage.setItem(k,String(v+amt));patched++;}
+        if(v&&typeof v==='object'){
+          let changed=false;
+          tokenKeys.forEach(tk=>{if(tk in v&&typeof v[tk]==='number'&&v[tk]>=0){v[tk]+=amt;changed=true;patched++;}});
+          if(changed)localStorage.setItem(k,JSON.stringify(v));
+        }
+      }catch(e){}
+    }
+    // 3. window globals
+    tokenKeys.forEach(k=>{if(typeof window[k]==='number'&&window[k]>=0){window[k]+=amt;patched++;}});
+    // 4. React state numeric patch
+    const rPatched=blPatchNumbers('coins',amt,v=>v>=0&&v<500000)+blPatchNumbers('tokens',amt,v=>v>=0&&v<500000)+blPatchNumbers('gold',amt,v=>v>=0&&v<500000);
+    patched+=rPatched;
+    return patched;
+  }
+
   $m('bl-add-coins').addEventListener('click',()=>{
-    const amt=parseInt($m('bl-coin-amt').value)||500;let patched=false;
-    try{['coins','tokens','gold','bucks','currency','balance','points'].forEach(key=>{const ex=localStorage.getItem(key);if(ex!==null&&!isNaN(ex)){localStorage.setItem(key,parseInt(ex)+amt);patched=true;}});document.querySelectorAll('*').forEach(node=>{const k=Object.keys(node).find(x=>x.startsWith('__reactFiber'));if(!k)return;let fiber=node[k];for(let i=0;i<25&&fiber;i++){if(fiber.memoizedState){let s=fiber.memoizedState;while(s){if(s.queue&&typeof s.memoizedState==='number'&&s.memoizedState>=0&&s.memoizedState<100000){s.memoizedState+=amt;patched=true;}s=s.next;}}fiber=fiber.return;}});blStatus((patched?'Added '+amt+' tokens! ':'Injected — ')+'Refresh if no visible change.',patched?'ok':'warn');log('[Blooket] +'+amt+' tokens attempted','i');}catch(e){blStatus('Error: '+e.message,'err');}
+    const amt=parseInt($m('bl-coin-amt').value)||500;
+    try{
+      const n=blAddTokens(amt);
+      blStatus(n>0?`+${amt} injected into ${n} location(s) — refresh if needed`:'Nothing found yet — join a game or open dashboard first','ok');
+      log('[Blooket] +'+amt+' tokens, '+n+' patches','i');
+    }catch(e){blStatus('Error: '+e.message,'err');}
   });
-  $m('bl-max-coins').addEventListener('click',()=>{['coins','tokens','gold','bucks','currency','balance','points'].forEach(k=>{if(localStorage.getItem(k)!==null)localStorage.setItem(k,99999);});blStatus('Token keys set to 99,999 — refresh to apply','ok');log('[Blooket] max tokens set','i');});
+
+  $m('bl-max-coins').addEventListener('click',()=>{
+    let patched=0;
+    const tokenKeys=['coins','tokens','gold','bucks','currency','balance','points','xp','gems','credits'];
+    tokenKeys.forEach(k=>{if(localStorage.getItem(k)!==null){localStorage.setItem(k,'999999');patched++;}});
+    // Also patch all numeric LS values that look like currencies
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      try{
+        const v=JSON.parse(localStorage.getItem(k));
+        if(typeof v==='number'&&v>=0&&v<500000){localStorage.setItem(k,'999999');patched++;}
+        if(v&&typeof v==='object'){
+          let changed=false;
+          tokenKeys.forEach(tk=>{if(tk in v&&typeof v[tk]==='number'){v[tk]=999999;changed=true;patched++;}});
+          if(changed)localStorage.setItem(k,JSON.stringify(v));
+        }
+      }catch(e){}
+    }
+    tokenKeys.forEach(k=>{if(typeof window[k]==='number'){window[k]=999999;patched++;}});
+    blStatus(patched>0?`Set ${patched} value(s) to 999,999 — refresh to apply`:'No token keys found yet','ok');
+    log('[Blooket] max tokens: '+patched+' locations','i');
+  });
+
+  // Auto answer — improved: walks fiber for question/answer data each tick
   let autoAnswerOn=false,autoAnswerInterval=null;
-  $m('bl-auto-answer').addEventListener('click',()=>{autoAnswerOn=!autoAnswerOn;$m('bl-aa-badge').textContent=autoAnswerOn?'ON':'toggle';if(autoAnswerOn){autoAnswerInterval=setInterval(()=>{try{document.querySelectorAll('[class*="answer"],[class*="Answer"],[class*="correct"],[class*="choice"],[class*="option"]').forEach(a=>{if(a.dataset.correct==='true'||a.getAttribute('iscorrect')==='true'||a.className.toLowerCase().includes('correct'))a.click();});}catch(e){}},800);blStatus('Auto answer ON','ok');log('[Blooket] auto answer ON','i');}else{clearInterval(autoAnswerInterval);blStatus('Auto answer OFF','warn');log('[Blooket] auto answer OFF','w');}});
-  $m('bl-instant-answer').addEventListener('click',()=>{let clicked=false;document.querySelectorAll('[class*="answer"],[class*="Answer"],[class*="choice"],[class*="option"]').forEach(a=>{if(!clicked&&(a.dataset.correct==='true'||a.getAttribute('iscorrect')==='true'||a.className.toLowerCase().includes('correct'))){a.click();clicked=true;}});if(!clicked){const first=document.querySelector('[class*="answer"],[class*="Answer"],[class*="choice"]');if(first){first.click();clicked=true;}}blStatus(clicked?'Answered!':'No question found — join a game first',clicked?'ok':'warn');});
+  function blClickCorrect(){
+    // Strategy 1: data attributes
+    const candidates=document.querySelectorAll('[data-correct],[iscorrect],[data-iscorrect]');
+    for(const el2 of candidates){
+      if(el2.dataset.correct==='true'||el2.getAttribute('iscorrect')==='true'||el2.dataset.iscorrect==='true'){el2.click();return true;}
+    }
+    // Strategy 2: class name contains 'correct' (not 'incorrect')
+    const allBtns=document.querySelectorAll('button,div[class*="answer"],div[class*="Answer"],div[class*="choice"],div[class*="Choice"],div[class*="option"],div[class*="Option"]');
+    for(const el2 of allBtns){
+      const cn=el2.className||'';
+      if(/correct/i.test(cn)&&!/incorrect/i.test(cn)){el2.click();return true;}
+    }
+    // Strategy 3: find correct answer text from React fiber, match to DOM
+    let correctText=null;
+    document.querySelectorAll('*').forEach(node=>{
+      if(correctText)return;
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<30&&fiber&&!correctText;i++){
+        try{
+          const p=fiber.memoizedProps;
+          if(p){
+            if(p.correctAnswer&&typeof p.correctAnswer==='string')correctText=p.correctAnswer;
+            if(p.correct&&typeof p.correct==='string')correctText=p.correct;
+            if(Array.isArray(p.answers)){const ca=p.answers.find(a=>a.correct||a.isCorrect);if(ca)correctText=ca.answer||ca.text||ca.val;}
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    if(correctText){
+      const allText=document.querySelectorAll('button,div[class*="answer"],div[class*="Answer"],div[class*="choice"],div[class*="option"]');
+      for(const el2 of allText){
+        if(el2.textContent.trim()===correctText.trim()){el2.click();return true;}
+      }
+    }
+    return false;
+  }
+
+  $m('bl-auto-answer').addEventListener('click',()=>{
+    autoAnswerOn=!autoAnswerOn;
+    $m('bl-aa-badge').textContent=autoAnswerOn?'ON':'toggle';
+    if(autoAnswerOn){
+      autoAnswerInterval=setInterval(()=>{try{blClickCorrect();}catch(e){}},600);
+      blStatus('Auto answer ON','ok');log('[Blooket] auto answer ON','i');
+    }else{
+      clearInterval(autoAnswerInterval);
+      blStatus('Auto answer OFF','warn');log('[Blooket] auto answer OFF','w');
+    }
+  });
+
+  $m('bl-instant-answer').addEventListener('click',()=>{
+    const clicked=blClickCorrect();
+    blStatus(clicked?'Answered!':'No answerable question found — join a game first',clicked?'ok':'warn');
+  });
+
+  // Speed hack — patches performance.now and Date.now
   let speedOn=false;
-  $m('bl-speed').addEventListener('click',()=>{speedOn=!speedOn;$m('bl-sp-badge').textContent=speedOn?'ON':'toggle';try{if(speedOn){window.__origDateNow=Date.now;let offset=0;window.__speedIv=setInterval(()=>{offset+=500;},100);Date.now=()=>window.__origDateNow()+offset;blStatus('Speed hack ON','ok');log('[Blooket] speed ON','i');}else{if(window.__origDateNow)Date.now=window.__origDateNow;clearInterval(window.__speedIv);blStatus('Speed hack OFF','warn');log('[Blooket] speed OFF','w');}}catch(e){blStatus('Error: '+e.message,'err');}});
-  $m('bl-unlock-blooks').addEventListener('click',()=>{let found=false;document.querySelectorAll('*').forEach(node=>{const k=Object.keys(node).find(x=>x.startsWith('__reactFiber'));if(!k)return;let fiber=node[k];for(let i=0;i<20&&fiber;i++){if(fiber.memoizedProps&&(fiber.memoizedProps.blooks||fiber.memoizedProps.unlockedBlooks)){log('[Blooket] blook props: '+JSON.stringify(Object.keys(fiber.memoizedProps.blooks||{})).slice(0,100),'i');found=true;}fiber=fiber.return;}});blStatus(found?'Blook data found — see console':'Open the Blooks page first, then try again',found?'ok':'warn');if(found)goConsole();});
+  $m('bl-speed').addEventListener('click',()=>{
+    speedOn=!speedOn;$m('bl-sp-badge').textContent=speedOn?'ON':'toggle';
+    try{
+      if(speedOn){
+        window.__bl_origDate=Date.now;
+        window.__bl_origPerf=performance.now.bind(performance);
+        const start=window.__bl_origDate();const perfStart=window.__bl_origPerf();
+        const MULT=8;
+        Date.now=()=>start+(window.__bl_origDate()-start)*MULT;
+        performance.now=()=>perfStart+(window.__bl_origPerf()-perfStart)*MULT;
+        blStatus('Speed ×8 ON — timers accelerated','ok');log('[Blooket] speed hack ON','i');
+      }else{
+        if(window.__bl_origDate)Date.now=window.__bl_origDate;
+        if(window.__bl_origPerf)performance.now=window.__bl_origPerf;
+        blStatus('Speed hack OFF','warn');log('[Blooket] speed hack OFF','w');
+      }
+    }catch(e){blStatus('Error: '+e.message,'err');}
+  });
+
+  // Blook data dump
+  $m('bl-unlock-blooks').addEventListener('click',()=>{
+    let found=false;
+    document.querySelectorAll('*').forEach(node=>{
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<40&&fiber;i++){
+        try{
+          const p=fiber.memoizedProps;
+          if(p){
+            ['blooks','unlockedBlooks','myBlooks','ownedBlooks'].forEach(key=>{
+              if(p[key]&&typeof p[key]==='object'){
+                log('[Blooket] '+key+': '+JSON.stringify(Object.keys(p[key])).slice(0,200),'i');
+                found=true;
+              }
+            });
+          }
+          let s=fiber.memoizedState;
+          while(s){
+            if(s.memoizedState&&typeof s.memoizedState==='object'){
+              ['blooks','unlockedBlooks','myBlooks'].forEach(key=>{
+                if(key in s.memoizedState){log('[Blooket] state.'+key+': '+JSON.stringify(s.memoizedState[key]).slice(0,200),'i');found=true;}
+              });
+            }
+            s=s.next;
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    blStatus(found?'Blook data dumped to console':'Navigate to your Blooks page first','ok');
+    if(found)goConsole();
+  });
+
+  // Box opener
   let boxInterval=null;
-  $m('bl-open-box').addEventListener('click',()=>{if(boxInterval){clearInterval(boxInterval);boxInterval=null;$m('bl-box-badge').textContent='boxes';blStatus('Box opener stopped','warn');return;}$m('bl-box-badge').textContent='STOP';boxInterval=setInterval(()=>{const btn=document.querySelector('[class*="open"],[class*="Open"],[class*="box"],[class*="Box"],[class*="pack"],[class*="Pack"]');if(btn)btn.click();},300);blStatus('Auto opening boxes — click again to stop','ok');});
-  $m('bl-get-answers').addEventListener('click',()=>{let found=false;document.querySelectorAll('*').forEach(node=>{const k=Object.keys(node).find(x=>x.startsWith('__reactFiber'));if(!k)return;let fiber=node[k];for(let i=0;i<15&&fiber;i++){const p=fiber.memoizedProps;if(p&&(p.question||p.correctAnswer||p.answers)){if(p.question)log('[Q] '+p.question,'i');if(p.correctAnswer)log('[A] '+p.correctAnswer,'i');if(p.answers)log('[answers] '+JSON.stringify(p.answers).slice(0,120),'i');found=true;}fiber=fiber.return;}});goConsole();if(!found)log('[Blooket] No Q&A found — join a game first','w');});
+  $m('bl-open-box').addEventListener('click',()=>{
+    if(boxInterval){clearInterval(boxInterval);boxInterval=null;$m('bl-box-badge').textContent='boxes';blStatus('Box opener stopped','warn');return;}
+    $m('bl-box-badge').textContent='STOP';
+    let clicks=0;
+    boxInterval=setInterval(()=>{
+      // Try multiple selectors that Blooket uses for box/pack buttons
+      const btn=document.querySelector('[class*="OpenBtn"],[class*="openBtn"],[class*="PackBtn"],[class*="packBtn"],[class*="BoxBtn"],[class*="Continue"],[class*="continue"],[class*="openBox"],[class*="OpenBox"]')
+        ||document.querySelector('button[class*="open"],button[class*="Open"],button[class*="pack"],button[class*="Pack"]');
+      if(btn){btn.click();clicks++;}
+    },250);
+    blStatus('Opening boxes — click again to stop','ok');
+    log('[Blooket] box opener started','i');
+  });
+
+  // Show answers — improved fiber walk
+  $m('bl-get-answers').addEventListener('click',()=>{
+    let found=0;
+    const seen=new Set();
+    document.querySelectorAll('*').forEach(node=>{
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<40&&fiber;i++){
+        try{
+          const p=fiber.memoizedProps;
+          if(p){
+            // Direct Q&A props
+            if(p.question&&!seen.has(p.question)){seen.add(p.question);log('[Q] '+p.question,'i');found++;}
+            if(p.correctAnswer&&!seen.has(p.correctAnswer)){seen.add(p.correctAnswer);log('[A✓] '+p.correctAnswer,'i');}
+            if(p.correct&&typeof p.correct==='string'&&!seen.has(p.correct)){seen.add(p.correct);log('[A✓] '+p.correct,'i');}
+            // Answers array
+            if(Array.isArray(p.answers)&&p.answers.length&&!seen.has(JSON.stringify(p.answers))){
+              seen.add(JSON.stringify(p.answers));
+              p.answers.forEach((a,i2)=>{
+                const txt=a.answer||a.text||a.val||String(a);
+                const correct=a.correct||a.isCorrect?'✓':'✗';
+                log(`  [${correct}] ${txt}`,'i');
+              });
+            }
+            // Question object nested
+            if(p.question&&typeof p.question==='object'){
+              const q=p.question;
+              if(q.question&&!seen.has(q.question)){seen.add(q.question);log('[Q] '+q.question,'i');found++;}
+              if(q.correctAnswer)log('[A✓] '+q.correctAnswer,'i');
+              if(Array.isArray(q.answers))q.answers.forEach(a=>{const correct=a.correct?'✓':'✗';log(`  [${correct}] ${a.answer||a}`,'i');});
+            }
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    goConsole();
+    if(!found)log('[Blooket] No Q&A in current view — make sure a question is on screen','w');
+    else blStatus(found+' question(s) dumped to console','ok');
+  });
+
+  // Ghost mode
   let ghostOn=false;
-  $m('bl-ghost').addEventListener('click',()=>{ghostOn=!ghostOn;$m('bl-gh-badge').textContent=ghostOn?'ON':'stealth';document.querySelectorAll('[class*="name"],[class*="Name"],[class*="username"],[class*="player"]').forEach(el2=>{if(ghostOn){el2.dataset.origText=el2.textContent;el2.textContent='???';}else if(el2.dataset.origText)el2.textContent=el2.dataset.origText;});blStatus(ghostOn?'Ghost mode ON — name hidden':'Ghost mode OFF',ghostOn?'ok':'warn');});
+  $m('bl-ghost').addEventListener('click',()=>{
+    ghostOn=!ghostOn;$m('bl-gh-badge').textContent=ghostOn?'ON':'stealth';
+    const sel='[class*="Name"],[class*="name"],[class*="username"],[class*="Username"],[class*="playerName"],[class*="PlayerName"]';
+    document.querySelectorAll(sel).forEach(el2=>{
+      if(!el2.children.length){ // only leaf text nodes
+        if(ghostOn){el2.dataset.origText=el2.textContent;el2.textContent='???';}
+        else if(el2.dataset.origText){el2.textContent=el2.dataset.origText;delete el2.dataset.origText;}
+      }
+    });
+    blStatus(ghostOn?'Ghost mode ON':'Ghost mode OFF',ghostOn?'ok':'warn');
+  });
 
   // ── games ──
   let gmGame=null,gmRAF=null,gmKeys={},gmScore=0;
