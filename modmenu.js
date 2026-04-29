@@ -49,6 +49,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .mm-tab.mm-blooket.mm-active { color: #c084fc; border-bottom-color: #c084fc; }
     #__modmenu__ .mm-tab.mm-games.mm-active { color: #4ade80; border-bottom-color: #4ade80; }
     #__modmenu__ .mm-tab.mm-calc.mm-active { color: #fb923c; border-bottom-color: #fb923c; }
+    #__modmenu__ .mm-tab.mm-vw.mm-active { color: #f87171; border-bottom-color: #f87171; }
 
     #__modmenu__ #mm-panels { flex: 1; overflow: hidden; }
     #__modmenu__ .mm-panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
@@ -273,6 +274,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div class="mm-tab mm-blooket" data-tab="blooket">blooket</div>
       <div class="mm-tab mm-calc" data-tab="calc">calc</div>
       <div class="mm-tab mm-games" data-tab="games">games</div>
+      <div class="mm-tab mm-vw" data-tab="videowatchr">▶ videowatchr</div>
     </div>
     <div id="mm-panels">
 
@@ -376,6 +378,10 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <button class="cc cc-num" data-cc=".">.</button>
           <button class="cc cc-eq" data-cc="=">=</button>
         </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-videowatchr">
+        <iframe id="mm-vw-frame" src="https://videowatchr.com" style="width:100%;height:100%;border:none;background:#000" allowfullscreen></iframe>
       </div>
 
       <div class="mm-panel" id="mm-panel-games">
