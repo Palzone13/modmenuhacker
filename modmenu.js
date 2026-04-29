@@ -261,7 +261,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div class="mm-dot mm-dot-r"></div>
       <div class="mm-dot mm-dot-y"></div>
       <div class="mm-dot mm-dot-g"></div>
-      <div id="mm-title">mod menu</div>
+      <div id="mm-title">modmenuhacker</div>
       <div id="mm-ver">v3.0</div>
     </div>
     <div id="mm-tabs">
@@ -458,7 +458,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     if(e.key==='ArrowUp'){e.preventDefault();histIdx=Math.min(histIdx+1,history.length-1);$m('mm-cinput').value=history[histIdx]||'';}
     if(e.key==='ArrowDown'){e.preventDefault();histIdx=Math.max(histIdx-1,-1);$m('mm-cinput').value=histIdx<0?'':history[histIdx];}
   });
-  log('Mod Menu v3.0 — '+location.hostname,'i');
+  log('ModMenuHacker v3.0 — '+location.hostname,'i');
 
   // ── inspect ──
   const inspectData={
