@@ -48,9 +48,10 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ #mm-clist { flex: 1; overflow-y: auto; padding: 0 8px 8px; }
     #__modmenu__ .mm-cmd { background: #1a1a24; border: 1px solid #ffffff18; border-radius: 6px; padding: 7px 9px; margin-bottom: 5px; cursor: pointer; transition: border-color .1s; }
     #__modmenu__ .mm-cmd:hover { border-color: #00e5ff; background: #222230; }
+    #__modmenu__ .mm-cmd.mm-cmd-on { border-color: #10b981; background: #10b98112; }
     #__modmenu__ .mm-cname { font-size: 11px; font-weight: 600; color: #00e5ff; } #__modmenu__ .mm-cdesc { font-size: 9.5px; color: #64748b; margin-top: 2px; }
     #__modmenu__ .mm-ctag { font-size: 9px; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-top: 4px; }
-    #__modmenu__ .t-dom{background:#00e5ff15;color:#00e5ff} #__modmenu__ .t-nav{background:#7c3aed15;color:#a78bfa} #__modmenu__ .t-net{background:#10b98115;color:#10b981} #__modmenu__ .t-storage{background:#f59e0b15;color:#f59e0b} #__modmenu__ .t-page{background:#ef444415;color:#fca5a5}
+    #__modmenu__ .t-dom{background:#00e5ff15;color:#00e5ff} #__modmenu__ .t-nav{background:#7c3aed15;color:#a78bfa} #__modmenu__ .t-net{background:#10b98115;color:#10b981} #__modmenu__ .t-storage{background:#f59e0b15;color:#f59e0b} #__modmenu__ .t-page{background:#ef444415;color:#fca5a5} #__modmenu__ .t-edit{background:#10b98115;color:#10b981}
     #__modmenu__ .mm-stabs { display: flex; border-bottom: 1px solid #ffffff18; flex-shrink: 0; }
     #__modmenu__ .mm-stab { padding: 5px 10px; font-size: 10px; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; user-select: none; }
     #__modmenu__ .mm-stab.mm-active { color: #f59e0b; border-bottom-color: #f59e0b; }
@@ -89,6 +90,8 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .gm-hud { display: flex; align-items: center; gap: 8px; padding: 4px 10px; background: #111118; border-top: 1px solid #ffffff18; font-size: 10px; color: #64748b; flex-shrink: 0; }
     #__modmenu__ .gm-hud span { color: #34d399; font-weight: 600; }
     #__modmenu__.mm-min { height: 34px !important; overflow: hidden; resize: none; }
+    .__mm_editable_hover__ { outline: 2px dashed #00e5ff !important; outline-offset: 2px !important; cursor: text !important; }
+    .__mm_editable_active__ { outline: 2px solid #10b981 !important; outline-offset: 2px !important; }
   `;
   document.head.appendChild(style);
 
@@ -98,7 +101,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     <div id="mm-topbar">
       <div class="mm-dot mm-dot-r"></div><div class="mm-dot mm-dot-y"></div><div class="mm-dot mm-dot-g"></div>
       <div id="mm-title">// MOD MENU //</div>
-      <div id="mm-ver">v2.1</div>
+      <div id="mm-ver">v2.2</div>
     </div>
     <div id="mm-tabs">
       <div class="mm-tab mm-active" data-tab="console">console</div>
@@ -260,7 +263,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     if (e.key === 'ArrowUp') { e.preventDefault(); histIdx = Math.min(histIdx + 1, history.length - 1); $m('mm-cinput').value = history[histIdx] || ''; }
     if (e.key === 'ArrowDown') { e.preventDefault(); histIdx = Math.max(histIdx - 1, -1); $m('mm-cinput').value = histIdx < 0 ? '' : history[histIdx]; }
   });
-  log('Mod Menu v2.1 on: ' + location.hostname, 'i');
+  log('Mod Menu v2.2 on: ' + location.hostname, 'i');
   log('Go to blooket.com and click the Blooket tab', 'i');
 
   // ── inspect ──
@@ -284,8 +287,68 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
   document.querySelectorAll('#__modmenu__ .mm-isub').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('#__modmenu__ .mm-isub').forEach(x => x.classList.remove('mm-active')); btn.classList.add('mm-active'); curIsub = btn.dataset.isub; renderInspect(curIsub); }); });
   renderInspect('window');
 
+  // ── edit anything ──
+  let editOn = false;
+  let editHovered = null;
+
+  function editHandleMouseOver(e) {
+    if (el.contains(e.target)) return;
+    if (editHovered && editHovered !== e.target) editHovered.classList.remove('__mm_editable_hover__');
+    editHovered = e.target;
+    editHovered.classList.add('__mm_editable_hover__');
+  }
+  function editHandleMouseOut(e) {
+    if (e.target && e.target !== el) e.target.classList.remove('__mm_editable_hover__');
+  }
+  function editHandleClick(e) {
+    if (el.contains(e.target)) return;
+    e.preventDefault(); e.stopPropagation();
+    const target = e.target;
+    target.classList.remove('__mm_editable_hover__');
+    target.classList.add('__mm_editable_active__');
+    target.contentEditable = 'true';
+    target.focus();
+    function done() {
+      target.contentEditable = 'false';
+      target.classList.remove('__mm_editable_active__');
+      target.removeEventListener('blur', done);
+      target.removeEventListener('keydown', keyHandler);
+    }
+    function keyHandler(ev) { if (ev.key === 'Escape') { done(); } }
+    target.addEventListener('blur', done);
+    target.addEventListener('keydown', keyHandler);
+  }
+
+  function enableEdit() {
+    document.addEventListener('mouseover', editHandleMouseOver, true);
+    document.addEventListener('mouseout', editHandleMouseOut, true);
+    document.addEventListener('click', editHandleClick, true);
+    document.body.style.cursor = 'text';
+    log('Edit mode ON — click any text to edit, Escape to commit', 'i');
+  }
+  function disableEdit() {
+    document.removeEventListener('mouseover', editHandleMouseOver, true);
+    document.removeEventListener('mouseout', editHandleMouseOut, true);
+    document.removeEventListener('click', editHandleClick, true);
+    if (editHovered) { editHovered.classList.remove('__mm_editable_hover__'); editHovered = null; }
+    document.querySelectorAll('.__mm_editable_active__').forEach(n => {
+      n.contentEditable = 'false'; n.classList.remove('__mm_editable_active__');
+    });
+    document.body.style.cursor = '';
+    log('Edit mode OFF', 'w');
+  }
+
   // ── commands ──
   const commands = [
+    { name: 'edit anything', desc: 'Click any text on the page to edit it in place', tag: 'edit', toggle: true,
+      run: (el2) => {
+        editOn = !editOn;
+        el2.classList.toggle('mm-cmd-on', editOn);
+        el2.querySelector('.mm-ctag').textContent = editOn ? '#edit ON' : '#edit';
+        el2.querySelector('.mm-cdesc').textContent = editOn ? 'Click any text to edit — Escape when done' : 'Click any text on the page to edit it in place';
+        editOn ? enableEdit() : disableEdit();
+      }
+    },
     { name: 'scroll to top', desc: 'Smooth scroll to top', tag: 'dom', code: `window.scrollTo({top:0,behavior:'smooth'})` },
     { name: 'scroll to bottom', desc: 'Smooth scroll to bottom', tag: 'dom', code: `window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})` },
     { name: 'highlight all links', desc: 'Outline every anchor in cyan', tag: 'dom', code: `document.querySelectorAll('a').forEach(a=>a.style.outline='2px solid #00e5ff')` },
@@ -304,13 +367,17 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     { name: 'rainbow mode', desc: 'Cycle hue-rotate animation', tag: 'page', code: `let h=0;setInterval(()=>{document.body.style.filter='hue-rotate('+h+'deg)';h+=2},30)` },
     { name: 'disable all CSS', desc: 'Remove all stylesheets', tag: 'page', code: `document.querySelectorAll('link[rel="stylesheet"],style').forEach(s=>s.remove())` },
   ];
-  const tagCls = { dom: 't-dom', nav: 't-nav', net: 't-net', storage: 't-storage', page: 't-page' };
+  const tagCls = { dom: 't-dom', nav: 't-nav', net: 't-net', storage: 't-storage', page: 't-page', edit: 't-edit' };
   function renderCommands(filter = '') {
     const list = $m('mm-clist'); list.innerHTML = '';
     commands.filter(c => (c.name + c.desc + c.tag).toLowerCase().includes(filter.toLowerCase())).forEach(c => {
       const el2 = document.createElement('div'); el2.className = 'mm-cmd';
-      el2.innerHTML = `<div class="mm-cname">${c.name}</div><div class="mm-cdesc">${c.desc}</div><span class="mm-ctag ${tagCls[c.tag]}">#${c.tag}</span>`;
-      el2.addEventListener('click', () => { goConsole(); runCode(c.code); });
+      if (c.toggle && c.name === 'edit anything' && editOn) el2.classList.add('mm-cmd-on');
+      el2.innerHTML = `<div class="mm-cname">${c.name}</div><div class="mm-cdesc">${c.desc}</div><span class="mm-ctag ${tagCls[c.tag]}">#${c.tag}${c.toggle && editOn ? ' ON' : ''}</span>`;
+      el2.addEventListener('click', () => {
+        if (c.toggle) { c.run(el2); }
+        else { goConsole(); runCode(c.code); }
+      });
       list.appendChild(el2);
     });
   }
