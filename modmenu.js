@@ -50,6 +50,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .mm-tab.mm-games.mm-active { color: #4ade80; border-bottom-color: #4ade80; }
     #__modmenu__ .mm-tab.mm-calc.mm-active { color: #fb923c; border-bottom-color: #fb923c; }
     #__modmenu__ .mm-tab.mm-vw.mm-active { color: #f87171; border-bottom-color: #f87171; }
+    #__modmenu__ .mm-tab.mm-kahoot.mm-active { color: #a78bfa; border-bottom-color: #a78bfa; }
 
     #__modmenu__ #mm-panels { flex: 1; overflow: hidden; }
     #__modmenu__ .mm-panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
@@ -275,6 +276,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div class="mm-tab mm-calc" data-tab="calc">calc</div>
       <div class="mm-tab mm-games" data-tab="games">games</div>
       <div class="mm-tab mm-vw" data-tab="videowatchr">▶ videowatchr</div>
+      <div class="mm-tab mm-kahoot" data-tab="kahoot">★ kahoot</div>
     </div>
     <div id="mm-panels">
 
@@ -377,6 +379,54 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <button class="cc cc-num cc-zero" data-cc="0">0</button>
           <button class="cc cc-num" data-cc=".">.</button>
           <button class="cc cc-eq" data-cc="=">=</button>
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-kahoot">
+        <div id="mm-kahoot-content" style="flex:1;overflow-y:auto;padding:10px 12px">
+          <div id="kh-status" style="font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;display:none;font-family:'Geist Mono',monospace"></div>
+
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(167,139,250,0.6)">answer reveal</div>
+            <button class="bl-btn" id="kh-show-answer" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">👁</span>
+              <div class="bl-info"><div class="bl-name">show correct answer</div><div class="bl-desc">Dump current Q&amp;A to console tab</div></div>
+              <span class="bl-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">once</span>
+            </button>
+            <button class="bl-btn" id="kh-auto-reveal" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">⚡</span>
+              <div class="bl-info"><div class="bl-name">auto reveal</div><div class="bl-desc">Continuously dump answers as questions appear</div></div>
+              <span class="bl-badge" id="kh-ar-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">toggle</span>
+            </button>
+          </div>
+
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(167,139,250,0.6)">display</div>
+            <button class="bl-btn" id="kh-ghost" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">👻</span>
+              <div class="bl-info"><div class="bl-name">ghost mode</div><div class="bl-desc">Hide your nickname locally</div></div>
+              <span class="bl-badge" id="kh-gh-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">stealth</span>
+            </button>
+            <button class="bl-btn" id="kh-highlight" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">🎨</span>
+              <div class="bl-info"><div class="bl-name">highlight answers</div><div class="bl-desc">Colour-code answer buttons by position</div></div>
+              <span class="bl-badge" id="kh-hl-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">toggle</span>
+            </button>
+          </div>
+
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(167,139,250,0.6)">info</div>
+            <button class="bl-btn" id="kh-dump-state" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">📋</span>
+              <div class="bl-info"><div class="bl-name">dump game state</div><div class="bl-desc">Log full React game state to console</div></div>
+              <span class="bl-badge" style="background:rgba(74,222,128,0.1);color:#4ade80">safe</span>
+            </button>
+            <button class="bl-btn" id="kh-get-pin" style="border-color:rgba(167,139,250,0.2)">
+              <span class="bl-icon">📌</span>
+              <div class="bl-info"><div class="bl-name">get game PIN</div><div class="bl-desc">Extract current game PIN from state</div></div>
+              <span class="bl-badge" style="background:rgba(74,222,128,0.1);color:#4ade80">safe</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1360,6 +1410,303 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       }
     });
     blStatus(ghostOn?'Ghost mode ON':'Ghost mode OFF',ghostOn?'ok':'warn');
+  });
+
+
+  // ── kahoot ──
+  function khStatus(msg,type='ok'){
+    const s=document.getElementById('kh-status');
+    if(!s)return;
+    s.textContent=msg;
+    s.style.cssText='font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;font-family:\'Geist Mono\',monospace;display:block;';
+    if(type==='ok')s.style.cssText+='background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2)';
+    else if(type==='warn')s.style.cssText+='background:rgba(251,146,60,0.08);color:#fb923c;border:1px solid rgba(251,146,60,0.2)';
+    else s.style.cssText+='background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.2)';
+    setTimeout(()=>{if(s)s.style.display='none';},4000);
+  }
+
+  // Walk React fiber to find Kahoot game state
+  function khFindState(){
+    const results=[];
+    const kahootKeys=['quizQuestionAnswers','currentQuestion','correctAnswer','correctAnswers','answers','question','gameBlockType','gameMode','twoFactorAuth','pin','playerName','challengeId','questionIndex','timeLeft'];
+    document.querySelectorAll('*').forEach(node=>{
+      const fk=Object.keys(node).find(k=>k.startsWith('__reactFiber')||k.startsWith('__reactInternalInstance'));
+      if(!fk)return;
+      let fiber=node[fk];
+      for(let i=0;i<80&&fiber;i++){
+        try{
+          // Check memoizedProps
+          const p=fiber.memoizedProps;
+          if(p&&typeof p==='object'){
+            kahootKeys.forEach(k=>{
+              if(k in p&&p[k]!==null&&p[k]!==undefined){
+                results.push({key:k,val:p[k],src:'props'});
+              }
+            });
+          }
+          // Check memoizedState chain
+          let s=fiber.memoizedState;
+          while(s){
+            if(s.memoizedState&&typeof s.memoizedState==='object'&&!Array.isArray(s.memoizedState)){
+              const obj=s.memoizedState;
+              kahootKeys.forEach(k=>{
+                if(k in obj&&obj[k]!==null&&obj[k]!==undefined){
+                  results.push({key:k,val:obj[k],src:'state'});
+                }
+              });
+              // One level deeper
+              Object.keys(obj).forEach(ok=>{
+                if(obj[ok]&&typeof obj[ok]==='object'&&!Array.isArray(obj[ok])){
+                  kahootKeys.forEach(k=>{
+                    if(k in obj[ok]&&obj[ok][k]!==null){
+                      results.push({key:k,val:obj[ok][k],src:'state.'+ok});
+                    }
+                  });
+                }
+              });
+            }
+            s=s.next;
+          }
+        }catch(e){}
+        fiber=fiber.return;
+      }
+    });
+    // Deduplicate by key, prefer deepest found
+    const seen={};
+    results.forEach(r=>{seen[r.key]=r;});
+    return seen;
+  }
+
+  // Also try window.__NEXT_DATA__ and window.gamePin which Kahoot sometimes exposes
+  function khGetWindowState(){
+    const out={};
+    try{
+      if(window.__NEXT_DATA__){
+        const d=window.__NEXT_DATA__;
+        if(d.props)out.nextProps=d.props;
+        if(d.query)out.query=d.query;
+      }
+    }catch(e){}
+    try{if(window.gamePin)out.gamePin=window.gamePin;}catch(e){}
+    try{if(window.playerName)out.playerName=window.playerName;}catch(e){}
+    // Kahoot stores things in __store sometimes
+    try{
+      if(window.__store){
+        const state=window.__store.getState();
+        if(state)out.storeState=state;
+      }
+    }catch(e){}
+    // Redux devtools
+    try{
+      const stores=Object.keys(window).filter(k=>window[k]&&typeof window[k].getState==='function'&&typeof window[k].dispatch==='function');
+      stores.forEach(k=>{try{out['store_'+k]=window[k].getState();}catch(e){}});
+    }catch(e){}
+    return out;
+  }
+
+  function khRevealAnswers(){
+    let found=0;
+    const state=khFindState();
+    const winState=khGetWindowState();
+
+    // Log question
+    if(state.question){
+      const q=typeof state.question.val==='object'?state.question.val.question||JSON.stringify(state.question.val):state.question.val;
+      log('[Kahoot] Q: '+String(q).slice(0,200),'i');
+      found++;
+    }
+
+    // Log correct answers — various formats Kahoot uses
+    const answerKeys=['correctAnswer','correctAnswers','quizQuestionAnswers'];
+    answerKeys.forEach(k=>{
+      if(state[k]){
+        const v=state[k].val;
+        if(Array.isArray(v)){
+          v.forEach((a,i)=>{
+            const correct=a.correct||a.isCorrect;
+            const text=a.answer||a.choice||a.text||String(a);
+            log('[Kahoot] ['+(correct?'✓':'✗')+'] '+text,'i');
+          });
+          found++;
+        } else if(typeof v==='string'||typeof v==='number'){
+          log('[Kahoot] Correct: '+v,'i');
+          found++;
+        } else if(typeof v==='object'&&v){
+          log('[Kahoot] '+k+': '+JSON.stringify(v).slice(0,300),'i');
+          found++;
+        }
+      }
+    });
+
+    // Answers array
+    if(state.answers){
+      const v=state.answers.val;
+      if(Array.isArray(v)){
+        v.forEach((a,i)=>{
+          const correct=a.correct||a.isCorrect||a.isCorrectAnswer;
+          const text=a.answer||a.choice||a.text||String(a);
+          log('[Kahoot] ['+(correct?'✓':'✗')+'] '+String(text).slice(0,100),'i');
+        });
+        found++;
+      }
+    }
+
+    // Index-based correct answer (Kahoot classic format)
+    if(state.gameBlockType){
+      log('[Kahoot] block type: '+state.gameBlockType.val,'i');
+    }
+
+    // Window store data
+    if(winState.storeState){
+      const gs=winState.storeState;
+      const interesting=['currentQuestion','correctAnswer','answers','question','questionIndex'];
+      interesting.forEach(k=>{
+        if(gs[k]!==undefined){log('[Kahoot] store.'+k+': '+JSON.stringify(gs[k]).slice(0,200),'i');found++;}
+        // nested
+        Object.keys(gs).forEach(sk=>{
+          if(gs[sk]&&typeof gs[sk]==='object'&&k in gs[sk]){
+            log('[Kahoot] store.'+sk+'.'+k+': '+JSON.stringify(gs[sk][k]).slice(0,200),'i');found++;
+          }
+        });
+      });
+    }
+
+    // Also try to read answer colours from DOM
+    // Kahoot's 4 answer buttons are always in the same order: red=0, blue=1, yellow=2, green=3
+    const btnSelectors=['[data-functional-selector*="answer"]','[class*="AnswerButton"]','[class*="answer-btn"]','[class*="answerButton"]','[class*="choiceButton"]','button[class*="answer"]'];
+    let domFound=false;
+    for(const sel of btnSelectors){
+      const btns=document.querySelectorAll(sel);
+      if(btns.length>=2){
+        log('[Kahoot] DOM answers ('+btns.length+' found):','i');
+        btns.forEach((b,i)=>{
+          const correct=b.dataset.correct==='true'||b.getAttribute('aria-label')?.includes('correct')||b.className.includes('correct');
+          log('  ['+(correct?'✓':'?')+'] '+(b.textContent||b.getAttribute('aria-label')||'btn '+i).trim().slice(0,80),'i');
+        });
+        domFound=true; found++;
+        break;
+      }
+    }
+
+    return found;
+  }
+
+  document.getElementById('kh-show-answer').addEventListener('click',()=>{
+    const n=khRevealAnswers();
+    goConsole();
+    khStatus(n>0?n+' answer(s) dumped to console':'Nothing found — make sure a question is visible on screen',n>0?'ok':'warn');
+  });
+
+  let khAutoRevealOn=false,khAutoRevealIv=null,khLastQ='';
+  document.getElementById('kh-auto-reveal').addEventListener('click',()=>{
+    khAutoRevealOn=!khAutoRevealOn;
+    document.getElementById('kh-ar-badge').textContent=khAutoRevealOn?'ON':'toggle';
+    if(khAutoRevealOn){
+      khLastQ='';
+      khAutoRevealIv=setInterval(()=>{
+        try{
+          const state=khFindState();
+          const qVal=state.question?JSON.stringify(state.question.val):'';
+          if(qVal&&qVal!==khLastQ){
+            khLastQ=qVal;
+            khRevealAnswers();
+            log('[Kahoot] --- new question detected ---','w');
+          }
+        }catch(e){}
+      },800);
+      khStatus('Auto reveal ON — answers logged as questions appear','ok');
+      log('[Kahoot] auto reveal ON','i');
+    } else {
+      clearInterval(khAutoRevealIv);
+      khStatus('Auto reveal OFF','warn');
+      log('[Kahoot] auto reveal OFF','w');
+    }
+  });
+
+  let khGhostOn=false;
+  document.getElementById('kh-ghost').addEventListener('click',()=>{
+    khGhostOn=!khGhostOn;
+    document.getElementById('kh-gh-badge').textContent=khGhostOn?'ON':'stealth';
+    const sel='[class*="Nickname"],[class*="nickname"],[class*="playerName"],[class*="PlayerName"],[data-functional-selector*="nickname"]';
+    document.querySelectorAll(sel).forEach(el=>{
+      if(!el.children.length){
+        if(khGhostOn){el.dataset.khOrig=el.textContent;el.textContent='???';}
+        else if(el.dataset.khOrig){el.textContent=el.dataset.khOrig;delete el.dataset.khOrig;}
+      }
+    });
+    khStatus(khGhostOn?'Ghost mode ON — nickname hidden locally':'Ghost mode OFF',khGhostOn?'ok':'warn');
+  });
+
+  let khHlOn=false,khHlIv=null;
+  document.getElementById('kh-highlight').addEventListener('click',()=>{
+    khHlOn=!khHlOn;
+    document.getElementById('kh-hl-badge').textContent=khHlOn?'ON':'toggle';
+    if(khHlOn){
+      // Kahoot's 4 answer colours already exist but this adds extra glow
+      const COLORS=['rgba(226,55,68,0.35)','rgba(19,104,206,0.35)','rgba(216,173,0,0.35)','rgba(38,137,12,0.35)'];
+      khHlIv=setInterval(()=>{
+        const sels=['[data-functional-selector*="answer"]','[class*="AnswerButton"]','[class*="answerButton"]','[class*="choiceButton"]','button[class*="answer"]'];
+        for(const sel of sels){
+          const btns=document.querySelectorAll(sel);
+          if(btns.length>=2){
+            btns.forEach((b,i)=>{b.style.boxShadow='0 0 16px 4px '+COLORS[i%4]+',inset 0 0 8px '+COLORS[i%4];});
+            break;
+          }
+        }
+      },500);
+      khStatus('Answers highlighted','ok');
+    } else {
+      clearInterval(khHlIv);
+      const sels=['[data-functional-selector*="answer"]','[class*="AnswerButton"]','[class*="answerButton"]','[class*="choiceButton"]'];
+      sels.forEach(s=>document.querySelectorAll(s).forEach(b=>b.style.boxShadow=''));
+      khStatus('Highlights removed','warn');
+    }
+  });
+
+  document.getElementById('kh-dump-state').addEventListener('click',()=>{
+    const state=khFindState();
+    const winState=khGetWindowState();
+    let found=0;
+    Object.entries(state).forEach(([k,v])=>{
+      log('[Kahoot] '+k+' ('+v.src+'): '+JSON.stringify(v.val).slice(0,200),'i');
+      found++;
+    });
+    Object.entries(winState).forEach(([k,v])=>{
+      log('[Kahoot] window.'+k+': '+JSON.stringify(v).slice(0,200),'i');
+      found++;
+    });
+    goConsole();
+    khStatus(found>0?found+' state entries dumped to console':'No Kahoot state found — join a game first',found>0?'ok':'warn');
+  });
+
+  document.getElementById('kh-get-pin').addEventListener('click',()=>{
+    let pin=null;
+    // Try URL first
+    const urlMatch=location.href.match(/[?&]pin=(\d+)/)||location.pathname.match(/\/(\d{6,8})/);
+    if(urlMatch)pin=urlMatch[1];
+    // Try window
+    try{if(window.gamePin)pin=window.gamePin;}catch(e){}
+    // Try state
+    const state=khFindState();
+    if(state.pin)pin=state.pin.val;
+    // Try __NEXT_DATA__
+    try{
+      const nd=window.__NEXT_DATA__;
+      if(nd&&nd.query&&nd.query.pin)pin=nd.query.pin;
+      if(nd&&nd.props&&nd.props.pageProps&&nd.props.pageProps.pin)pin=nd.props.pageProps.pin;
+    }catch(e){}
+    // Try DOM
+    if(!pin){
+      const pinEl=document.querySelector('[class*="pin"],[class*="Pin"],[data-functional-selector*="pin"]');
+      if(pinEl)pin=pinEl.textContent.replace(/\D/g,'').slice(0,8)||null;
+    }
+    if(pin){
+      navigator.clipboard.writeText(String(pin)).catch(()=>{});
+      khStatus('PIN: '+pin+' (copied to clipboard)','ok');
+      log('[Kahoot] Game PIN: '+pin,'i');
+    } else {
+      khStatus('No PIN found — navigate to a Kahoot game first','warn');
+    }
   });
 
   // ── games ──
