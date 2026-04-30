@@ -431,7 +431,37 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       </div>
 
       <div class="mm-panel" id="mm-panel-videowatchr">
-        <iframe id="mm-vw-frame" src="https://videowatchr.com" style="width:100%;height:100%;border:none;background:#000" allowfullscreen></iframe>
+        <div id="vw-app" style="display:flex;flex-direction:column;height:100%;background:#0a0a0e;overflow:hidden">
+
+          <!-- Search bar -->
+          <div style="display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;background:#111118">
+            <input id="vw-search" type="text" placeholder="Search YouTube videos..." autocomplete="off" spellcheck="false"
+              style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 11px;color:#e2e8f0;font-family:'Geist',sans-serif;font-size:11.5px;outline:none"/>
+            <button id="vw-search-btn" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:7px;padding:6px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap">Search</button>
+            <button id="vw-back-btn" style="display:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 12px;font-family:'Geist Mono',monospace;font-size:11px;cursor:pointer">← back</button>
+          </div>
+
+          <!-- Player view (hidden initially) -->
+          <div id="vw-player-view" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+            <div style="position:relative;width:100%;padding-top:56.25%;background:#000;flex-shrink:0">
+              <iframe id="vw-player-frame" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
+                allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>
+            </div>
+            <div id="vw-video-info" style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0">
+              <div id="vw-video-title" style="font-size:12px;font-weight:500;color:#e2e8f0;line-height:1.4;margin-bottom:3px"></div>
+              <div id="vw-video-channel" style="font-size:10.5px;color:rgba(255,255,255,0.35);font-family:'Geist Mono',monospace"></div>
+            </div>
+          </div>
+
+          <!-- Results / home view -->
+          <div id="vw-results-view" style="flex:1;overflow-y:auto;padding:6px 8px">
+            <div id="vw-results-list"></div>
+          </div>
+
+          <!-- Status bar -->
+          <div id="vw-status" style="padding:4px 10px;font-family:'Geist Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);flex-shrink:0;border-top:1px solid rgba(255,255,255,0.05)">videowatchr — powered by youtube</div>
+
+        </div>
       </div>
 
       <div class="mm-panel" id="mm-panel-games">
@@ -933,49 +963,49 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
   const commands=[
     {name:'edit anything',desc:'Click any element on the page to edit its text',tag:'edit',toggle:true,
       run:(el2)=>{editOn=!editOn;el2.classList.toggle('mm-cmd-on',editOn);el2.querySelector('.mm-ctag').textContent=editOn?'on':'#edit';el2.querySelector('.mm-cdesc').textContent=editOn?'Active — click any element, Escape to commit':'Click any element on the page to edit its text';editOn?enableEdit():disableEdit();}},
-    {name:'scroll to top',desc:'Smooth scroll to top of page',tag:'dom',code:`window.scrollTo({top:0,behavior:'smooth'})`},
-    {name:'scroll to bottom',desc:'Smooth scroll to bottom of page',tag:'dom',code:`window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})`},
-    {name:'highlight all links',desc:'Outline every anchor element',tag:'dom',code:`document.querySelectorAll('a').forEach(a=>a.style.outline='2px solid #22d3ee')`},
-    {name:'remove all images',desc:'Remove every img element from the page',tag:'dom',code:`document.querySelectorAll('img').forEach(i=>i.remove())`},
-    {name:'count all elements',desc:'Log total DOM element count',tag:'dom',code:`alert('Total elements: '+document.querySelectorAll('*').length)`},
-    {name:'copy page URL',desc:'Copy current URL to clipboard',tag:'nav',code:`navigator.clipboard.writeText(location.href).then(()=>alert('Copied!'))`},
-    {name:'open blank tab',desc:'Open about:blank in new tab',tag:'nav',code:`window.open('about:blank','_blank')`},
-    {name:'hard reload',desc:'Force reload ignoring cache',tag:'nav',code:`location.reload(true)`},
-    {name:'log fetch calls',desc:'Patch fetch to log all network requests',tag:'net',code:`const _f=window.fetch;window.fetch=(...a)=>{console.log('[fetch]',a[0]);return _f(...a)};alert('fetch patched')`},
-    {name:'clear localStorage',desc:'Wipe all localStorage keys',tag:'storage',code:`localStorage.clear();alert('cleared')`},
-    {name:'clear sessionStorage',desc:'Wipe all sessionStorage keys',tag:'storage',code:`sessionStorage.clear();alert('cleared')`},
-    {name:'dark mode toggle',desc:'Invert page colors',tag:'page',code:`document.body.style.filter=document.body.style.filter?'':'invert(1) hue-rotate(180deg)'`},
-    {name:'zoom 150%',desc:'Scale page to 150%',tag:'page',code:`document.body.style.zoom='1.5'`},
-    {name:'zoom reset',desc:'Reset page zoom to 100%',tag:'page',code:`document.body.style.zoom='1'`},
-    {name:'rainbow mode',desc:'Cycle hue-rotate animation on the page',tag:'page',code:`let h=0;setInterval(()=>{document.body.style.filter='hue-rotate('+h+'deg)';h+=2},30)`},
-    {name:'disable all CSS',desc:'Remove all stylesheets from page',tag:'page',code:`document.querySelectorAll('link[rel="stylesheet"],style').forEach(s=>s.remove())`},
+    {name:'scroll to top',desc:'Smooth scroll to top of page',tag:'dom',code:`window.scrollTo({top:0,behavior:'smooth'});log('Scrolled to top','i')`},
+    {name:'scroll to bottom',desc:'Smooth scroll to bottom of page',tag:'dom',code:`window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});log('Scrolled to bottom','i')`},
+    {name:'highlight all links',desc:'Outline every anchor element',tag:'dom',code:`const n=document.querySelectorAll('a').length;document.querySelectorAll('a').forEach(a=>a.style.outline='2px solid #22d3ee');log('Highlighted '+n+' links','i')`},
+    {name:'remove all images',desc:'Remove every img element from the page',tag:'dom',code:`const n=document.querySelectorAll('img').length;document.querySelectorAll('img').forEach(i=>i.remove());log('Removed '+n+' images','w')`},
+    {name:'count all elements',desc:'Log total DOM element count',tag:'dom',code:`log('Total elements: '+document.querySelectorAll('*').length,'i')`},
+    {name:'copy page URL',desc:'Copy current URL to clipboard',tag:'nav',code:`navigator.clipboard.writeText(location.href).then(()=>log('Copied URL: '+location.href,'i')).catch(()=>log('Clipboard blocked','e'))`},
+    {name:'open blank tab',desc:'Open about:blank in new tab',tag:'nav',code:`window.open('about:blank','_blank');log('Opened blank tab','i')`},
+    {name:'hard reload',desc:'Force reload ignoring cache',tag:'nav',code:`log('Reloading...','w');setTimeout(()=>location.reload(true),300)`},
+    {name:'log fetch calls',desc:'Patch fetch to log all network requests',tag:'net',code:`const _f=window.fetch;window.fetch=(...a)=>{log('[fetch] '+String(a[0]),'i');return _f(...a)};log('fetch() patched — all requests will appear here','i')`},
+    {name:'clear localStorage',desc:'Wipe all localStorage keys',tag:'storage',code:`localStorage.clear();log('localStorage cleared','w')`},
+    {name:'clear sessionStorage',desc:'Wipe all sessionStorage keys',tag:'storage',code:`sessionStorage.clear();log('sessionStorage cleared','w')`},
+    {name:'dark mode toggle',desc:'Invert page colors',tag:'page',code:`const on=!document.body.style.filter;document.body.style.filter=on?'invert(1) hue-rotate(180deg)':'';log('Dark mode '+(on?'ON':'OFF'),'i')`},
+    {name:'zoom 150%',desc:'Scale page to 150%',tag:'page',code:`document.body.style.zoom='1.5';log('Zoom set to 150%','i')`},
+    {name:'zoom reset',desc:'Reset page zoom to 100%',tag:'page',code:`document.body.style.zoom='1';log('Zoom reset to 100%','i')`},
+    {name:'rainbow mode',desc:'Cycle hue-rotate animation on the page',tag:'page',code:`let h=0;setInterval(()=>{document.body.style.filter='hue-rotate('+h+'deg)';h+=2},30);log('Rainbow mode ON — refresh to stop','i')`},
+    {name:'disable all CSS',desc:'Remove all stylesheets from page',tag:'page',code:`const n=document.querySelectorAll('link[rel="stylesheet"],style').length;document.querySelectorAll('link[rel="stylesheet"],style').forEach(s=>s.remove());log('Removed '+n+' stylesheet(s) — refresh to restore','w')`},
     {name:'asteroids 3D',desc:'Fullscreen 3D asteroid shooter overlay — ESC to quit',tag:'game',toggle:true,
       run:(el2)=>{const on=!!asteroidOverlay;launchAsteroids();el2.classList.toggle('mm-cmd-on',!on);el2.querySelector('.mm-ctag').textContent=!on?'PLAYING':'#game';el2.querySelector('.mm-cdesc').textContent=!on?'Running — ESC or click again to quit':'Fullscreen 3D asteroid shooter overlay — ESC to quit';}},
     // ── dom ──
-    {name:'show all passwords',desc:'Reveal all password input fields as plain text',tag:'dom',code:`document.querySelectorAll('input[type="password"]').forEach(i=>{i.type='text'});alert('Passwords revealed')`},
+    {name:'show all passwords',desc:'Reveal all password input fields as plain text',tag:'dom',code:`const n=document.querySelectorAll('input[type="password"]').length;document.querySelectorAll('input[type="password"]').forEach(i=>{i.type='text'});log('Revealed '+n+' password field(s)','i')`},
     {name:'click all checkboxes',desc:'Check every checkbox on the page',tag:'dom',code:`document.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(c=>c.click())`},
-    {name:'remove all popups',desc:'Remove fixed/sticky overlays and modals',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if((s.position==='fixed'||s.position==='sticky')&&e!==document.getElementById('__modmenu__'))e.remove()})`},
-    {name:'remove cookie banners',desc:'Nuke common cookie consent banners',tag:'dom',code:`['cookie','consent','gdpr','banner','popup','overlay','modal'].forEach(w=>document.querySelectorAll('[id*="'+w+'"],[class*="'+w+'"]').forEach(e=>{if(e!==document.getElementById('__modmenu__'))e.remove()}))`},
-    {name:'show hidden elements',desc:'Make all hidden elements visible',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if(s.display==='none'||s.visibility==='hidden'||s.opacity==='0')e.style.cssText+='display:block!important;visibility:visible!important;opacity:1!important'})`},
-    {name:'dump all links',desc:'Log every hyperlink href to console',tag:'dom',code:`Array.from(document.querySelectorAll('a[href]')).forEach(a=>console.log(a.href));alert('Logged '+document.querySelectorAll('a[href]').length+' links — check browser console')`},
-    {name:'dump all images',desc:'Log every image src to console',tag:'dom',code:`Array.from(document.images).forEach(i=>console.log(i.src));alert('Logged '+document.images.length+' images')`},
-    {name:'outline all elements',desc:'Draw a coloured outline around every DOM element',tag:'dom',code:`document.querySelectorAll('*').forEach((e,i)=>{e.style.outline='1px solid hsl('+(i*37%360)+',80%,55%)'})`},
-    {name:'remove all outlines',desc:'Strip all inline outlines added by debug tools',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>e.style.outline='')`},
-    {name:'freeze page',desc:'Disable all pointer events — page becomes unclickable',tag:'dom',code:`document.body.style.pointerEvents='none';alert('Page frozen — refresh to undo')`},
+    {name:'remove all popups',desc:'Remove fixed/sticky overlays and modals',tag:'dom',code:`let n=0;document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if((s.position==='fixed'||s.position==='sticky')&&e!==document.getElementById('__modmenu__')){e.remove();n++}});log('Removed '+n+' fixed/sticky element(s)','w')`},
+    {name:'remove cookie banners',desc:'Nuke common cookie consent banners',tag:'dom',code:`let n=0;['cookie','consent','gdpr','banner','popup','overlay','modal'].forEach(w=>document.querySelectorAll('[id*="'+w+'"],[class*="'+w+'"]').forEach(e=>{if(e!==document.getElementById('__modmenu__')){e.remove();n++}}));log('Removed '+n+' banner/popup element(s)','w')`},
+    {name:'show hidden elements',desc:'Make all hidden elements visible',tag:'dom',code:`let n=0;document.querySelectorAll('*').forEach(e=>{const s=getComputedStyle(e);if(s.display==='none'||s.visibility==='hidden'||s.opacity==='0'){e.style.cssText+='display:block!important;visibility:visible!important;opacity:1!important';n++}});log('Made '+n+' hidden element(s) visible','i')`},
+    {name:'dump all links',desc:'Log every hyperlink href to mod menu console',tag:'dom',code:`const links=Array.from(document.querySelectorAll('a[href]'));links.forEach(a=>log(a.href,'i'));log('--- '+links.length+' links total ---','w')`},
+    {name:'dump all images',desc:'Log every image src to mod menu console',tag:'dom',code:`const imgs=Array.from(document.images);imgs.forEach(i=>log(i.src,'i'));log('--- '+imgs.length+' images total ---','w')`},
+    {name:'outline all elements',desc:'Draw a coloured outline around every DOM element',tag:'dom',code:`const all=document.querySelectorAll('*');all.forEach((e,i)=>{e.style.outline='1px solid hsl('+(i*37%360)+',80%,55%)'});log('Outlined '+all.length+' elements','i')`},
+    {name:'remove all outlines',desc:'Strip all inline outlines added by debug tools',tag:'dom',code:`document.querySelectorAll('*').forEach(e=>e.style.outline='');log('All outlines removed','i')`},
+    {name:'freeze page',desc:'Disable all pointer events — page becomes unclickable',tag:'dom',code:`document.body.style.pointerEvents='none';log('Page frozen — refresh to undo','w')`},
     // ── nav ──
-    {name:'go back',desc:'Navigate to previous page in history',tag:'nav',code:`history.back()`},
-    {name:'go forward',desc:'Navigate forward in history',tag:'nav',code:`history.forward()`},
-    {name:'copy page title',desc:'Copy the current page title to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.title).then(()=>alert('Copied: '+document.title))`},
-    {name:'copy all text',desc:'Copy the entire visible page text to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.body.innerText).then(()=>alert('Page text copied'))`},
-    {name:'print page',desc:'Open the browser print dialog',tag:'nav',code:`window.print()`},
+    {name:'go back',desc:'Navigate to previous page in history',tag:'nav',code:`history.back();log('Navigating back...','i')`},
+    {name:'go forward',desc:'Navigate forward in history',tag:'nav',code:`history.forward();log('Navigating forward...','i')`},
+    {name:'copy page title',desc:'Copy the current page title to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.title).then(()=>log('Copied title: '+document.title,'i')).catch(()=>log('Clipboard blocked','e'))`},
+    {name:'copy all text',desc:'Copy the entire visible page text to clipboard',tag:'nav',code:`navigator.clipboard.writeText(document.body.innerText).then(()=>log('Page text copied ('+document.body.innerText.length+' chars)','i')).catch(()=>log('Clipboard blocked','e'))`},
+    {name:'print page',desc:'Open the browser print dialog',tag:'nav',code:`log('Opening print dialog...','i');window.print()`},
     // ── net ──
-    {name:'block all images',desc:'Intercept future image requests and block them',tag:'net',code:`const _o=window.open;const s=document.createElement('style');s.textContent='img{display:none!important}';document.head.appendChild(s);alert('Images blocked')`},
-    {name:'dump network timing',desc:'Log resource load times to console',tag:'net',code:`performance.getEntriesByType('resource').sort((a,b)=>b.duration-a.duration).slice(0,20).forEach(r=>console.log(r.duration.toFixed(0)+'ms',r.name));alert('Top 20 slowest resources logged')`},
-    {name:'intercept XHR',desc:'Patch XMLHttpRequest to log all requests',tag:'net',code:`const _open=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u,...a){console.log('[XHR]',m,u);return _open.call(this,m,u,...a)};alert('XHR patched')`},
+    {name:'block all images',desc:'Intercept future image requests and block them',tag:'net',code:`const s=document.createElement('style');s.textContent='img{display:none!important}';document.head.appendChild(s);log('All images hidden — refresh to restore','w')`},
+    {name:'dump network timing',desc:'Log resource load times to mod menu console',tag:'net',code:`const res=performance.getEntriesByType('resource').sort((a,b)=>b.duration-a.duration).slice(0,20);res.forEach(r=>log(r.duration.toFixed(0).padStart(6)+' ms  '+r.name.split('/').pop(),'i'));log('--- top '+res.length+' slowest resources ---','w')`},
+    {name:'intercept XHR',desc:'Patch XMLHttpRequest to log all requests',tag:'net',code:`const _open=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u,...a){log('[XHR] '+m+' '+String(u),'i');return _open.call(this,m,u,...a)};log('XHR patched — all requests will appear here','i')`},
     // ── storage ──
-    {name:'dump localStorage JSON',desc:'Pretty-print all localStorage to console',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch{d[k]=localStorage.getItem(k)}}console.log(JSON.stringify(d,null,2));alert('localStorage dumped to console')`},
-    {name:'backup localStorage',desc:'Copy localStorage as JSON to clipboard',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch{d[k]=localStorage.getItem(k)}}navigator.clipboard.writeText(JSON.stringify(d,null,2)).then(()=>alert('Backup copied to clipboard'))`},
-    {name:'clear all cookies',desc:'Expire every cookie on the current domain',tag:'storage',code:`document.cookie.split(';').forEach(c=>{const k=c.split('=')[0].trim();document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname});alert('Cookies cleared')`},
+    {name:'dump localStorage JSON',desc:'Pretty-print all localStorage to mod menu console',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch(e){d[k]=localStorage.getItem(k)}}if(!localStorage.length){log('localStorage is empty','w')}else{Object.entries(d).forEach(([k,v])=>log(k+' → '+JSON.stringify(v).slice(0,120),'i'));log('--- '+localStorage.length+' keys total ---','w')}`},
+    {name:'backup localStorage',desc:'Copy localStorage as JSON to clipboard',tag:'storage',code:`const d={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);try{d[k]=JSON.parse(localStorage.getItem(k))}catch(e){d[k]=localStorage.getItem(k)}}navigator.clipboard.writeText(JSON.stringify(d,null,2)).then(()=>log('localStorage backup copied to clipboard ('+localStorage.length+' keys)','i')).catch(()=>log('Clipboard blocked','e'))`},
+    {name:'clear all cookies',desc:'Expire every cookie on the current domain',tag:'storage',code:`const cks=document.cookie.split(';').filter(c=>c.trim());cks.forEach(c=>{const k=c.split('=')[0].trim();document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname});log('Cleared '+cks.length+' cookie(s)','w')`},
     // ── page ──
     {name:'focus mode',desc:'Dim everything except the element you hover over',tag:'page',toggle:true,
       run:(el2)=>{
@@ -990,16 +1020,16 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       }
     },
     {name:'reading mode',desc:'Strip page to just main text content',tag:'page',code:`const main=document.querySelector('article,main,[role="main"],.post,.entry-content')||document.body;const clone=main.cloneNode(true);document.body.innerHTML='';document.body.style.cssText='max-width:720px;margin:40px auto;padding:20px;font:18px/1.7 Georgia,serif;color:#111;background:#fff';document.body.appendChild(clone)`},
-    {name:'night mode',desc:'Dark background, light text, low contrast',tag:'page',code:`document.body.style.cssText+='background:#111!important;color:#ccc!important;filter:brightness(.85)'`},
-    {name:'sepia mode',desc:'Apply warm sepia tone to the page',tag:'page',code:`document.body.style.filter='sepia(0.7) brightness(0.95)'`},
-    {name:'font size up',desc:'Increase all text size by 20%',tag:'page',code:`document.body.style.fontSize=(parseFloat(getComputedStyle(document.body).fontSize||'16')*1.2)+'px'`},
-    {name:'font size down',desc:'Decrease all text size by 20%',tag:'page',code:`document.body.style.fontSize=(parseFloat(getComputedStyle(document.body).fontSize||'16')*0.8)+'px'`},
-    {name:'take screenshot',desc:'Capture page to canvas and open in new tab',tag:'page',code:`import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js').then(m=>m.default(document.body)).then(c=>window.open(c.toDataURL(),'_blank')).catch(()=>alert('html2canvas not available on this page'))`},
-    {name:'word count',desc:'Count all visible words on the page',tag:'page',code:`const txt=document.body.innerText;const words=txt.trim().split(/\s+/).filter(Boolean);alert('Words: '+words.length+'\nChars: '+txt.length+'\nLines: '+txt.split('\n').length)`},
+    {name:'night mode',desc:'Dark background, light text, low contrast',tag:'page',code:`document.body.style.cssText+='background:#111!important;color:#ccc!important;filter:brightness(.85)';log('Night mode applied','i')`},
+    {name:'sepia mode',desc:'Apply warm sepia tone to the page',tag:'page',code:`document.body.style.filter='sepia(0.7) brightness(0.95)';log('Sepia mode applied','i')`},
+    {name:'font size up',desc:'Increase all text size by 20%',tag:'page',code:`const s=(parseFloat(getComputedStyle(document.body).fontSize||'16')*1.2);document.body.style.fontSize=s+'px';log('Font size: '+s.toFixed(1)+'px','i')`},
+    {name:'font size down',desc:'Decrease all text size by 20%',tag:'page',code:`const s=(parseFloat(getComputedStyle(document.body).fontSize||'16')*0.8);document.body.style.fontSize=s+'px';log('Font size: '+s.toFixed(1)+'px','i')`},
+    {name:'take screenshot',desc:'Capture page to canvas and open in new tab',tag:'page',code:`import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js').then(m=>m.default(document.body)).then(c=>window.open(c.toDataURL(),'_blank')).catch(e=>log('Screenshot failed: '+e.message,'e'))`},
+    {name:'word count',desc:'Count all visible words on the page',tag:'page',code:`const txt=document.body.innerText;const words=txt.trim().split(/\s+/).filter(Boolean);log('Words: '+words.length,'i');log('Chars: '+txt.length,'i');log('Lines: '+txt.split('\n').length,'i')`},
     {name:'find & highlight',desc:'Highlight all occurrences of a word',tag:'page',code:"const q=prompt('Highlight word or phrase:');if(q){document.body.innerHTML=document.body.innerHTML.replace(new RegExp(q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&'),'gi'),'<mark style=\"background:#facc15;color:#000\">$&</mark>')}"},
-    {name:'full screen',desc:'Toggle fullscreen mode for the page',tag:'page',code:`document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()`},
-    {name:'page to grayscale',desc:'Render entire page in black and white',tag:'page',code:`document.body.style.filter=(document.body.style.filter.includes('grayscale')?'':'grayscale(1)')`},
-    {name:'confetti',desc:'Drop confetti animation on the page',tag:'page',code:`(()=>{const c=document.createElement('canvas');Object.assign(c.style,{position:'fixed',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:2147483645});document.body.appendChild(c);const ctx=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:Math.random()*-c.height,v:2+Math.random()*4,a:Math.random()*Math.PI*2,r:4+Math.random()*6,col:'hsl('+(Math.random()*360)+',80%,60%)'}));let frames=0;(function loop(){if(frames++>300){c.remove();return}ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.y+=q.v;q.a+=0.05;ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a);ctx.fillStyle=q.col;ctx.fillRect(-q.r/2,-q.r/2,q.r,q.r);ctx.restore();if(q.y>c.height)q.y=-20});requestAnimationFrame(loop)})()})()`},
+    {name:'full screen',desc:'Toggle fullscreen mode for the page',tag:'page',code:`document.fullscreenElement?(document.exitFullscreen(),log('Exited fullscreen','i')):(document.documentElement.requestFullscreen(),log('Entered fullscreen','i'))`},
+    {name:'page to grayscale',desc:'Render entire page in black and white',tag:'page',code:`const on=!document.body.style.filter.includes('grayscale');document.body.style.filter=on?'grayscale(1)':'';log('Grayscale '+(on?'ON':'OFF'),'i')`},
+    {name:'confetti',desc:'Drop confetti animation on the page (runs for ~10 sec)',tag:'page',code:`(()=>{const c=document.createElement('canvas');Object.assign(c.style,{position:'fixed',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:2147483645});document.body.appendChild(c);const ctx=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:Math.random()*-c.height,v:2+Math.random()*4,a:Math.random()*Math.PI*2,r:4+Math.random()*6,col:'hsl('+(Math.random()*360)+',80%,60%)'}));let frames=0;(function loop(){if(frames++>300){c.remove();return}ctx.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.y+=q.v;q.a+=0.05;ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a);ctx.fillStyle=q.col;ctx.fillRect(-q.r/2,-q.r/2,q.r,q.r);ctx.restore();if(q.y>c.height)q.y=-20});requestAnimationFrame(loop)})()})()`},
   ];
   const tagCls={dom:'t-dom',nav:'t-nav',net:'t-net',storage:'t-storage',page:'t-page',edit:'t-edit',game:'t-game'};
   function renderCommands(filter=''){
@@ -1708,6 +1738,225 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       khStatus('No PIN found — navigate to a Kahoot game first','warn');
     }
   });
+
+
+  // ── videowatchr frontend ──
+  (function(){
+    const vwSearch=$m('vw-search'), vwSearchBtn=$m('vw-search-btn'), vwBackBtn=$m('vw-back-btn');
+    const vwPlayerView=$m('vw-player-view'), vwResultsView=$m('vw-results-view');
+    const vwResultsList=$m('vw-results-list'), vwStatus=$m('vw-status');
+    const vwPlayerFrame=$m('vw-player-frame');
+    const vwVideoTitle=$m('vw-video-title'), vwVideoChannel=$m('vw-video-channel');
+
+    if(!vwSearch)return; // panel not in DOM yet
+
+    function vwSetStatus(msg){if(vwStatus)vwStatus.textContent=msg;}
+
+    function vwShowPlayer(videoId,title,channel){
+      vwPlayerFrame.src='https://www.youtube.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1';
+      vwVideoTitle.textContent=title||videoId;
+      vwVideoChannel.textContent=channel||'';
+      vwPlayerView.style.display='flex';
+      vwBackBtn.style.display='block';
+      vwSetStatus('playing: '+videoId);
+    }
+
+    function vwShowResults(){
+      vwPlayerView.style.display='none';
+      vwPlayerFrame.src='';
+      vwBackBtn.style.display='none';
+    }
+
+    // Card renderer
+    function vwCard(item){
+      const vid=item.id?.videoId||item.videoId||'';
+      const snippet=item.snippet||item;
+      const title=snippet.title||'Untitled';
+      const channel=snippet.channelTitle||snippet.channel||'';
+      const thumb=snippet.thumbnails?.medium?.url||snippet.thumbnails?.default?.url||('https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg');
+      const duration=snippet.duration||'';
+
+      const card=document.createElement('div');
+      card.style.cssText='display:flex;gap:9px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:background .12s;margin-bottom:4px;align-items:flex-start';
+      card.innerHTML=`
+        <div style="flex-shrink:0;width:112px;height:63px;border-radius:5px;overflow:hidden;background:#111;position:relative">
+          <img src="${thumb}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display='none'"/>
+          ${duration?`<span style="position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,0.8);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-family:'Geist Mono',monospace">${duration}</span>`:''}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11.5px;font-weight:500;color:#e2e8f0;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${title}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px;font-family:'Geist Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${channel}</div>
+        </div>`;
+      card.addEventListener('mouseenter',()=>card.style.background='rgba(255,255,255,0.05)');
+      card.addEventListener('mouseleave',()=>card.style.background='');
+      card.addEventListener('click',()=>vwShowPlayer(vid,title,channel));
+      return card;
+    }
+
+    function vwSectionHeader(text){
+      const h=document.createElement('div');
+      h.style.cssText='font-size:9.5px;color:rgba(248,113,113,0.6);text-transform:uppercase;letter-spacing:.1em;font-weight:600;padding:6px 4px 4px;font-family:"Geist",sans-serif';
+      h.textContent=text;
+      return h;
+    }
+
+    function vwSpinner(msg){
+      const d=document.createElement('div');
+      d.style.cssText='text-align:center;padding:30px 10px;color:rgba(255,255,255,0.2);font-size:11px;font-family:"Geist Mono",monospace';
+      d.textContent=msg||'loading...';
+      return d;
+    }
+
+    // Search using YouTube's no-key embed search via videowatchr's own search endpoint
+    // VideoWatchr proxies YouTube search at /search?q=
+    // We also fall back to building direct embed links from a simple scrape
+    async function vwDoSearch(q){
+      vwResultsList.innerHTML='';
+      vwResultsList.appendChild(vwSpinner('searching "'+q+'"...'));
+      vwSetStatus('searching...');
+
+      try{
+        // Strategy 1: Use YouTube's oembed + invidious public API (no key needed)
+        const invidiousInstances=[
+          'https://inv.nadeko.net',
+          'https://invidious.privacydev.net',
+          'https://invidious.fdn.fr',
+        ];
+
+        let results=null;
+        for(const inst of invidiousInstances){
+          try{
+            const r=await fetch(inst+'/api/v1/search?q='+encodeURIComponent(q)+'&type=video&fields=videoId,title,author,lengthSeconds,videoThumbnails',{signal:AbortSignal.timeout(4000)});
+            if(r.ok){results=await r.json();break;}
+          }catch(e){}
+        }
+
+        vwResultsList.innerHTML='';
+
+        if(results&&results.length){
+          vwResultsList.appendChild(vwSectionHeader('results for "'+q+'"'));
+          results.slice(0,15).forEach(item=>{
+            const mins=Math.floor((item.lengthSeconds||0)/60);
+            const secs=String((item.lengthSeconds||0)%60).padStart(2,'0');
+            const dur=item.lengthSeconds?(mins+':'+secs):'';
+            const thumb=item.videoThumbnails?.[2]?.url||item.videoThumbnails?.[0]?.url||('https://i.ytimg.com/vi/'+item.videoId+'/mqdefault.jpg');
+            const card=vwCard({
+              videoId:item.videoId,
+              snippet:{title:item.title,channelTitle:item.author,duration:dur,
+                thumbnails:{medium:{url:thumb}}}
+            });
+            vwResultsList.appendChild(card);
+          });
+          vwSetStatus(results.length+' results for "'+q+'"');
+        } else {
+          // Strategy 2: Direct YouTube embed search fallback — show clickable search page
+          vwResultsList.innerHTML='';
+          const msg=document.createElement('div');
+          msg.style.cssText='padding:16px;font-size:11px;color:rgba(255,255,255,0.35);font-family:"Geist",sans-serif;line-height:1.7';
+          msg.innerHTML=`<div style="color:rgba(248,113,113,0.7);margin-bottom:8px;font-size:12px">Search proxy unavailable</div>
+            Try one of these:<br><br>
+            <a href="https://videowatchr.com/search?q=${encodeURIComponent(q)}" target="_blank" style="color:#f87171;text-decoration:none">▶ Search on VideoWatchr.com</a><br>
+            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}" target="_blank" style="color:#f87171;text-decoration:none">▶ Search on YouTube</a><br><br>
+            <div style="font-size:10px;color:rgba(255,255,255,0.2)">Or paste a YouTube video ID or URL below to watch directly:</div><br>
+            <div style="display:flex;gap:6px">
+              <input id="vw-direct-id" placeholder="youtube.com/watch?v=..." type="text" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 9px;color:#e2e8f0;font-family:'Geist Mono',monospace;font-size:10.5px;outline:none"/>
+              <button id="vw-direct-play" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:6px;padding:5px 12px;font-family:'Geist',sans-serif;font-size:11px;cursor:pointer">play</button>
+            </div>`;
+          vwResultsList.appendChild(msg);
+          document.getElementById('vw-direct-play')?.addEventListener('click',()=>{
+            const raw=document.getElementById('vw-direct-id')?.value||'';
+            const match=raw.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)||raw.match(/^([a-zA-Z0-9_-]{11})$/);
+            if(match)vwShowPlayer(match[1],'Direct play','');
+            else vwSetStatus('invalid YouTube URL or ID');
+          });
+          vwSetStatus('search proxy unavailable');
+        }
+      }catch(e){
+        vwResultsList.innerHTML='';
+        vwResultsList.appendChild(vwSpinner('error: '+e.message));
+        vwSetStatus('error — try again');
+      }
+    }
+
+    // Home screen — categories + trending
+    async function vwLoadHome(){
+      vwResultsList.innerHTML='';
+      vwResultsList.appendChild(vwSpinner('loading...'));
+      vwSetStatus('loading home...');
+
+      const categories=[
+        {name:'🎮 gaming',q:'gaming highlights 2024'},
+        {name:'🎵 music',q:'music video 2024'},
+        {name:'😂 comedy',q:'funny videos 2024'},
+        {name:'🔬 science & tech',q:'science technology 2024'},
+        {name:'🏅 sports',q:'sports highlights 2024'},
+      ];
+
+      vwResultsList.innerHTML='';
+
+      // Quick links row
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;flex-wrap:wrap;gap:5px;padding:4px 2px 10px';
+      categories.forEach(cat=>{
+        const btn=document.createElement('button');
+        btn.textContent=cat.name;
+        btn.style.cssText='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:4px 11px;font-family:"Geist",sans-serif;font-size:10.5px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all .12s';
+        btn.addEventListener('mouseenter',()=>{btn.style.background='rgba(248,113,113,0.1)';btn.style.borderColor='rgba(248,113,113,0.3)';btn.style.color='#f87171';});
+        btn.addEventListener('mouseleave',()=>{btn.style.background='rgba(255,255,255,0.05)';btn.style.borderColor='rgba(255,255,255,0.09)';btn.style.color='rgba(255,255,255,0.55)';});
+        btn.addEventListener('click',()=>{vwSearch.value=cat.q;vwDoSearch(cat.q);});
+        row.appendChild(btn);
+      });
+      vwResultsList.appendChild(row);
+
+      // Try to load trending via invidious
+      const instances=['https://inv.nadeko.net','https://invidious.privacydev.net','https://invidious.fdn.fr'];
+      let trending=null;
+      for(const inst of instances){
+        try{
+          const r=await fetch(inst+'/api/v1/trending?type=default&fields=videoId,title,author,lengthSeconds,videoThumbnails',{signal:AbortSignal.timeout(4000)});
+          if(r.ok){trending=await r.json();break;}
+        }catch(e){}
+      }
+
+      if(trending&&trending.length){
+        vwResultsList.appendChild(vwSectionHeader('trending'));
+        trending.slice(0,12).forEach(item=>{
+          const mins=Math.floor((item.lengthSeconds||0)/60);
+          const secs=String((item.lengthSeconds||0)%60).padStart(2,'0');
+          const card=vwCard({
+            videoId:item.videoId,
+            snippet:{title:item.title,channelTitle:item.author,duration:item.lengthSeconds?(mins+':'+secs):'',
+              thumbnails:{medium:{url:item.videoThumbnails?.[2]?.url||'https://i.ytimg.com/vi/'+item.videoId+'/mqdefault.jpg'}}}
+          });
+          vwResultsList.appendChild(card);
+        });
+        vwSetStatus('trending loaded');
+      } else {
+        const hint=document.createElement('div');
+        hint.style.cssText='padding:10px 4px;font-size:10.5px;color:rgba(255,255,255,0.2);font-family:"Geist",sans-serif;line-height:1.7';
+        hint.textContent='Search above to find videos, or pick a category.';
+        vwResultsList.appendChild(hint);
+        vwSetStatus('videowatchr — powered by youtube');
+      }
+    }
+
+    // Events
+    vwSearchBtn.addEventListener('click',()=>{const q=vwSearch.value.trim();if(q)vwDoSearch(q);});
+    vwSearch.addEventListener('keydown',e=>{if(e.key==='Enter'){const q=vwSearch.value.trim();if(q)vwDoSearch(q);}});
+    vwBackBtn.addEventListener('click',()=>vwShowResults());
+
+    // Load home when tab is clicked
+    document.querySelectorAll('#__modmenu__ .mm-tab').forEach(t=>{
+      if(t.dataset.tab==='videowatchr'){
+        t.addEventListener('click',()=>{
+          if(!vwResultsList.children.length)vwLoadHome();
+        });
+      }
+    });
+
+    // Also load if tab is already active on init
+    if(document.getElementById('mm-panel-videowatchr')?.classList.contains('mm-active'))vwLoadHome();
+  })();
 
   // ── games ──
   let gmGame=null,gmRAF=null,gmKeys={},gmScore=0;
