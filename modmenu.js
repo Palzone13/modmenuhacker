@@ -51,6 +51,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .mm-tab.mm-calc.mm-active { color: #fb923c; border-bottom-color: #fb923c; }
     #__modmenu__ .mm-tab.mm-vw.mm-active { color: #f87171; border-bottom-color: #f87171; }
     #__modmenu__ .mm-tab.mm-kahoot.mm-active { color: #a78bfa; border-bottom-color: #a78bfa; }
+    #__modmenu__ .mm-tab.mm-home.mm-active { color: #fff; border-bottom-color: #fff; }
 
     #__modmenu__ #mm-panels { flex: 1; overflow: hidden; }
     #__modmenu__ .mm-panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
@@ -247,6 +248,30 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .cc-eq:hover { background: #f97316; }
     #__modmenu__ .cc-zero { grid-column: span 2; }
 
+
+    /* Toast notifications */
+    #__mm_toast__ {
+      position: fixed; bottom: 20px; right: 20px; z-index: 2147483647;
+      display: flex; flex-direction: column; gap: 6px; pointer-events: none;
+    }
+    .mm-toast {
+      padding: 9px 14px; border-radius: 8px; font-family: 'Geist Mono', monospace;
+      font-size: 11px; line-height: 1.5; max-width: 300px; word-break: break-word;
+      pointer-events: none; transform: translateX(120%); transition: transform .22s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .mm-toast.mm-toast-in { transform: translateX(0); }
+    .mm-toast.mm-toast-out { transform: translateX(120%); transition: transform .18s ease-in; }
+    .mm-toast-ok {
+      background: #0d2e16; border: 1px solid #166534;
+      color: #4ade80;
+    }
+    .mm-toast-ok .mm-toast-title { color: #86efac; font-weight: 600; font-size: 11.5px; }
+    .mm-toast-err {
+      background: #2d0e0e; border: 1px solid #7f1d1d;
+      color: #f87171;
+    }
+    .mm-toast-err .mm-toast-title { color: #fca5a5; font-weight: 600; font-size: 11.5px; }
     /* Minimize */
     #__modmenu__.mm-min { height: 44px !important; overflow: hidden; resize: none; }
 
@@ -267,7 +292,8 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div id="mm-ver">v3.0</div>
     </div>
     <div id="mm-tabs">
-      <div class="mm-tab mm-active" data-tab="console">console</div>
+      <div class="mm-tab mm-home mm-active" data-tab="home">home</div>
+      <div class="mm-tab" data-tab="console">console</div>
       <div class="mm-tab" data-tab="inspect">inspect</div>
       <div class="mm-tab" data-tab="commands">commands</div>
       <div class="mm-tab" data-tab="storage">storage</div>
@@ -280,7 +306,32 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     </div>
     <div id="mm-panels">
 
-      <div class="mm-panel mm-active" id="mm-panel-console">
+      <div class="mm-panel mm-active" id="mm-panel-home">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:0;padding:20px;text-align:center;position:relative;overflow:hidden">
+
+          <!-- Background glow -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,0.03) 0%,transparent 70%);pointer-events:none"></div>
+
+          <!-- Name -->
+          <div style="font-family:'Geist',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:0.04em;margin-bottom:5px">modmenuhacker</div>
+
+          <!-- Tagline -->
+          <div style="font-family:'Geist',sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.3);letter-spacing:0.08em;margin-bottom:40px">bringing modmenus to you</div>
+
+          <!-- Divider -->
+          <div style="width:40px;height:1px;background:rgba(255,255,255,0.1);margin-bottom:40px"></div>
+
+          <!-- Clock -->
+          <div id="mm-home-time" style="font-family:'Geist Mono',monospace;font-size:52px;font-weight:300;color:#fff;letter-spacing:-0.02em;line-height:1;margin-bottom:8px">00:00</div>
+          <div id="mm-home-secs" style="font-family:'Geist Mono',monospace;font-size:22px;font-weight:300;color:rgba(255,255,255,0.25);letter-spacing:0.05em;margin-bottom:32px">00</div>
+
+          <!-- Date -->
+          <div id="mm-home-date" style="font-family:'Geist',sans-serif;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;text-transform:uppercase"></div>
+
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-console">
         <div id="mm-cout"></div>
         <div id="mm-cinwrap">
           <span id="mm-cprompt">&rsaquo;</span>
@@ -445,7 +496,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <div id="vw-player-view" style="display:none;flex-direction:column;flex:1;overflow:hidden">
             <div style="position:relative;width:100%;padding-top:56.25%;background:#000;flex-shrink:0">
               <iframe id="vw-player-frame" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
-                allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>
+                allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
             </div>
             <div id="vw-video-info" style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0">
               <div id="vw-video-title" style="font-size:12px;font-weight:500;color:#e2e8f0;line-height:1.4;margin-bottom:3px"></div>
@@ -477,8 +528,24 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     </div>
   `;
   document.body.appendChild(el);
+  const toastContainer=document.createElement('div');toastContainer.id='__mm_toast__';document.body.appendChild(toastContainer);
 
   const $m = id => document.getElementById(id);
+
+  function showToast(type, title, detail, duration){
+    const t=document.createElement('div');
+    t.className='mm-toast mm-toast-'+(type==='ok'?'ok':'err');
+    t.innerHTML='<div class="mm-toast-title">'+(type==='ok'?'✓ '+title:'✗ '+title)+'</div>'
+      +(detail?'<div style="margin-top:2px;opacity:0.75;font-size:10px">'+String(detail).slice(0,120)+'</div>':'');
+    toastContainer.appendChild(t);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('mm-toast-in')));
+    setTimeout(()=>{
+      t.classList.remove('mm-toast-in');t.classList.add('mm-toast-out');
+      setTimeout(()=>t.remove(), 200);
+    }, duration||2800);
+  }
+
+
 
   // ── drag ──
   let dragging = false, dx = 0, dy = 0;
@@ -529,22 +596,52 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     document.querySelector('#__modmenu__ [data-tab="console"]').classList.add('mm-active');
     $m('mm-panel-console').classList.add('mm-active');
   }
-  function runCode(code){
+  function runCode(code,cmdName){
     if(!code.trim())return;
     const row=document.createElement('div');row.className='mm-log';
     row.innerHTML=`<span class="mm-ts">${ts()}</span><span style="color:rgba(255,255,255,0.3)">›</span><span style="flex:1;word-break:break-all;color:#e2e8f0">${esc(code)}</span>`;
     cout.appendChild(row);
-    try{const r=(0,eval)(code);const r2=document.createElement('div');r2.className='mm-log';r2.innerHTML=`<span class="mm-ts"></span><span style="color:rgba(255,255,255,0.2)">‹</span><span style="flex:1">${fmt(r)}</span>`;cout.appendChild(r2);}
-    catch(e){log(e.message,'e');}
+    try{
+      const r=(0,eval)(code);
+      const r2=document.createElement('div');r2.className='mm-log';
+      r2.innerHTML=`<span class="mm-ts"></span><span style="color:rgba(255,255,255,0.2)">‹</span><span style="flex:1">${fmt(r)}</span>`;
+      cout.appendChild(r2);
+      showToast('ok', cmdName||'command executed', r!==undefined?String(r).slice(0,60):null);
+    }
+    catch(e){
+      log(e.message,'e');
+      showToast('err', 'command failed', e.message);
+    }
     cout.scrollTop=cout.scrollHeight;
   }
-  $m('mm-runbtn').addEventListener('click',()=>{const v=$m('mm-cinput').value;if(!v.trim())return;history.unshift(v);histIdx=-1;runCode(v);$m('mm-cinput').value='';});
+  $m('mm-runbtn').addEventListener('click',()=>{const v=$m('mm-cinput').value;if(!v.trim())return;history.unshift(v);histIdx=-1;runCode(v,'eval');$m('mm-cinput').value='';});
   $m('mm-cinput').addEventListener('keydown',e=>{
     if(e.key==='Enter')$m('mm-runbtn').click();
     if(e.key==='ArrowUp'){e.preventDefault();histIdx=Math.min(histIdx+1,history.length-1);$m('mm-cinput').value=history[histIdx]||'';}
     if(e.key==='ArrowDown'){e.preventDefault();histIdx=Math.max(histIdx-1,-1);$m('mm-cinput').value=histIdx<0?'':history[histIdx];}
   });
   log('ModMenuHacker v3.0 — '+location.hostname,'i');
+  // ── home clock ──
+  (function(){
+    const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function tickClock(){
+      const n=new Date();
+      const h=String(n.getHours()).padStart(2,'0');
+      const m=String(n.getMinutes()).padStart(2,'0');
+      const s=String(n.getSeconds()).padStart(2,'0');
+      const timeEl=document.getElementById('mm-home-time');
+      const secsEl=document.getElementById('mm-home-secs');
+      const dateEl=document.getElementById('mm-home-date');
+      if(timeEl)timeEl.textContent=h+':'+m;
+      if(secsEl)secsEl.textContent=s;
+      if(dateEl)dateEl.textContent=DAYS[n.getDay()]+', '+MONTHS[n.getMonth()]+' '+n.getDate()+' '+n.getFullYear();
+    }
+    tickClock();
+    setInterval(tickClock,1000);
+  })();
+
+
 
   // ── inspect ──
   const inspectData={
@@ -1038,7 +1135,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       const el2=document.createElement('div');el2.className='mm-cmd';
       if(c.toggle&&c.name==='edit anything'&&editOn)el2.classList.add('mm-cmd-on');
       el2.innerHTML=`<div class="mm-cname">${c.name}</div><div class="mm-cdesc">${c.desc}</div><span class="mm-ctag ${tagCls[c.tag]}">${c.toggle&&editOn?'on':'#'+c.tag}</span>`;
-      el2.addEventListener('click',()=>{if(c.toggle){c.run(el2);}else{goConsole();runCode(c.code);}});
+      el2.addEventListener('click',()=>{if(c.toggle){c.run(el2);}else{goConsole();runCode(c.code,c.name);}});
       list.appendChild(el2);
     });
   }
@@ -1747,13 +1844,12 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     const vwResultsList=$m('vw-results-list'), vwStatus=$m('vw-status');
     const vwPlayerFrame=$m('vw-player-frame');
     const vwVideoTitle=$m('vw-video-title'), vwVideoChannel=$m('vw-video-channel');
-
-    if(!vwSearch)return; // panel not in DOM yet
+    if(!vwSearch)return;
 
     function vwSetStatus(msg){if(vwStatus)vwStatus.textContent=msg;}
 
     function vwShowPlayer(videoId,title,channel){
-      vwPlayerFrame.src='https://www.youtube.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1';
+      vwPlayerFrame.src='https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1';
       vwVideoTitle.textContent=title||videoId;
       vwVideoChannel.textContent=channel||'';
       vwPlayerView.style.display='flex';
@@ -1767,195 +1863,197 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       vwBackBtn.style.display='none';
     }
 
-    // Card renderer
-    function vwCard(item){
-      const vid=item.id?.videoId||item.videoId||'';
-      const snippet=item.snippet||item;
-      const title=snippet.title||'Untitled';
-      const channel=snippet.channelTitle||snippet.channel||'';
-      const thumb=snippet.thumbnails?.medium?.url||snippet.thumbnails?.default?.url||('https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg');
-      const duration=snippet.duration||'';
-
+    function vwCard(videoId,title,channel,thumb,duration){
       const card=document.createElement('div');
       card.style.cssText='display:flex;gap:9px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:background .12s;margin-bottom:4px;align-items:flex-start';
-      card.innerHTML=`
-        <div style="flex-shrink:0;width:112px;height:63px;border-radius:5px;overflow:hidden;background:#111;position:relative">
-          <img src="${thumb}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display='none'"/>
-          ${duration?`<span style="position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,0.8);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-family:'Geist Mono',monospace">${duration}</span>`:''}
-        </div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:11.5px;font-weight:500;color:#e2e8f0;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${title}</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px;font-family:'Geist Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${channel}</div>
-        </div>`;
-      card.addEventListener('mouseenter',()=>card.style.background='rgba(255,255,255,0.05)');
-      card.addEventListener('mouseleave',()=>card.style.background='');
-      card.addEventListener('click',()=>vwShowPlayer(vid,title,channel));
+      const safethumb=thumb||('https://i.ytimg.com/vi/'+videoId+'/mqdefault.jpg');
+      const safeTitle=(title||videoId).replace(/</g,'&lt;');
+      const safeChan=(channel||'').replace(/</g,'&lt;');
+      card.innerHTML='<div style="flex-shrink:0;width:112px;height:63px;border-radius:5px;overflow:hidden;background:#111;position:relative">'
+        +'<img src="'+safethumb+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>'
+        +(duration?'<span style="position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,0.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-family:monospace">'+duration+'</span>':'')
+        +'</div>'
+        +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:11.5px;font-weight:500;color:#e2e8f0;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">'+safeTitle+'</div>'
+        +'<div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+safeChan+'</div>'
+        +'</div>';
+      card.addEventListener('mouseenter',function(){card.style.background='rgba(255,255,255,0.05)';});
+      card.addEventListener('mouseleave',function(){card.style.background='';});
+      card.addEventListener('click',function(){vwShowPlayer(videoId,title,channel);});
       return card;
     }
 
     function vwSectionHeader(text){
       const h=document.createElement('div');
-      h.style.cssText='font-size:9.5px;color:rgba(248,113,113,0.6);text-transform:uppercase;letter-spacing:.1em;font-weight:600;padding:6px 4px 4px;font-family:"Geist",sans-serif';
+      h.style.cssText='font-size:9.5px;color:rgba(248,113,113,0.6);text-transform:uppercase;letter-spacing:.1em;font-weight:600;padding:6px 4px 4px;font-family:sans-serif';
       h.textContent=text;
       return h;
     }
 
     function vwSpinner(msg){
       const d=document.createElement('div');
-      d.style.cssText='text-align:center;padding:30px 10px;color:rgba(255,255,255,0.2);font-size:11px;font-family:"Geist Mono",monospace';
+      d.style.cssText='text-align:center;padding:30px 10px;color:rgba(255,255,255,0.25);font-size:11px;font-family:monospace';
       d.textContent=msg||'loading...';
       return d;
     }
 
-    // Search using YouTube's no-key embed search via videowatchr's own search endpoint
-    // VideoWatchr proxies YouTube search at /search?q=
-    // We also fall back to building direct embed links from a simple scrape
+    function vwFetchTimeout(url,ms){
+      return new Promise(function(resolve,reject){
+        const ctrl=new AbortController();
+        const timer=setTimeout(function(){ctrl.abort();reject(new Error('timeout'));},ms||5000);
+        fetch(url,{signal:ctrl.signal}).then(function(r){clearTimeout(timer);resolve(r);}).catch(function(e){clearTimeout(timer);reject(e);});
+      });
+    }
+
+    // Public no-key YouTube search APIs (no CORS issues)
+    // Primary: yt.lemnoslife.com/noKey - free public YouTube Data API proxy
+    // Fallback: pipedapi.kavin.rocks - Piped API (YouTube frontend)
+    // Fallback 2: direct ID entry
+
+    async function vwSearchAPI(q){
+      // Try Piped API instances (they allow CORS)
+      var pipedInstances=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://piped-api.garudalinux.org'];
+      for(var i=0;i<pipedInstances.length;i++){
+        try{
+          var r=await vwFetchTimeout(pipedInstances[i]+'/search?q='+encodeURIComponent(q)+'&filter=videos',5000);
+          if(r.ok){
+            var data=await r.json();
+            if(data&&data.items&&data.items.length)return{source:'piped',items:data.items};
+          }
+        }catch(e){}
+      }
+      return null;
+    }
+
+    async function vwTrendingAPI(){
+      var pipedInstances=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://piped-api.garudalinux.org'];
+      for(var i=0;i<pipedInstances.length;i++){
+        try{
+          var r=await vwFetchTimeout(pipedInstances[i]+'/trending?region=US',5000);
+          if(r.ok){
+            var data=await r.json();
+            if(data&&data.length)return data;
+          }
+        }catch(e){}
+      }
+      return null;
+    }
+
+    function vwSecsToTime(s){
+      if(!s||s<0)return'';
+      var m=Math.floor(s/60),sec=String(s%60).padStart(2,'0');
+      return m+':'+sec;
+    }
+
+    function vwRenderPipedItems(items,max){
+      (items||[]).slice(0,max||15).forEach(function(item){
+        var videoId=(item.url||'').replace('/watch?v=','');
+        var thumb=item.thumbnail||('https://i.ytimg.com/vi/'+videoId+'/mqdefault.jpg');
+        var dur=vwSecsToTime(item.duration);
+        vwResultsList.appendChild(vwCard(videoId,item.title,item.uploaderName,thumb,dur));
+      });
+    }
+
     async function vwDoSearch(q){
       vwResultsList.innerHTML='';
       vwResultsList.appendChild(vwSpinner('searching "'+q+'"...'));
       vwSetStatus('searching...');
-
       try{
-        // Strategy 1: Use YouTube's oembed + invidious public API (no key needed)
-        const invidiousInstances=[
-          'https://inv.nadeko.net',
-          'https://invidious.privacydev.net',
-          'https://invidious.fdn.fr',
-        ];
-
-        let results=null;
-        for(const inst of invidiousInstances){
-          try{
-            const r=await fetch(inst+'/api/v1/search?q='+encodeURIComponent(q)+'&type=video&fields=videoId,title,author,lengthSeconds,videoThumbnails',{signal:AbortSignal.timeout(4000)});
-            if(r.ok){results=await r.json();break;}
-          }catch(e){}
-        }
-
+        var res=await vwSearchAPI(q);
         vwResultsList.innerHTML='';
-
-        if(results&&results.length){
+        if(res&&res.items&&res.items.length){
           vwResultsList.appendChild(vwSectionHeader('results for "'+q+'"'));
-          results.slice(0,15).forEach(item=>{
-            const mins=Math.floor((item.lengthSeconds||0)/60);
-            const secs=String((item.lengthSeconds||0)%60).padStart(2,'0');
-            const dur=item.lengthSeconds?(mins+':'+secs):'';
-            const thumb=item.videoThumbnails?.[2]?.url||item.videoThumbnails?.[0]?.url||('https://i.ytimg.com/vi/'+item.videoId+'/mqdefault.jpg');
-            const card=vwCard({
-              videoId:item.videoId,
-              snippet:{title:item.title,channelTitle:item.author,duration:dur,
-                thumbnails:{medium:{url:thumb}}}
-            });
-            vwResultsList.appendChild(card);
-          });
-          vwSetStatus(results.length+' results for "'+q+'"');
+          vwRenderPipedItems(res.items,15);
+          vwSetStatus(res.items.length+' results');
         } else {
-          // Strategy 2: Direct YouTube embed search fallback — show clickable search page
-          vwResultsList.innerHTML='';
-          const msg=document.createElement('div');
-          msg.style.cssText='padding:16px;font-size:11px;color:rgba(255,255,255,0.35);font-family:"Geist",sans-serif;line-height:1.7';
-          msg.innerHTML=`<div style="color:rgba(248,113,113,0.7);margin-bottom:8px;font-size:12px">Search proxy unavailable</div>
-            Try one of these:<br><br>
-            <a href="https://videowatchr.com/search?q=${encodeURIComponent(q)}" target="_blank" style="color:#f87171;text-decoration:none">▶ Search on VideoWatchr.com</a><br>
-            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}" target="_blank" style="color:#f87171;text-decoration:none">▶ Search on YouTube</a><br><br>
-            <div style="font-size:10px;color:rgba(255,255,255,0.2)">Or paste a YouTube video ID or URL below to watch directly:</div><br>
-            <div style="display:flex;gap:6px">
-              <input id="vw-direct-id" placeholder="youtube.com/watch?v=..." type="text" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 9px;color:#e2e8f0;font-family:'Geist Mono',monospace;font-size:10.5px;outline:none"/>
-              <button id="vw-direct-play" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:6px;padding:5px 12px;font-family:'Geist',sans-serif;font-size:11px;cursor:pointer">play</button>
-            </div>`;
-          vwResultsList.appendChild(msg);
-          document.getElementById('vw-direct-play')?.addEventListener('click',()=>{
-            const raw=document.getElementById('vw-direct-id')?.value||'';
-            const match=raw.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)||raw.match(/^([a-zA-Z0-9_-]{11})$/);
-            if(match)vwShowPlayer(match[1],'Direct play','');
-            else vwSetStatus('invalid YouTube URL or ID');
-          });
-          vwSetStatus('search proxy unavailable');
+          vwResultsList.appendChild(vwSectionHeader('search unavailable on this network'));
+          vwShowFallback(q);
         }
       }catch(e){
         vwResultsList.innerHTML='';
-        vwResultsList.appendChild(vwSpinner('error: '+e.message));
-        vwSetStatus('error — try again');
+        vwResultsList.appendChild(vwSectionHeader('search unavailable on this network'));
+        vwShowFallback(q);
       }
     }
 
-    // Home screen — categories + trending
+    function vwShowFallback(q){
+      var div=document.createElement('div');
+      div.style.cssText='padding:10px 4px;font-size:11px;color:rgba(255,255,255,0.4);font-family:sans-serif;line-height:2';
+      div.innerHTML='<a href="https://videowatchr.com/search?q='+encodeURIComponent(q||'')+'" target="_blank" style="color:#f87171;text-decoration:none;display:block">▶ Open on VideoWatchr.com</a>'
+        +'<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(q||'')+'" target="_blank" style="color:#f87171;text-decoration:none;display:block">▶ Open on YouTube</a>'
+        +'<div style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.2)">Or paste a YouTube URL / video ID to watch:</div>'
+        +'<div style="display:flex;gap:6px;margin-top:6px">'
+        +'<input id="vw-direct-id" placeholder="youtube.com/watch?v=... or video ID" type="text" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 9px;color:#e2e8f0;font-family:monospace;font-size:10.5px;outline:none"/>'
+        +'<button id="vw-direct-play" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:6px;padding:5px 12px;font-family:sans-serif;font-size:11px;cursor:pointer">play</button>'
+        +'</div>';
+      vwResultsList.appendChild(div);
+      vwSetStatus('search unavailable — paste a video ID to watch');
+      var playBtn=document.getElementById('vw-direct-play');
+      if(playBtn){
+        playBtn.addEventListener('click',function(){
+          var raw=(document.getElementById('vw-direct-id')||{}).value||'';
+          var match=raw.match(/[?&]v=([a-zA-Z0-9_-]{11})/)||raw.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/)||raw.match(/^([a-zA-Z0-9_-]{11})$/);
+          if(match)vwShowPlayer(match[1],'','');
+          else vwSetStatus('invalid YouTube URL or ID');
+        });
+      }
+    }
+
     async function vwLoadHome(){
       vwResultsList.innerHTML='';
       vwResultsList.appendChild(vwSpinner('loading...'));
-      vwSetStatus('loading home...');
+      vwSetStatus('loading...');
 
-      const categories=[
-        {name:'🎮 gaming',q:'gaming highlights 2024'},
-        {name:'🎵 music',q:'music video 2024'},
-        {name:'😂 comedy',q:'funny videos 2024'},
-        {name:'🔬 science & tech',q:'science technology 2024'},
-        {name:'🏅 sports',q:'sports highlights 2024'},
+      // Category pills
+      var categories=[
+        {name:'🎮 gaming',q:'gaming highlights'},
+        {name:'🎵 music',q:'music video'},
+        {name:'😂 comedy',q:'funny videos'},
+        {name:'🔬 tech',q:'science technology'},
+        {name:'🏅 sports',q:'sports highlights'},
+        {name:'🎬 movies',q:'movie trailer 2024'},
       ];
-
       vwResultsList.innerHTML='';
-
-      // Quick links row
-      const row=document.createElement('div');
+      var row=document.createElement('div');
       row.style.cssText='display:flex;flex-wrap:wrap;gap:5px;padding:4px 2px 10px';
-      categories.forEach(cat=>{
-        const btn=document.createElement('button');
+      categories.forEach(function(cat){
+        var btn=document.createElement('button');
         btn.textContent=cat.name;
-        btn.style.cssText='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:4px 11px;font-family:"Geist",sans-serif;font-size:10.5px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all .12s';
-        btn.addEventListener('mouseenter',()=>{btn.style.background='rgba(248,113,113,0.1)';btn.style.borderColor='rgba(248,113,113,0.3)';btn.style.color='#f87171';});
-        btn.addEventListener('mouseleave',()=>{btn.style.background='rgba(255,255,255,0.05)';btn.style.borderColor='rgba(255,255,255,0.09)';btn.style.color='rgba(255,255,255,0.55)';});
-        btn.addEventListener('click',()=>{vwSearch.value=cat.q;vwDoSearch(cat.q);});
+        btn.style.cssText='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:4px 11px;font-family:sans-serif;font-size:10.5px;color:rgba(255,255,255,0.55);cursor:pointer';
+        btn.addEventListener('mouseenter',function(){btn.style.background='rgba(248,113,113,0.1)';btn.style.borderColor='rgba(248,113,113,0.3)';btn.style.color='#f87171';});
+        btn.addEventListener('mouseleave',function(){btn.style.background='rgba(255,255,255,0.05)';btn.style.borderColor='rgba(255,255,255,0.09)';btn.style.color='rgba(255,255,255,0.55)';});
+        btn.addEventListener('click',function(){vwSearch.value=cat.q;vwDoSearch(cat.q);});
         row.appendChild(btn);
       });
       vwResultsList.appendChild(row);
 
-      // Try to load trending via invidious
-      const instances=['https://inv.nadeko.net','https://invidious.privacydev.net','https://invidious.fdn.fr'];
-      let trending=null;
-      for(const inst of instances){
-        try{
-          const r=await fetch(inst+'/api/v1/trending?type=default&fields=videoId,title,author,lengthSeconds,videoThumbnails',{signal:AbortSignal.timeout(4000)});
-          if(r.ok){trending=await r.json();break;}
-        }catch(e){}
-      }
-
-      if(trending&&trending.length){
-        vwResultsList.appendChild(vwSectionHeader('trending'));
-        trending.slice(0,12).forEach(item=>{
-          const mins=Math.floor((item.lengthSeconds||0)/60);
-          const secs=String((item.lengthSeconds||0)%60).padStart(2,'0');
-          const card=vwCard({
-            videoId:item.videoId,
-            snippet:{title:item.title,channelTitle:item.author,duration:item.lengthSeconds?(mins+':'+secs):'',
-              thumbnails:{medium:{url:item.videoThumbnails?.[2]?.url||'https://i.ytimg.com/vi/'+item.videoId+'/mqdefault.jpg'}}}
-          });
-          vwResultsList.appendChild(card);
-        });
-        vwSetStatus('trending loaded');
-      } else {
-        const hint=document.createElement('div');
-        hint.style.cssText='padding:10px 4px;font-size:10.5px;color:rgba(255,255,255,0.2);font-family:"Geist",sans-serif;line-height:1.7';
-        hint.textContent='Search above to find videos, or pick a category.';
-        vwResultsList.appendChild(hint);
-        vwSetStatus('videowatchr — powered by youtube');
+      try{
+        var trending=await vwTrendingAPI();
+        if(trending&&trending.length){
+          vwResultsList.appendChild(vwSectionHeader('trending'));
+          vwRenderPipedItems(trending,12);
+          vwSetStatus('trending loaded');
+        } else {
+          vwResultsList.appendChild(vwSectionHeader('search above or pick a category'));
+          vwSetStatus('search unavailable on this network — type to search or paste a video ID');
+        }
+      }catch(e){
+        vwResultsList.appendChild(vwSectionHeader('search above or pick a category'));
+        vwSetStatus('ready');
       }
     }
 
-    // Events
-    vwSearchBtn.addEventListener('click',()=>{const q=vwSearch.value.trim();if(q)vwDoSearch(q);});
-    vwSearch.addEventListener('keydown',e=>{if(e.key==='Enter'){const q=vwSearch.value.trim();if(q)vwDoSearch(q);}});
-    vwBackBtn.addEventListener('click',()=>vwShowResults());
+    vwSearchBtn.addEventListener('click',function(){var q=vwSearch.value.trim();if(q)vwDoSearch(q);});
+    vwSearch.addEventListener('keydown',function(e){if(e.key==='Enter'){var q=vwSearch.value.trim();if(q)vwDoSearch(q);}});
+    vwBackBtn.addEventListener('click',function(){vwShowResults();});
 
-    // Load home when tab is clicked
-    document.querySelectorAll('#__modmenu__ .mm-tab').forEach(t=>{
+    document.querySelectorAll('#__modmenu__ .mm-tab').forEach(function(t){
       if(t.dataset.tab==='videowatchr'){
-        t.addEventListener('click',()=>{
+        t.addEventListener('click',function(){
           if(!vwResultsList.children.length)vwLoadHome();
         });
       }
     });
-
-    // Also load if tab is already active on init
-    if(document.getElementById('mm-panel-videowatchr')?.classList.contains('mm-active'))vwLoadHome();
   })();
 
   // ── games ──
