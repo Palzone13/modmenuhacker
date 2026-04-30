@@ -532,19 +532,6 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
 
   const $m = id => document.getElementById(id);
 
-  function showToast(type, title, detail, duration){
-    const t=document.createElement('div');
-    t.className='mm-toast mm-toast-'+(type==='ok'?'ok':'err');
-    t.innerHTML='<div class="mm-toast-title">'+(type==='ok'?'✓ '+title:'✗ '+title)+'</div>'
-      +(detail?'<div style="margin-top:2px;opacity:0.75;font-size:10px">'+String(detail).slice(0,120)+'</div>':'');
-    toastContainer.appendChild(t);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('mm-toast-in')));
-    setTimeout(()=>{
-      t.classList.remove('mm-toast-in');t.classList.add('mm-toast-out');
-      setTimeout(()=>t.remove(), 200);
-    }, duration||2800);
-  }
-
 
 
   // ── drag ──
@@ -589,6 +576,18 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     const row=document.createElement('div');row.className='mm-log';
     row.innerHTML=`<span class="mm-ts">${ts()}</span><span class="mm-l${type}">${type==='i'?'›':type==='w'?'!':`×`}</span><span style="flex:1;word-break:break-all;color:rgba(255,255,255,0.7)">${esc(String(msg))}</span>`;
     cout.appendChild(row);cout.scrollTop=cout.scrollHeight;
+  }
+  function showToast(type,title,detail,duration){
+    const t=document.createElement('div');
+    t.className='mm-toast mm-toast-'+(type==='ok'?'ok':'err');
+    t.innerHTML='<div class="mm-toast-title">'+(type==='ok'?'&#10003; '+title:'&#10007; '+title)+'</div>'
+      +(detail?'<div style="margin-top:2px;opacity:0.75;font-size:10px">'+String(detail).slice(0,120)+'</div>':'');
+    toastContainer.appendChild(t);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){t.classList.add('mm-toast-in');});});
+    setTimeout(function(){
+      t.classList.remove('mm-toast-in');t.classList.add('mm-toast-out');
+      setTimeout(function(){t.remove();},200);
+    },duration||2800);
   }
   function goConsole(){
     document.querySelectorAll('#__modmenu__ .mm-tab').forEach(x=>x.classList.remove('mm-active'));
