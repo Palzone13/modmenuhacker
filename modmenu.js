@@ -52,6 +52,10 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .mm-tab.mm-vw.mm-active { color: #f87171; border-bottom-color: #f87171; }
     #__modmenu__ .mm-tab.mm-kahoot.mm-active { color: #a78bfa; border-bottom-color: #a78bfa; }
     #__modmenu__ .mm-tab.mm-home.mm-active { color: #fff; border-bottom-color: #fff; }
+    #__modmenu__ .mm-tab.mm-tools.mm-active { color: #22d3ee; border-bottom-color: #22d3ee; }
+    #__modmenu__ .mm-tab.mm-notepad.mm-active { color: #facc15; border-bottom-color: #facc15; }
+    #__modmenu__ .mm-tab.mm-timer.mm-active { color: #fb923c; border-bottom-color: #fb923c; }
+    #__modmenu__ .mm-tab.mm-privacy.mm-active { color: #f87171; border-bottom-color: #f87171; }
 
     #__modmenu__ #mm-panels { flex: 1; overflow: hidden; }
     #__modmenu__ .mm-panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
@@ -303,6 +307,10 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div class="mm-tab mm-games" data-tab="games">games</div>
       <div class="mm-tab mm-vw" data-tab="videowatchr">▶ videowatchr</div>
       <div class="mm-tab mm-kahoot" data-tab="kahoot">★ kahoot</div>
+      <div class="mm-tab mm-tools" data-tab="tools">tools</div>
+      <div class="mm-tab mm-notepad" data-tab="notepad">notepad</div>
+      <div class="mm-tab mm-timer" data-tab="timer">timer</div>
+      <div class="mm-tab mm-privacy" data-tab="privacy">privacy</div>
     </div>
     <div id="mm-panels">
 
@@ -313,20 +321,35 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,0.03) 0%,transparent 70%);pointer-events:none"></div>
 
           <!-- Name -->
-          <div style="font-family:'Geist',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:0.04em;margin-bottom:5px">modmenuhacker</div>
+          <div style="font-family:Geist,sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:0.04em;margin-bottom:5px">modmenuhacker</div>
 
           <!-- Tagline -->
-          <div style="font-family:'Geist',sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.3);letter-spacing:0.08em;margin-bottom:40px">bringing modmenus to you</div>
+          <div style="font-family:Geist,sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.3);letter-spacing:0.08em;margin-bottom:40px">bringing modmenus to you</div>
 
           <!-- Divider -->
           <div style="width:40px;height:1px;background:rgba(255,255,255,0.1);margin-bottom:40px"></div>
 
           <!-- Clock -->
-          <div id="mm-home-time" style="font-family:'Geist Mono',monospace;font-size:52px;font-weight:300;color:#fff;letter-spacing:-0.02em;line-height:1;margin-bottom:8px">00:00</div>
-          <div id="mm-home-secs" style="font-family:'Geist Mono',monospace;font-size:22px;font-weight:300;color:rgba(255,255,255,0.25);letter-spacing:0.05em;margin-bottom:32px">00</div>
+          <div id="mm-home-time" style="font-family:Geist Mono,monospace;font-size:52px;font-weight:300;color:#fff;letter-spacing:-0.02em;line-height:1;margin-bottom:8px">00:00</div>
+          <div id="mm-home-secs" style="font-family:Geist Mono,monospace;font-size:22px;font-weight:300;color:rgba(255,255,255,0.25);letter-spacing:0.05em;margin-bottom:32px">00</div>
 
           <!-- Date -->
-          <div id="mm-home-date" style="font-family:'Geist',sans-serif;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;text-transform:uppercase"></div>
+          <div id="mm-home-date" style="font-family:Geist,sans-serif;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;text-transform:uppercase"></div>
+
+          <!-- Theme picker -->
+          <div style="margin-top:32px;display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div style="font-size:9.5px;color:rgba(255,255,255,0.15);letter-spacing:.12em;text-transform:uppercase;font-family:Geist,sans-serif">accent color</div>
+            <div id="mm-theme-swatches" style="display:flex;gap:8px">
+              <div class="mm-swatch" data-color="#22d3ee" style="width:18px;height:18px;border-radius:50%;background:#22d3ee;cursor:pointer;transition:transform .15s;outline:2px solid rgba(255,255,255,0.4);outline-offset:2px"></div>
+              <div class="mm-swatch" data-color="#f87171" style="width:18px;height:18px;border-radius:50%;background:#f87171;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#a78bfa" style="width:18px;height:18px;border-radius:50%;background:#a78bfa;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#4ade80" style="width:18px;height:18px;border-radius:50%;background:#4ade80;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#fb923c" style="width:18px;height:18px;border-radius:50%;background:#fb923c;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#facc15" style="width:18px;height:18px;border-radius:50%;background:#facc15;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#f472b6" style="width:18px;height:18px;border-radius:50%;background:#f472b6;cursor:pointer;transition:transform .15s"></div>
+              <div class="mm-swatch" data-color="#fff" style="width:18px;height:18px;border-radius:50%;background:#fff;cursor:pointer;transition:transform .15s"></div>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -435,7 +458,7 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
 
       <div class="mm-panel" id="mm-panel-kahoot">
         <div id="mm-kahoot-content" style="flex:1;overflow-y:auto;padding:10px 12px">
-          <div id="kh-status" style="font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;display:none;font-family:'Geist Mono',monospace"></div>
+          <div id="kh-status" style="font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;display:none;font-family:Geist Mono,monospace"></div>
 
           <div class="bl-section">
             <div class="bl-title" style="color:rgba(167,139,250,0.6)">answer reveal</div>
@@ -487,9 +510,9 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <!-- Search bar -->
           <div style="display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;background:#111118">
             <input id="vw-search" type="text" placeholder="Search YouTube videos..." autocomplete="off" spellcheck="false"
-              style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 11px;color:#e2e8f0;font-family:'Geist',sans-serif;font-size:11.5px;outline:none"/>
-            <button id="vw-search-btn" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:7px;padding:6px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap">Search</button>
-            <button id="vw-back-btn" style="display:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 12px;font-family:'Geist Mono',monospace;font-size:11px;cursor:pointer">← back</button>
+              style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 11px;color:#e2e8f0;font-family:Geist,sans-serif;font-size:11.5px;outline:none"/>
+            <button id="vw-search-btn" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25);border-radius:7px;padding:6px 14px;font-family:Geist,sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap">Search</button>
+            <button id="vw-back-btn" style="display:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 12px;font-family:Geist Mono,monospace;font-size:11px;cursor:pointer">← back</button>
           </div>
 
           <!-- Player view (hidden initially) -->
@@ -498,9 +521,17 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
               <iframe id="vw-player-frame" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
                 allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
             </div>
-            <div id="vw-video-info" style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0">
-              <div id="vw-video-title" style="font-size:12px;font-weight:500;color:#e2e8f0;line-height:1.4;margin-bottom:3px"></div>
-              <div id="vw-video-channel" style="font-size:10.5px;color:rgba(255,255,255,0.35);font-family:'Geist Mono',monospace"></div>
+            <div id="vw-video-info" style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1;min-width:0">
+                  <div id="vw-video-title" style="font-size:12px;font-weight:500;color:#e2e8f0;line-height:1.4;margin-bottom:2px"></div>
+                  <div id="vw-video-channel" style="font-size:10.5px;color:rgba(255,255,255,0.35);font-family:Geist Mono,monospace"></div>
+                </div>
+                <div style="display:flex;gap:5px;flex-shrink:0;margin-top:1px">
+                  <button id="vw-fav-btn" title="Add to favorites" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 8px;color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer;transition:all .15s">☆</button>
+                  <button id="vw-pip-btn" title="Picture in Picture" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 8px;color:rgba(255,255,255,0.4);font-size:11px;cursor:pointer;font-family:Geist,sans-serif;transition:all .15s">⊡ pip</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -509,9 +540,172 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
             <div id="vw-results-list"></div>
           </div>
 
-          <!-- Status bar -->
-          <div id="vw-status" style="padding:4px 10px;font-family:'Geist Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);flex-shrink:0;border-top:1px solid rgba(255,255,255,0.05)">videowatchr — powered by youtube</div>
+          <!-- History / Favorites tabs -->
+          <div id="vw-lib-bar" style="display:none;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.06);background:#111118">
+            <div style="display:flex;gap:2px;padding:0 8px">
+              <button class="vw-lib-tab vw-lib-on" data-lib="history" style="padding:6px 10px;font-size:10px;color:rgba(248,113,113,0.8);border-bottom:2px solid #f87171;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:Geist,sans-serif">history</button>
+              <button class="vw-lib-tab" data-lib="favorites" style="padding:6px 10px;font-size:10px;color:rgba(255,255,255,0.3);border:none;background:none;cursor:pointer;font-family:Geist,sans-serif">★ favorites</button>
+            </div>
+          </div>
+          <div id="vw-lib-content" style="display:none;flex:1;overflow-y:auto;padding:6px 8px"></div>
 
+          <!-- Status bar -->
+          <div id="vw-status" style="padding:4px 10px;font-family:Geist Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);flex-shrink:0;border-top:1px solid rgba(255,255,255,0.05)">videowatchr — powered by youtube</div>
+
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-tools">
+        <div style="flex:1;overflow-y:auto;padding:10px 12px">
+
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(34,211,238,0.6)">inspectors</div>
+            <button class="bl-btn" id="tl-colorpicker">
+              <span class="bl-icon">🎨</span>
+              <div class="bl-info"><div class="bl-name">color picker</div><div class="bl-desc">Click any element to copy its color</div></div>
+              <span class="bl-badge" id="tl-cp-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">toggle</span>
+            </button>
+            <button class="bl-btn" id="tl-ruler">
+              <span class="bl-icon">📏</span>
+              <div class="bl-info"><div class="bl-name">ruler</div><div class="bl-desc">Drag to measure pixel distances</div></div>
+              <span class="bl-badge" id="tl-rl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">toggle</span>
+            </button>
+            <button class="bl-btn" id="tl-fontinspect">
+              <span class="bl-icon">🔤</span>
+              <div class="bl-info"><div class="bl-name">font inspector</div><div class="bl-desc">Click any text to see its font info</div></div>
+              <span class="bl-badge" id="tl-fi-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">toggle</span>
+            </button>
+          </div>
+
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(34,211,238,0.6)">utilities</div>
+            <button class="bl-btn" id="tl-imgdown">
+              <span class="bl-icon">🖼</span>
+              <div class="bl-info"><div class="bl-name">image downloader</div><div class="bl-desc">List all images with download buttons</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">scan</span>
+            </button>
+            <button class="bl-btn" id="tl-wikipedia">
+              <span class="bl-icon">📖</span>
+              <div class="bl-info"><div class="bl-name">wikipedia lookup</div><div class="bl-desc">Search Wikipedia inline</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">search</span>
+            </button>
+            <button class="bl-btn" id="tl-units">
+              <span class="bl-icon">⚖️</span>
+              <div class="bl-info"><div class="bl-name">unit converter</div><div class="bl-desc">Length, weight, temperature</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">tool</span>
+            </button>
+            <button class="bl-btn" id="tl-css">
+              <span class="bl-icon">💅</span>
+              <div class="bl-info"><div class="bl-name">CSS injector</div><div class="bl-desc">Write and apply custom CSS live</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">inject</span>
+            </button>
+          </div>
+
+          <!-- Expandable areas -->
+          <div id="tl-imglist" style="display:none"></div>
+          <div id="tl-wiki-box" style="display:none;margin-top:8px"></div>
+          <div id="tl-units-box" style="display:none;margin-top:8px"></div>
+          <div id="tl-css-box" style="display:none;margin-top:8px"></div>
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-notepad">
+        <div style="display:flex;flex-direction:column;height:100%">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;background:#111118">
+            <span style="font-size:10px;color:rgba(255,255,255,0.25);font-family:Geist Mono,monospace" id="np-wordcount">0 words</span>
+            <div style="display:flex;gap:6px">
+              <button id="np-copy" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:3px 10px;color:rgba(255,255,255,0.4);font-family:Geist,sans-serif;font-size:10px;cursor:pointer">copy</button>
+              <button id="np-clear" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:5px;padding:3px 10px;color:#f87171;font-family:Geist,sans-serif;font-size:10px;cursor:pointer">clear</button>
+            </div>
+          </div>
+          <textarea id="np-area" spellcheck="true" placeholder="Start typing... notes are saved automatically."
+            style="flex:1;background:transparent;border:none;outline:none;resize:none;padding:12px 14px;color:#e2e8f0;font-family:Geist,sans-serif;font-size:12.5px;line-height:1.7;color:#e2e8f0"></textarea>
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-timer">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:20px">
+
+          <!-- Mode selector -->
+          <div style="display:flex;gap:6px">
+            <button class="mm-timer-mode tm-active" data-mins="25" data-label="pomodoro">🍅 pomodoro</button>
+            <button class="mm-timer-mode" data-mins="5" data-label="short break">☕ short break</button>
+            <button class="mm-timer-mode" data-mins="15" data-label="long break">😴 long break</button>
+            <button class="mm-timer-mode" data-mins="0" data-label="custom">⚙ custom</button>
+          </div>
+
+          <!-- Custom input -->
+          <div id="tm-custom-row" style="display:none;gap:6px;align-items:center">
+            <input id="tm-custom-mins" type="number" min="1" max="999" value="10"
+              style="width:60px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 8px;color:#e2e8f0;font-family:Geist Mono,monospace;font-size:13px;outline:none;text-align:center"/>
+            <span style="color:rgba(255,255,255,0.3);font-size:12px;font-family:Geist,sans-serif">minutes</span>
+          </div>
+
+          <!-- Big clock display -->
+          <div id="tm-display" style="font-family:Geist Mono,monospace;font-size:64px;font-weight:300;color:#fff;letter-spacing:-0.02em;line-height:1">25:00</div>
+          <div id="tm-label" style="font-size:11px;color:rgba(255,255,255,0.25);font-family:Geist,sans-serif;letter-spacing:.1em;text-transform:uppercase">pomodoro</div>
+
+          <!-- Progress bar -->
+          <div style="width:240px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden">
+            <div id="tm-progress" style="height:100%;background:#fb923c;width:100%;transition:width .5s linear;border-radius:2px"></div>
+          </div>
+
+          <!-- Controls -->
+          <div style="display:flex;gap:10px">
+            <button id="tm-start" style="background:rgba(251,146,60,0.15);border:1px solid rgba(251,146,60,0.3);border-radius:8px;padding:8px 28px;color:#fb923c;font-family:Geist,sans-serif;font-size:13px;font-weight:500;cursor:pointer">start</button>
+            <button id="tm-reset" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 18px;color:rgba(255,255,255,0.35);font-family:Geist,sans-serif;font-size:13px;cursor:pointer">reset</button>
+          </div>
+
+          <div id="tm-session" style="font-size:10px;color:rgba(255,255,255,0.2);font-family:Geist Mono,monospace">session 1</div>
+        </div>
+        <style>
+          .mm-timer-mode{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:5px 10px;font-family:Geist,sans-serif;font-size:10px;color:rgba(255,255,255,0.35);cursor:pointer}
+          .mm-timer-mode.tm-active{background:rgba(251,146,60,0.12);border-color:rgba(251,146,60,0.3);color:#fb923c}
+        </style>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-privacy">
+        <div style="flex:1;overflow-y:auto;padding:10px 12px">
+          <div id="pv-status" style="display:none;font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;font-family:Geist Mono,monospace"></div>
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(248,113,113,0.6)">fingerprint</div>
+            <button class="bl-btn" id="pv-canvas">
+              <span class="bl-icon">🖼</span>
+              <div class="bl-info"><div class="bl-name">canvas fingerprint spoofer</div><div class="bl-desc">Adds random noise to canvas reads</div></div>
+              <span class="bl-badge" id="pv-cv-badge" style="background:rgba(248,113,113,0.1);color:#f87171">toggle</span>
+            </button>
+            <button class="bl-btn" id="pv-audio">
+              <span class="bl-icon">🔊</span>
+              <div class="bl-info"><div class="bl-name">audio fingerprint spoofer</div><div class="bl-desc">Randomizes AudioContext output</div></div>
+              <span class="bl-badge" id="pv-au-badge" style="background:rgba(248,113,113,0.1);color:#f87171">toggle</span>
+            </button>
+            <button class="bl-btn" id="pv-webgl">
+              <span class="bl-icon">🎮</span>
+              <div class="bl-info"><div class="bl-name">WebGL spoofer</div><div class="bl-desc">Masks GPU vendor/renderer strings</div></div>
+              <span class="bl-badge" id="pv-wg-badge" style="background:rgba(248,113,113,0.1);color:#f87171">toggle</span>
+            </button>
+          </div>
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(248,113,113,0.6)">network</div>
+            <button class="bl-btn" id="pv-referrer">
+              <span class="bl-icon">🔗</span>
+              <div class="bl-info"><div class="bl-name">referrer blocker</div><div class="bl-desc">Strips referrer from all outgoing requests</div></div>
+              <span class="bl-badge" id="pv-rf-badge" style="background:rgba(248,113,113,0.1);color:#f87171">toggle</span>
+            </button>
+            <button class="bl-btn" id="pv-useragent">
+              <span class="bl-icon">🕵️</span>
+              <div class="bl-info"><div class="bl-name">user agent spoofer</div><div class="bl-desc">Randomize navigator.userAgent</div></div>
+              <span class="bl-badge" id="pv-ua-badge" style="background:rgba(248,113,113,0.1);color:#f87171">toggle</span>
+            </button>
+          </div>
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(248,113,113,0.6)">info</div>
+            <button class="bl-btn" id="pv-report">
+              <span class="bl-icon">📋</span>
+              <div class="bl-info"><div class="bl-name">fingerprint report</div><div class="bl-desc">Show what sites can see about your browser</div></div>
+              <span class="bl-badge" style="background:rgba(74,222,128,0.1);color:#4ade80">safe</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -520,6 +714,9 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
           <button class="gm-pick gm-on" id="gm-tetris">tetris</button>
           <button class="gm-pick" id="gm-flappy">flappy bird</button>
           <button class="gm-pick" id="gm-space">space invaders</button>
+          <button class="gm-pick" id="gm-snake">snake</button>
+          <button class="gm-pick" id="gm-pong">pong</button>
+          <button class="gm-pick" id="gm-mine">minesweeper</button>
         </div>
         <canvas id="mm-gamecanvas"></canvas>
         <div class="gm-hud">score: <span id="gm-score">0</span> &nbsp;|&nbsp; <span id="gm-status-label">arrows / space to play</span></div>
@@ -1149,7 +1346,37 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       const store=tab==='local'?localStorage:sessionStorage;
       if(!store.length){c.innerHTML='<div style="color:rgba(255,255,255,0.2);padding:14px;font-size:11px;font-family:\'Geist Mono\',monospace">(empty)</div>';return;}
       for(let i=0;i<store.length;i++){const k=store.key(i),v=store.getItem(k);const row=document.createElement('div');row.className='mm-srow';row.innerHTML=`<span class="mm-sk">${esc(k)}</span><span class="mm-sv">${esc(v)}</span><span class="mm-sdel" data-k="${esc(k)}" data-st="${tab}">×</span>`;c.appendChild(row);}
-    }else{const cookies=document.cookie.split(';').map(x=>x.trim()).filter(Boolean);if(!cookies.length){c.innerHTML='<div style="color:rgba(255,255,255,0.2);padding:14px;font-size:11px;font-family:\'Geist Mono\',monospace">(no cookies)</div>';return;}cookies.forEach(cookie=>{const[k,...rest]=cookie.split('=');const row=document.createElement('div');row.className='mm-srow';row.innerHTML=`<span class="mm-sk">${esc(k)}</span><span class="mm-sv">${esc(rest.join('='))}</span>`;c.appendChild(row);});}
+    }else{
+      const cookies=document.cookie.split(';').map(x=>x.trim()).filter(Boolean);
+      if(!cookies.length){c.innerHTML='<div style="color:rgba(255,255,255,0.2);padding:14px;font-size:11px;font-family:\'Geist Mono\',monospace">(no cookies)</div>';return;}
+      cookies.forEach(cookie=>{
+        const eqIdx=cookie.indexOf('=');
+        const k=cookie.slice(0,eqIdx).trim();
+        const v=cookie.slice(eqIdx+1);
+        const row=document.createElement('div');row.className='mm-srow';row.style.alignItems='center';
+        const keySpan=document.createElement('span');keySpan.className='mm-sk';keySpan.textContent=k;
+        const valInput=document.createElement('input');
+        valInput.value=v;
+        valInput.style.cssText='flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:2px 6px;color:#e2e8f0;font-family:"Geist Mono",monospace;font-size:9.5px;outline:none;min-width:0';
+        const saveBtn=document.createElement('button');
+        saveBtn.textContent='save';
+        saveBtn.style.cssText='background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.2);border-radius:4px;padding:2px 7px;color:#fb923c;font-size:9px;cursor:pointer;flex-shrink:0;font-family:sans-serif';
+        saveBtn.addEventListener('click',function(){
+          document.cookie=k+'='+valInput.value+';path=/';
+          showToast('ok','cookie saved',k+'='+valInput.value.slice(0,30));
+          log('[Cookie] set '+k+'='+valInput.value.slice(0,60),'i');
+        });
+        const delBtn=document.createElement('span');delBtn.className='mm-sdel';delBtn.textContent='×';
+        delBtn.addEventListener('click',function(){
+          document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+          document.cookie=k+'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname;
+          showToast('ok','cookie deleted',k);
+          renderStorage('cookies');
+        });
+        row.appendChild(keySpan);row.appendChild(valInput);row.appendChild(saveBtn);row.appendChild(delBtn);
+        c.appendChild(row);
+      });
+    }
     c.querySelectorAll('.mm-sdel').forEach(btn=>{btn.addEventListener('click',()=>{if(btn.dataset.st==='local')localStorage.removeItem(btn.dataset.k);else sessionStorage.removeItem(btn.dataset.k);renderStorage(curStab);});});
   }
   document.querySelectorAll('#__modmenu__ .mm-stab').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#__modmenu__ .mm-stab').forEach(x=>x.classList.remove('mm-active'));btn.classList.add('mm-active');curStab=btn.dataset.stab;renderStorage(curStab);});});
@@ -2055,6 +2282,691 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     });
   })();
 
+
+  // ── notepad ──
+  (function(){
+    const area = document.getElementById('np-area');
+    const wc = document.getElementById('np-wordcount');
+    if(!area) return;
+    // Load saved
+    try{ area.value = localStorage.getItem('__mm_notes__') || ''; }catch(e){}
+    function updateWC(){
+      const words = area.value.trim().split(/\s+/).filter(Boolean).length;
+      if(wc) wc.textContent = words + ' word' + (words!==1?'s':'') + ' · ' + area.value.length + ' chars';
+      try{ localStorage.setItem('__mm_notes__', area.value); }catch(e){}
+    }
+    updateWC();
+    area.addEventListener('input', updateWC);
+    document.getElementById('np-copy').addEventListener('click', function(){
+      navigator.clipboard.writeText(area.value).then(function(){
+        showToast('ok','notes copied',''+area.value.length+' characters');
+      }).catch(function(){ showToast('err','clipboard blocked',''); });
+    });
+    document.getElementById('np-clear').addEventListener('click', function(){
+      if(area.value && confirm('Clear all notes?')){ area.value=''; updateWC(); showToast('ok','notes cleared',''); }
+    });
+  })();
+
+  // ── pomodoro timer ──
+  (function(){
+    let tmTotal=25*60, tmLeft=25*60, tmRunning=false, tmInterval=null, tmSession=1;
+    const disp=document.getElementById('tm-display');
+    const prog=document.getElementById('tm-progress');
+    const lbl=document.getElementById('tm-label');
+    const sess=document.getElementById('tm-session');
+    const startBtn=document.getElementById('tm-start');
+    const resetBtn=document.getElementById('tm-reset');
+    const customRow=document.getElementById('tm-custom-row');
+    const customMins=document.getElementById('tm-custom-mins');
+    if(!disp)return;
+
+    function tmFmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+    function tmRender(){
+      disp.textContent=tmFmt(tmLeft);
+      prog.style.width=(tmLeft/tmTotal*100)+'%';
+    }
+    function tmBeep(){
+      try{
+        const ac=new AudioContext();
+        const o=ac.createOscillator();
+        const g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);
+        o.frequency.value=880;g.gain.setValueAtTime(0.3,ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.8);
+        o.start();o.stop(ac.currentTime+0.8);
+      }catch(e){}
+    }
+
+    document.querySelectorAll('.mm-timer-mode').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.mm-timer-mode').forEach(function(b){b.classList.remove('tm-active');});
+        btn.classList.add('tm-active');
+        const mins=parseInt(btn.dataset.mins);
+        if(mins===0){ customRow.style.display='flex'; tmTotal=(parseInt(customMins.value)||10)*60; }
+        else{ customRow.style.display='none'; tmTotal=mins*60; }
+        lbl.textContent=btn.dataset.label;
+        tmLeft=tmTotal; tmRunning=false; clearInterval(tmInterval);
+        startBtn.textContent='start'; tmRender();
+      });
+    });
+    customMins.addEventListener('input',function(){
+      tmTotal=(parseInt(customMins.value)||1)*60; tmLeft=tmTotal; tmRender();
+    });
+    startBtn.addEventListener('click',function(){
+      if(tmRunning){
+        tmRunning=false; clearInterval(tmInterval); startBtn.textContent='resume';
+      } else {
+        tmRunning=true; startBtn.textContent='pause';
+        tmInterval=setInterval(function(){
+          tmLeft--;
+          tmRender();
+          if(tmLeft<=0){
+            clearInterval(tmInterval); tmRunning=false; startBtn.textContent='start';
+            tmBeep(); tmSession++;
+            if(sess)sess.textContent='session '+tmSession;
+            showToast('ok','timer done!',lbl.textContent+' complete');
+          }
+        },1000);
+      }
+    });
+    resetBtn.addEventListener('click',function(){
+      tmRunning=false; clearInterval(tmInterval); tmLeft=tmTotal;
+      startBtn.textContent='start'; tmRender();
+    });
+    tmRender();
+  })();
+
+  // ── tools ──
+  (function(){
+    // --- Color Picker ---
+    let cpOn=false;
+    function cpHandler(e){
+      if(document.getElementById('__modmenu__').contains(e.target))return;
+      e.preventDefault(); e.stopPropagation();
+      const s=getComputedStyle(e.target);
+      const bg=s.backgroundColor, fg=s.color, border=s.borderColor;
+      const result='bg: '+bg+' | text: '+fg;
+      navigator.clipboard.writeText(bg).catch(function(){});
+      showToast('ok','color copied',bg);
+      log('[ColorPicker] bg='+bg+' text='+fg,'i');
+      // Show swatch overlay briefly
+      const swatch=document.createElement('div');
+      swatch.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483645;padding:8px 16px;border-radius:8px;font-family:monospace;font-size:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);pointer-events:none;background:'+bg+';border:2px solid rgba(255,255,255,0.3);box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+      swatch.textContent=bg;
+      document.body.appendChild(swatch);
+      setTimeout(function(){swatch.remove();},1500);
+    }
+    document.getElementById('tl-colorpicker').addEventListener('click',function(){
+      cpOn=!cpOn;
+      document.getElementById('tl-cp-badge').textContent=cpOn?'ON':'toggle';
+      if(cpOn){ document.addEventListener('click',cpHandler,true); document.body.style.cursor='crosshair'; log('Color picker ON — click any element','i'); }
+      else{ document.removeEventListener('click',cpHandler,true); document.body.style.cursor=''; log('Color picker OFF','w'); }
+    });
+
+    // --- Ruler ---
+    let rlOn=false, rlStart=null, rlOverlay=null;
+    function rlDown(e){ rlStart={x:e.clientX,y:e.clientY}; }
+    function rlMove(e){
+      if(!rlStart)return;
+      if(!rlOverlay){ rlOverlay=document.createElement('div'); rlOverlay.style.cssText='position:fixed;z-index:2147483645;pointer-events:none;border:1px dashed #22d3ee;background:rgba(34,211,238,0.05)'; document.body.appendChild(rlOverlay); }
+      const x=Math.min(rlStart.x,e.clientX), y=Math.min(rlStart.y,e.clientY);
+      const w=Math.abs(e.clientX-rlStart.x), h=Math.abs(e.clientY-rlStart.y);
+      rlOverlay.style.cssText='position:fixed;z-index:2147483645;pointer-events:none;border:1px dashed #22d3ee;background:rgba(34,211,238,0.05);left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px';
+      rlOverlay.textContent='';
+      const lbl=document.createElement('span');
+      lbl.style.cssText='position:absolute;top:2px;left:4px;font-family:monospace;font-size:10px;color:#22d3ee;background:rgba(0,0,0,0.7);padding:1px 4px;border-radius:3px';
+      lbl.textContent=w+'×'+h+'px';
+      rlOverlay.appendChild(lbl);
+    }
+    function rlUp(e){
+      if(!rlStart)return;
+      const w=Math.abs(e.clientX-rlStart.x), h=Math.abs(e.clientY-rlStart.y);
+      log('[Ruler] '+w+' × '+h+' px','i');
+      showToast('ok','measured',w+' × '+h+' px');
+      rlStart=null;
+      setTimeout(function(){if(rlOverlay){rlOverlay.remove();rlOverlay=null;}},1200);
+    }
+    document.getElementById('tl-ruler').addEventListener('click',function(){
+      rlOn=!rlOn;
+      document.getElementById('tl-rl-badge').textContent=rlOn?'ON':'toggle';
+      if(rlOn){ document.addEventListener('mousedown',rlDown); document.addEventListener('mousemove',rlMove); document.addEventListener('mouseup',rlUp); log('Ruler ON — drag to measure','i'); }
+      else{ document.removeEventListener('mousedown',rlDown); document.removeEventListener('mousemove',rlMove); document.removeEventListener('mouseup',rlUp); if(rlOverlay){rlOverlay.remove();rlOverlay=null;} log('Ruler OFF','w'); }
+    });
+
+    // --- Font Inspector ---
+    let fiOn=false;
+    function fiHandler(e){
+      if(document.getElementById('__modmenu__').contains(e.target))return;
+      e.preventDefault(); e.stopPropagation();
+      const s=getComputedStyle(e.target);
+      const info='font: '+s.fontFamily+' | size: '+s.fontSize+' | weight: '+s.fontWeight+' | line-height: '+s.lineHeight+' | color: '+s.color;
+      log('[Font] '+info,'i');
+      showToast('ok',s.fontSize+' '+s.fontWeight,s.fontFamily.split(',')[0].replace(/['"]/g,'').trim());
+    }
+    document.getElementById('tl-fontinspect').addEventListener('click',function(){
+      fiOn=!fiOn;
+      document.getElementById('tl-fi-badge').textContent=fiOn?'ON':'toggle';
+      if(fiOn){ document.addEventListener('click',fiHandler,true); document.body.style.cursor='help'; log('Font inspector ON — click any text','i'); }
+      else{ document.removeEventListener('click',fiHandler,true); document.body.style.cursor=''; log('Font inspector OFF','w'); }
+    });
+
+    // --- Image Downloader ---
+    document.getElementById('tl-imgdown').addEventListener('click',function(){
+      const imgs=Array.from(document.images).filter(function(i){return i.src&&!i.src.startsWith('data:')&&i.width>32&&i.height>32;});
+      const box=document.getElementById('tl-imglist');
+      if(!imgs.length){ showToast('err','no images found',''); return; }
+      box.style.display='block';
+      box.innerHTML='<div style="font-size:9.5px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-weight:600">'+imgs.length+' images found</div>';
+      imgs.forEach(function(img,i){
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05)';
+        const thumb=document.createElement('img');
+        thumb.src=img.src; thumb.style.cssText='width:40px;height:28px;object-fit:cover;border-radius:4px;flex-shrink:0;background:#111';
+        const info=document.createElement('div');
+        info.style.cssText='flex:1;min-width:0';
+        info.innerHTML='<div style="font-size:10px;color:rgba(255,255,255,0.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace">'+img.src.split('/').pop().slice(0,40)+'</div>'
+          +'<div style="font-size:9.5px;color:rgba(255,255,255,0.25)">'+img.naturalWidth+'×'+img.naturalHeight+'</div>';
+        const btn=document.createElement('a');
+        btn.href=img.src; btn.download=''; btn.target='_blank';
+        btn.style.cssText='background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);border-radius:5px;padding:3px 9px;color:#22d3ee;font-size:10px;font-family:sans-serif;text-decoration:none;flex-shrink:0;cursor:pointer';
+        btn.textContent='save';
+        row.appendChild(thumb); row.appendChild(info); row.appendChild(btn);
+        box.appendChild(row);
+      });
+      showToast('ok','found '+imgs.length+' images','click save to download each');
+    });
+
+    // --- Wikipedia ──
+    document.getElementById('tl-wikipedia').addEventListener('click',function(){
+      const box=document.getElementById('tl-wiki-box');
+      if(box.style.display!=='none'&&box.innerHTML){ box.style.display='none'; return; }
+      box.style.display='block';
+      box.innerHTML='<div style="display:flex;gap:6px;margin-bottom:8px">'
+        +'<input id="tl-wiki-q" type="text" placeholder="Search Wikipedia..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;color:#e2e8f0;font-family:sans-serif;font-size:11px;outline:none"/>'
+        +'<button id="tl-wiki-go" style="background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.25);border-radius:6px;padding:6px 12px;color:#22d3ee;font-family:sans-serif;font-size:11px;cursor:pointer">go</button>'
+        +'</div><div id="tl-wiki-result" style="font-size:11px;color:rgba(255,255,255,0.6);line-height:1.6;font-family:sans-serif"></div>';
+      function doWiki(){
+        const q=document.getElementById('tl-wiki-q').value.trim();
+        if(!q)return;
+        const res=document.getElementById('tl-wiki-result');
+        res.textContent='searching...';
+        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(q))
+          .then(function(r){return r.json();})
+          .then(function(d){
+            if(d.extract){
+              res.innerHTML='<div style="font-weight:600;color:#e2e8f0;margin-bottom:4px">'+d.title+'</div>'
+                +d.extract.slice(0,400)+'...'
+                +'<a href="'+d.content_urls.desktop.page+'" target="_blank" style="display:block;margin-top:6px;color:#22d3ee;text-decoration:none;font-size:10px">read more on wikipedia →</a>';
+              showToast('ok','wikipedia: '+d.title,'');
+            } else { res.textContent='Not found. Try a different search term.'; }
+          }).catch(function(e){ res.textContent='Error: '+e.message; });
+      }
+      document.getElementById('tl-wiki-go').addEventListener('click',doWiki);
+      document.getElementById('tl-wiki-q').addEventListener('keydown',function(e){if(e.key==='Enter')doWiki();});
+      setTimeout(function(){document.getElementById('tl-wiki-q').focus();},50);
+    });
+
+    // --- Unit Converter ---
+    document.getElementById('tl-units').addEventListener('click',function(){
+      const box=document.getElementById('tl-units-box');
+      if(box.style.display!=='none'&&box.innerHTML){ box.style.display='none'; return; }
+      box.style.display='block';
+      const cats={
+        length:{ units:['mm','cm','m','km','in','ft','yd','mi'], factors:[0.001,0.01,1,1000,0.0254,0.3048,0.9144,1609.34] },
+        weight:{ units:['mg','g','kg','t','oz','lb','st'], factors:[0.000001,0.001,1,1000,0.0283495,0.453592,6.35029] },
+        temp:{ units:['°C','°F','K'], special:true }
+      };
+      box.innerHTML='<div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap">'
+        +'<button class="uc-cat uc-on" data-cat="length">length</button>'
+        +'<button class="uc-cat" data-cat="weight">weight</button>'
+        +'<button class="uc-cat" data-cat="temp">temp</button>'
+        +'</div>'
+        +'<div id="uc-body"></div>'
+        +'<style>.uc-cat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:3px 10px;font-family:sans-serif;font-size:10px;color:rgba(255,255,255,0.4);cursor:pointer}.uc-cat.uc-on{background:rgba(34,211,238,0.1);border-color:rgba(34,211,238,0.3);color:#22d3ee}.uc-field{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:4px 8px;color:#e2e8f0;font-family:monospace;font-size:11px;outline:none;width:80px}.uc-field:focus{border-color:rgba(34,211,238,0.4)}</style>';
+      function renderCat(cat){
+        const body=document.getElementById('uc-body');
+        body.innerHTML='';
+        if(cat==='temp'){
+          body.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:6px">'
+            +'<label style="font-size:10px;color:rgba(255,255,255,0.35);font-family:sans-serif;display:flex;flex-direction:column;gap:3px">°C<input class="uc-field" id="uc-c" type="number" placeholder="0"/></label>'
+            +'<label style="font-size:10px;color:rgba(255,255,255,0.35);font-family:sans-serif;display:flex;flex-direction:column;gap:3px">°F<input class="uc-field" id="uc-f" type="number" placeholder="32"/></label>'
+            +'<label style="font-size:10px;color:rgba(255,255,255,0.35);font-family:sans-serif;display:flex;flex-direction:column;gap:3px">K<input class="uc-field" id="uc-k" type="number" placeholder="273.15"/></label>'
+            +'</div>';
+          document.getElementById('uc-c').addEventListener('input',function(){
+            const c=parseFloat(this.value);if(isNaN(c))return;
+            document.getElementById('uc-f').value=(c*9/5+32).toFixed(4);
+            document.getElementById('uc-k').value=(c+273.15).toFixed(4);
+          });
+          document.getElementById('uc-f').addEventListener('input',function(){
+            const f=parseFloat(this.value);if(isNaN(f))return;
+            const c=(f-32)*5/9;
+            document.getElementById('uc-c').value=c.toFixed(4);
+            document.getElementById('uc-k').value=(c+273.15).toFixed(4);
+          });
+          document.getElementById('uc-k').addEventListener('input',function(){
+            const k=parseFloat(this.value);if(isNaN(k))return;
+            const c=k-273.15;
+            document.getElementById('uc-c').value=c.toFixed(4);
+            document.getElementById('uc-f').value=(c*9/5+32).toFixed(4);
+          });
+        } else {
+          const d=cats[cat];
+          const wrap=document.createElement('div');
+          wrap.style.cssText='display:flex;flex-wrap:wrap;gap:6px';
+          d.units.forEach(function(u,i){
+            const lbl=document.createElement('label');
+            lbl.style.cssText='font-size:10px;color:rgba(255,255,255,0.35);font-family:sans-serif;display:flex;flex-direction:column;gap:3px';
+            lbl.innerHTML=u+'<input class="uc-field uc-val" data-idx="'+i+'" type="number" placeholder="0"/>';
+            wrap.appendChild(lbl);
+          });
+          body.appendChild(wrap);
+          body.querySelectorAll('.uc-val').forEach(function(inp){
+            inp.addEventListener('input',function(){
+              const idx=parseInt(this.dataset.idx);
+              const val=parseFloat(this.value);if(isNaN(val))return;
+              const inMeters=val*d.factors[idx];
+              body.querySelectorAll('.uc-val').forEach(function(other){
+                const oi=parseInt(other.dataset.idx);
+                if(oi!==idx)other.value=(inMeters/d.factors[oi]).toFixed(6).replace(/\.?0+$/,'');
+              });
+            });
+          });
+        }
+      }
+      renderCat('length');
+      box.querySelectorAll('.uc-cat').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          box.querySelectorAll('.uc-cat').forEach(function(b){b.classList.remove('uc-on');});
+          btn.classList.add('uc-on');
+          renderCat(btn.dataset.cat);
+        });
+      });
+    });
+
+    // --- CSS Injector ---
+    document.getElementById('tl-css').addEventListener('click',function(){
+      const box=document.getElementById('tl-css-box');
+      if(box.style.display!=='none'&&box.innerHTML){ box.style.display='none'; return; }
+      box.style.display='block';
+      box.innerHTML='<textarea id="tl-css-input" placeholder="/* type CSS here */" spellcheck="false"'
+        +' style="width:100%;height:110px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px 10px;color:#e2e8f0;font-family:monospace;font-size:11px;outline:none;resize:vertical;display:block;margin-bottom:6px"></textarea>'
+        +'<div style="display:flex;gap:6px">'
+        +'<button id="tl-css-apply" style="background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.25);border-radius:6px;padding:5px 14px;color:#22d3ee;font-family:sans-serif;font-size:11px;cursor:pointer">apply</button>'
+        +'<button id="tl-css-remove" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:6px;padding:5px 14px;color:#f87171;font-family:sans-serif;font-size:11px;cursor:pointer">remove</button>'
+        +'</div>';
+      let injected=null;
+      document.getElementById('tl-css-apply').addEventListener('click',function(){
+        const css=document.getElementById('tl-css-input').value;
+        if(!css.trim()){ showToast('err','no CSS to inject',''); return; }
+        if(injected)injected.remove();
+        injected=document.createElement('style');
+        injected.id='__mm_injected_css__';
+        injected.textContent=css;
+        document.head.appendChild(injected);
+        showToast('ok','CSS applied',css.length+' chars injected');
+        log('[CSS] injected '+css.length+' chars','i');
+      });
+      document.getElementById('tl-css-remove').addEventListener('click',function(){
+        const s=document.getElementById('__mm_injected_css__');
+        if(s){s.remove();injected=null;showToast('ok','CSS removed','');}
+        else showToast('err','nothing to remove','');
+      });
+    });
+  })();
+
+  // ── privacy ──
+  (function(){
+    function pvStatus(msg,type){
+      const s=document.getElementById('pv-status');
+      if(!s)return;
+      s.textContent=msg;
+      s.style.cssText='display:block;font-size:11px;padding:7px 11px;border-radius:7px;margin-bottom:8px;font-family:"Geist Mono",monospace;'
+        +(type==='ok'?'background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2)'
+        :'background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.2)');
+      setTimeout(function(){s.style.display='none';},3500);
+    }
+
+    // Canvas spoofer
+    let cvOn=false;
+    document.getElementById('pv-canvas').addEventListener('click',function(){
+      cvOn=!cvOn;
+      document.getElementById('pv-cv-badge').textContent=cvOn?'ON':'toggle';
+      if(cvOn){
+        const orig=HTMLCanvasElement.prototype.toDataURL;
+        HTMLCanvasElement.prototype.toDataURL=function(){
+          const ctx=this.getContext('2d');
+          if(ctx){const id=ctx.getImageData(0,0,1,1);id.data[0]=(id.data[0]+Math.floor(Math.random()*3)-1+256)%256;ctx.putImageData(id,0,0);}
+          return orig.apply(this,arguments);
+        };
+        window.__mm_cvOrig=orig;
+        pvStatus('Canvas spoofer ON','ok'); log('[Privacy] canvas spoofer ON','i');
+      } else {
+        if(window.__mm_cvOrig)HTMLCanvasElement.prototype.toDataURL=window.__mm_cvOrig;
+        pvStatus('Canvas spoofer OFF','ok'); log('[Privacy] canvas spoofer OFF','w');
+      }
+    });
+
+    // Audio spoofer
+    let auOn=false;
+    document.getElementById('pv-audio').addEventListener('click',function(){
+      auOn=!auOn;
+      document.getElementById('pv-au-badge').textContent=auOn?'ON':'toggle';
+      if(auOn){
+        const origGetChan=AnalyserNode.prototype.getFloatFrequencyData;
+        AnalyserNode.prototype.getFloatFrequencyData=function(arr){
+          origGetChan.call(this,arr);
+          for(let i=0;i<arr.length;i++)arr[i]+=Math.random()*0.0001-0.00005;
+        };
+        window.__mm_auOrig=origGetChan;
+        pvStatus('Audio spoofer ON','ok'); log('[Privacy] audio spoofer ON','i');
+      } else {
+        if(window.__mm_auOrig)AnalyserNode.prototype.getFloatFrequencyData=window.__mm_auOrig;
+        pvStatus('Audio spoofer OFF','ok'); log('[Privacy] audio spoofer OFF','w');
+      }
+    });
+
+    // WebGL spoofer
+    let wgOn=false;
+    document.getElementById('pv-webgl').addEventListener('click',function(){
+      wgOn=!wgOn;
+      document.getElementById('pv-wg-badge').textContent=wgOn?'ON':'toggle';
+      if(wgOn){
+        const origGetParam=WebGLRenderingContext.prototype.getParameter;
+        WebGLRenderingContext.prototype.getParameter=function(p){
+          if(p===37445)return'Intel Inc.';
+          if(p===37446)return'Intel Iris OpenGL Engine';
+          return origGetParam.call(this,p);
+        };
+        window.__mm_wgOrig=origGetParam;
+        pvStatus('WebGL spoofer ON — reporting as Intel Iris','ok'); log('[Privacy] WebGL spoofer ON','i');
+      } else {
+        if(window.__mm_wgOrig)WebGLRenderingContext.prototype.getParameter=window.__mm_wgOrig;
+        pvStatus('WebGL spoofer OFF','ok'); log('[Privacy] WebGL spoofer OFF','w');
+      }
+    });
+
+    // Referrer blocker
+    let rfOn=false;
+    document.getElementById('pv-referrer').addEventListener('click',function(){
+      rfOn=!rfOn;
+      document.getElementById('pv-rf-badge').textContent=rfOn?'ON':'toggle';
+      if(rfOn){
+        const origFetch=window.fetch;
+        window.__mm_rfFetch=origFetch;
+        window.fetch=function(url,opts){
+          opts=opts||{};opts.headers=opts.headers||{};
+          if(typeof opts.headers.set==='function')opts.headers.set('Referer','');
+          return origFetch(url,opts);
+        };
+        // Meta referrer tag
+        let meta=document.querySelector('meta[name="referrer"]');
+        if(!meta){meta=document.createElement('meta');meta.name='referrer';document.head.appendChild(meta);}
+        meta.content='no-referrer';
+        pvStatus('Referrer blocker ON','ok'); log('[Privacy] referrer blocker ON','i');
+      } else {
+        if(window.__mm_rfFetch)window.fetch=window.__mm_rfFetch;
+        pvStatus('Referrer blocker OFF','ok'); log('[Privacy] referrer blocker OFF','w');
+      }
+    });
+
+    // UA spoofer
+    let uaOn=false;
+    const fakeUAs=[
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15',
+      'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+    ];
+    document.getElementById('pv-useragent').addEventListener('click',function(){
+      uaOn=!uaOn;
+      document.getElementById('pv-ua-badge').textContent=uaOn?'ON':'toggle';
+      if(uaOn){
+        const fakeUA=fakeUAs[Math.floor(Math.random()*fakeUAs.length)];
+        try{
+          Object.defineProperty(navigator,'userAgent',{get:function(){return fakeUA;},configurable:true});
+          pvStatus('UA spoofed: '+fakeUA.slice(0,60)+'...','ok');
+          log('[Privacy] UA spoofed: '+fakeUA,'i');
+        }catch(e){pvStatus('UA spoof failed: '+e.message,'ok');log('[Privacy] UA spoof error: '+e.message,'e');}
+      } else {
+        try{Object.defineProperty(navigator,'userAgent',{get:function(){return navigator.userAgent;},configurable:true});}catch(e){}
+        pvStatus('UA restored (reload page for full effect)','ok'); log('[Privacy] UA spoofer OFF','w');
+      }
+    });
+
+    // Fingerprint report
+    document.getElementById('pv-report').addEventListener('click',function(){
+      goConsole();
+      log('--- fingerprint report ---','w');
+      log('userAgent: '+navigator.userAgent,'i');
+      log('platform: '+navigator.platform,'i');
+      log('language: '+navigator.language+' / '+navigator.languages,'i');
+      log('hardwareConcurrency: '+navigator.hardwareConcurrency,'i');
+      log('deviceMemory: '+(navigator.deviceMemory||'unknown')+'GB','i');
+      log('screen: '+screen.width+'×'+screen.height+' depth:'+screen.colorDepth,'i');
+      log('timezone: '+Intl.DateTimeFormat().resolvedOptions().timeZone,'i');
+      log('plugins: '+navigator.plugins.length,'i');
+      try{const c=document.createElement('canvas');const ctx=c.getContext('2d');ctx.fillText('test',0,10);log('canvas: '+c.toDataURL().slice(0,80)+'...','i');}catch(e){}
+      log('cookiesEnabled: '+navigator.cookieEnabled,'i');
+      log('doNotTrack: '+navigator.doNotTrack,'i');
+      log('--- end report ---','w');
+      showToast('ok','report logged','check console tab');
+    });
+  })();
+
+
+  // ── theme switcher ──
+  (function(){
+    const THEME_KEY='__mm_accent__';
+    function applyTheme(color){
+      try{localStorage.setItem(THEME_KEY,color);}catch(e){}
+      // Recolor all active tab indicators and key accent elements
+      const styleId='__mm_theme_style__';
+      let s=document.getElementById(styleId);
+      if(!s){s=document.createElement('style');s.id=styleId;document.head.appendChild(s);}
+      s.textContent=
+        '#__modmenu__ .mm-tab.mm-active{color:'+color+'!important;border-bottom-color:'+color+'!important}'
+        +'#__modmenu__ #mm-title{color:'+color+'!important}'
+        +'#__modmenu__ #mm-cprompt{color:'+color+'!important}'
+        +'#__modmenu__ #mm-runbtn{background:'+color+'22!important;color:'+color+'!important;border-color:'+color+'44!important}'
+        +'#__modmenu__ #mm-home-time{color:'+color+'!important}'
+        +'#__modmenu__ #mm-home-secs{color:'+color+'88!important}';
+    }
+    // Load saved
+    try{const saved=localStorage.getItem(THEME_KEY);if(saved)applyTheme(saved);}catch(e){}
+    // Wire up swatches
+    document.querySelectorAll('#__modmenu__ .mm-swatch').forEach(function(sw){
+      sw.addEventListener('click',function(){
+        document.querySelectorAll('#__modmenu__ .mm-swatch').forEach(function(s){s.style.outlineColor='transparent';});
+        sw.style.outlineColor='rgba(255,255,255,0.5)';
+        applyTheme(sw.dataset.color);
+        showToast('ok','theme updated',sw.dataset.color);
+      });
+    });
+  })();
+
+  // ── videowatchr — history, favorites, pip ──
+  (function(){
+    const HIST_KEY='__mm_vw_history__';
+    const FAV_KEY='__mm_vw_favs__';
+
+    function loadArr(key){try{return JSON.parse(localStorage.getItem(key)||'[]');}catch(e){return[];}}
+    function saveArr(key,arr){try{localStorage.setItem(key,JSON.stringify(arr.slice(0,50)));}catch(e){}}
+
+    function addHistory(videoId,title,channel,thumb){
+      const hist=loadArr(HIST_KEY).filter(function(h){return h.id!==videoId;});
+      hist.unshift({id:videoId,title:title,channel:channel,thumb:thumb,ts:Date.now()});
+      saveArr(HIST_KEY,hist);
+      updateLibBadge();
+    }
+
+    function toggleFav(videoId,title,channel,thumb){
+      const favs=loadArr(FAV_KEY);
+      const idx=favs.findIndex(function(f){return f.id===videoId;});
+      if(idx>=0){favs.splice(idx,1);saveArr(FAV_KEY,favs);return false;}
+      else{favs.unshift({id:videoId,title:title,channel:channel,thumb:thumb});saveArr(FAV_KEY,favs);return true;}
+    }
+
+    function isFav(videoId){return loadArr(FAV_KEY).some(function(f){return f.id===videoId;});}
+
+    function updateLibBadge(){
+      const hist=loadArr(HIST_KEY);
+      const libBar=document.getElementById('vw-lib-bar');
+      if(libBar&&hist.length>0)libBar.style.display='block';
+    }
+
+    function renderLib(type){
+      const libBar=document.getElementById('vw-lib-bar');
+      const libContent=document.getElementById('vw-lib-content');
+      const resultsView=document.getElementById('vw-results-view');
+      if(!libBar||!libContent)return;
+      const items=loadArr(type===('favorites')?FAV_KEY:HIST_KEY);
+      libBar.style.display='block';
+      libContent.style.display='flex';
+      libContent.style.flexDirection='column';
+      resultsView.style.display='none';
+      libContent.innerHTML='';
+      if(!items.length){
+        libContent.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:Geist,sans-serif">'+(type==='favorites'?'No favorites yet — star a video to save it':'No watch history yet')+'</div>';
+        return;
+      }
+      items.forEach(function(item){
+        const card=document.createElement('div');
+        card.style.cssText='display:flex;gap:9px;padding:7px 6px;border-radius:8px;cursor:pointer;margin-bottom:4px;align-items:flex-start';
+        const thumb=item.thumb||('https://i.ytimg.com/vi/'+item.id+'/mqdefault.jpg');
+        card.innerHTML='<div style="flex-shrink:0;width:90px;height:52px;border-radius:5px;overflow:hidden;background:#111">'
+          +'<img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover"/></div>'
+          +'<div style="flex:1;min-width:0">'
+          +'<div style="font-size:11px;font-weight:500;color:#e2e8f0;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">'+(item.title||item.id)+'</div>'
+          +'<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;font-family:Geist Mono,monospace">'+(item.channel||'')+'</div>'
+          +(item.ts?'<div style="font-size:9.5px;color:rgba(255,255,255,0.18);margin-top:2px">'+new Date(item.ts).toLocaleDateString()+'</div>':'')
+          +'</div>';
+        card.addEventListener('mouseenter',function(){card.style.background='rgba(255,255,255,0.05)';});
+        card.addEventListener('mouseleave',function(){card.style.background='';});
+        card.addEventListener('click',function(){
+          libContent.style.display='none';
+          resultsView.style.display='flex';
+          // Call vwShowPlayer if available
+          const frame=document.getElementById('vw-player-frame');
+          const titleEl=document.getElementById('vw-video-title');
+          const chanEl=document.getElementById('vw-video-channel');
+          const playerView=document.getElementById('vw-player-view');
+          const backBtn=document.getElementById('vw-back-btn');
+          if(frame){
+            frame.src='https://www.youtube-nocookie.com/embed/'+item.id+'?autoplay=1&rel=0&modestbranding=1';
+            if(titleEl)titleEl.textContent=item.title||item.id;
+            if(chanEl)chanEl.textContent=item.channel||'';
+            if(playerView)playerView.style.display='flex';
+            if(backBtn)backBtn.style.display='block';
+            updateFavBtn(item.id);
+          }
+        });
+        libContent.appendChild(card);
+      });
+    }
+
+    // Wire up lib tabs
+    document.querySelectorAll('.vw-lib-tab').forEach(function(tab){
+      tab.addEventListener('click',function(){
+        document.querySelectorAll('.vw-lib-tab').forEach(function(t){
+          t.style.color='rgba(255,255,255,0.3)';
+          t.style.borderBottom='none';
+        });
+        tab.style.color='rgba(248,113,113,0.8)';
+        tab.style.borderBottom='2px solid #f87171';
+        renderLib(tab.dataset.lib);
+      });
+    });
+
+    // Add history tab button to search bar
+    const searchBar=document.querySelector('#vw-app > div:first-child');
+    if(searchBar){
+      const histBtn=document.createElement('button');
+      histBtn.id='vw-lib-btn';
+      histBtn.textContent='☰';
+      histBtn.title='History & Favorites';
+      histBtn.style.cssText='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 10px;color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer;transition:all .15s;flex-shrink:0';
+      histBtn.addEventListener('click',function(){
+        const libContent=document.getElementById('vw-lib-content');
+        const resultsView=document.getElementById('vw-results-view');
+        const libBar=document.getElementById('vw-lib-bar');
+        if(libContent&&libContent.style.display!=='none'){
+          libContent.style.display='none';
+          if(resultsView)resultsView.style.display='flex';
+        } else {
+          if(resultsView)resultsView.style.display='none';
+          updateLibBadge();
+          renderLib('history');
+        }
+      });
+      searchBar.appendChild(histBtn);
+    }
+
+    function updateFavBtn(videoId){
+      const btn=document.getElementById('vw-fav-btn');
+      if(!btn)return;
+      if(isFav(videoId)){btn.textContent='★';btn.style.color='#facc15';btn.style.borderColor='rgba(250,204,21,0.3)';}
+      else{btn.textContent='☆';btn.style.color='rgba(255,255,255,0.4)';btn.style.borderColor='rgba(255,255,255,0.1)';}
+    }
+
+    // PiP button
+    const pipBtn=document.getElementById('vw-pip-btn');
+    if(pipBtn){
+      pipBtn.addEventListener('click',function(){
+        const frame=document.getElementById('vw-player-frame');
+        if(!frame)return;
+        // Get the video element inside the iframe if possible
+        try{
+          const video=frame.contentDocument&&frame.contentDocument.querySelector('video');
+          if(video&&video.requestPictureInPicture){video.requestPictureInPicture();return;}
+        }catch(e){}
+        // Fallback: open in new window
+        const src=frame.src;
+        if(src){window.open(src.replace('embed/','watch?v=').replace('www.youtube-nocookie.com','www.youtube.com'),'_blank');}
+        showToast('ok','opened in new tab','pip requires same-origin video');
+      });
+    }
+
+    // Fav button
+    const favBtn=document.getElementById('vw-fav-btn');
+    if(favBtn){
+      favBtn.addEventListener('click',function(){
+        const frame=document.getElementById('vw-player-frame');
+        if(!frame||!frame.src)return;
+        const match=frame.src.match(/embed\/([a-zA-Z0-9_-]{11})/);
+        if(!match)return;
+        const vid=match[1];
+        const title=(document.getElementById('vw-video-title')||{}).textContent||vid;
+        const channel=(document.getElementById('vw-video-channel')||{}).textContent||'';
+        const thumb='https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg';
+        const added=toggleFav(vid,title,channel,thumb);
+        updateFavBtn(vid);
+        showToast('ok',added?'added to favorites':'removed from favorites',title.slice(0,50));
+      });
+    }
+
+    // Hook into vwShowPlayer to record history
+    // Override the existing vwShowPlayer by patching it after the IIFE runs
+    const origVwShow=window.__vwShowPlayer;
+    function patchVwHistory(){
+      const frame=document.getElementById('vw-player-frame');
+      if(!frame)return;
+      const observer=new MutationObserver(function(){
+        const src=frame.src;
+        if(!src)return;
+        const match=src.match(/embed\/([a-zA-Z0-9_-]{11})/);
+        if(!match)return;
+        const vid=match[1];
+        const title=(document.getElementById('vw-video-title')||{}).textContent||vid;
+        const channel=(document.getElementById('vw-video-channel')||{}).textContent||'';
+        const thumb='https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg';
+        addHistory(vid,title,channel,thumb);
+        updateFavBtn(vid);
+      });
+      observer.observe(frame,{attributes:true,attributeFilter:['src']});
+    }
+    patchVwHistory();
+    updateLibBadge();
+  })();
+
   // ── games ──
   let gmGame=null,gmRAF=null,gmKeys={},gmScore=0;
   function gmSetScore(n){gmScore=n;$m('gm-score').textContent=n;}
@@ -2062,9 +2974,169 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
   function stopGame(){if(gmRAF)cancelAnimationFrame(gmRAF);gmRAF=null;if(gmGame&&gmGame.destroy)gmGame.destroy();gmGame=null;}
   function sizeCanvas(){const cv=$m('mm-gamecanvas');const panel=$m('mm-panel-games');const bar=panel.querySelector('.gm-bar');const hud=panel.querySelector('.gm-hud');cv.width=panel.clientWidth||480;cv.height=panel.clientHeight-bar.offsetHeight-hud.offsetHeight-4||380;}
   function initGamesPanel(){sizeCanvas();startTetris();}
-  document.querySelectorAll('#__modmenu__ .gm-pick').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#__modmenu__ .gm-pick').forEach(x=>x.classList.remove('gm-on'));btn.classList.add('gm-on');stopGame();gmSetScore(0);if(btn.id==='gm-tetris')startTetris();else if(btn.id==='gm-flappy')startFlappy();else startSpace();});});
+  document.querySelectorAll('#__modmenu__ .gm-pick').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#__modmenu__ .gm-pick').forEach(x=>x.classList.remove('gm-on'));btn.classList.add('gm-on');stopGame();gmSetScore(0);if(btn.id==='gm-tetris')startTetris();else if(btn.id==='gm-flappy')startFlappy();else if(btn.id==='gm-space')startSpace();else if(btn.id==='gm-snake')startSnake();else if(btn.id==='gm-pong')startPong();else if(btn.id==='gm-mine')startMinesweeper();});});
   document.addEventListener('keydown',e=>{gmKeys[e.key]=true;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)&&$m('mm-panel-games').classList.contains('mm-active'))e.preventDefault();});
   document.addEventListener('keyup',e=>{gmKeys[e.key]=false;});
+
+  // ── snake ──
+  function startSnake(){
+    const cv=$m('mm-gamecanvas'),ctx=cv.getContext('2d');
+    const W=cv.width,H=cv.height;
+    const SZ=18,COLS=Math.floor(W/SZ),ROWS=Math.floor(H/SZ);
+    let snake=[{x:Math.floor(COLS/2),y:Math.floor(ROWS/2)}];
+    let dir={x:1,y:0},nextDir={x:1,y:0},food=null,dead=false,lastTime=0,speed=110;
+    function placeFood(){
+      let pos;
+      do{pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)};}
+      while(snake.some(function(s){return s.x===pos.x&&s.y===pos.y;}));
+      food=pos;
+    }
+    placeFood();
+    function draw(){
+      ctx.fillStyle='#0a0a0e';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+      for(let x=0;x<COLS;x++){ctx.beginPath();ctx.moveTo(x*SZ,0);ctx.lineTo(x*SZ,H);ctx.stroke();}
+      for(let y=0;y<ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*SZ);ctx.lineTo(W,y*SZ);ctx.stroke();}
+      snake.forEach(function(s,i){
+        ctx.fillStyle=i===0?'#4ade80':('rgba(74,222,128,'+(0.4+0.6*(i/snake.length))+')');
+        ctx.fillRect(s.x*SZ+1,s.y*SZ+1,SZ-2,SZ-2);
+        if(i===0){
+          ctx.fillStyle='#0a0a0e';
+          ctx.beginPath();ctx.arc(s.x*SZ+SZ/2+dir.x*3+dir.y*3,s.y*SZ+SZ/2+dir.y*3-dir.x*3,2,0,Math.PI*2);ctx.fill();
+          ctx.beginPath();ctx.arc(s.x*SZ+SZ/2+dir.x*3-dir.y*3,s.y*SZ+SZ/2+dir.y*3+dir.x*3,2,0,Math.PI*2);ctx.fill();
+        }
+      });
+      if(food){ctx.fillStyle='#f87171';ctx.shadowColor='#f87171';ctx.shadowBlur=8;ctx.fillRect(food.x*SZ+3,food.y*SZ+3,SZ-6,SZ-6);ctx.shadowBlur=0;}
+      if(dead){
+        ctx.fillStyle='rgba(0,0,0,0.65)';ctx.fillRect(0,H/2-26,W,52);
+        ctx.fillStyle='#f87171';ctx.font='bold 15px Geist,sans-serif';ctx.textAlign='center';
+        ctx.fillText('GAME OVER — space to restart',W/2,H/2+6);
+      }
+    }
+    function loop(ts){
+      if(!gmGame)return;
+      if(dead){draw();if(gmKeys[' ']){dead=false;snake=[{x:Math.floor(COLS/2),y:Math.floor(ROWS/2)}];dir={x:1,y:0};nextDir={x:1,y:0};gmSetScore(0);speed=110;placeFood();gmKeys[' ']=false;}gmRAF=requestAnimationFrame(loop);return;}
+      if(ts-lastTime>speed){
+        lastTime=ts;
+        if(!(nextDir.x===-dir.x&&nextDir.y===-dir.y))dir={x:nextDir.x,y:nextDir.y};
+        const head={x:(snake[0].x+dir.x+COLS)%COLS,y:(snake[0].y+dir.y+ROWS)%ROWS};
+        if(snake.some(function(s){return s.x===head.x&&s.y===head.y;})){dead=true;}
+        else{
+          snake.unshift(head);
+          if(food&&head.x===food.x&&head.y===food.y){gmSetScore(gmScore+10);speed=Math.max(55,speed-2);placeFood();}
+          else snake.pop();
+        }
+      }
+      if(gmKeys['ArrowLeft']&&dir.x!==1)nextDir={x:-1,y:0};
+      if(gmKeys['ArrowRight']&&dir.x!==-1)nextDir={x:1,y:0};
+      if(gmKeys['ArrowUp']&&dir.y!==1)nextDir={x:0,y:-1};
+      if(gmKeys['ArrowDown']&&dir.y!==-1)nextDir={x:0,y:1};
+      draw();gmRAF=requestAnimationFrame(loop);
+    }
+    gmGame={destroy:function(){}};gmSetScore(0);gmStatus('arrows=move  eat red squares');
+    gmRAF=requestAnimationFrame(loop);
+  }
+
+  // ── pong ──
+  function startPong(){
+    const cv=$m('mm-gamecanvas'),ctx=cv.getContext('2d');
+    const W=cv.width,H=cv.height;
+    const PAD_H=55,PAD_W=8,BALL_S=8;
+    let p1={y:H/2-PAD_H/2,score:0},p2={y:H/2-PAD_H/2,score:0};
+    let ball={x:W/2,y:H/2,vx:3.5,vy:2.5};
+    let started=false,lastTime=0;
+    function resetBall(d){ball={x:W/2,y:H/2,vx:(d||1)*3.5,vy:(Math.random()-0.5)*5};}
+    function draw(){
+      ctx.fillStyle='#0a0a0e';ctx.fillRect(0,0,W,H);
+      ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='rgba(255,255,255,0.15)';ctx.font='bold 28px Geist Mono,monospace';ctx.textAlign='center';
+      ctx.fillText(p1.score,W/4,36);ctx.fillText(p2.score,3*W/4,36);
+      ctx.fillStyle='#e2e8f0';
+      ctx.fillRect(10,p1.y,PAD_W,PAD_H);ctx.fillRect(W-10-PAD_W,p2.y,PAD_W,PAD_H);
+      ctx.fillStyle='#facc15';ctx.shadowColor='#facc15';ctx.shadowBlur=8;
+      ctx.fillRect(ball.x-BALL_S/2,ball.y-BALL_S/2,BALL_S,BALL_S);ctx.shadowBlur=0;
+      if(!started){ctx.fillStyle='rgba(255,255,255,0.2)';ctx.font='11px Geist,sans-serif';ctx.textAlign='center';ctx.fillText('W/S=left  ↑/↓=right  SPACE=start',W/2,H-14);}
+    }
+    function loop(ts){
+      if(!gmGame)return;
+      lastTime=ts;
+      if(gmKeys['ArrowUp'])p2.y=Math.max(0,p2.y-5);
+      if(gmKeys['ArrowDown'])p2.y=Math.min(H-PAD_H,p2.y+5);
+      if(gmKeys['w']||gmKeys['W'])p1.y=Math.max(0,p1.y-5);
+      if(gmKeys['s']||gmKeys['S'])p1.y=Math.min(H-PAD_H,p1.y+5);
+      if(gmKeys[' ']&&!started){started=true;gmKeys[' ']=false;}
+      if(started){
+        ball.x+=ball.vx;ball.y+=ball.vy;
+        if(ball.y<=0||ball.y>=H)ball.vy*=-1;
+        if(ball.x<=10+PAD_W+BALL_S/2&&ball.y>=p1.y&&ball.y<=p1.y+PAD_H){ball.vx=Math.min(Math.abs(ball.vx)*1.05,9);ball.vy+=((ball.y-(p1.y+PAD_H/2))/(PAD_H/2))*2;}
+        if(ball.x>=W-10-PAD_W-BALL_S/2&&ball.y>=p2.y&&ball.y<=p2.y+PAD_H){ball.vx=-Math.min(Math.abs(ball.vx)*1.05,9);ball.vy+=((ball.y-(p2.y+PAD_H/2))/(PAD_H/2))*2;}
+        if(ball.x<0){p2.score++;gmSetScore(p1.score+p2.score);resetBall(1);}
+        if(ball.x>W){p1.score++;gmSetScore(p1.score+p2.score);resetBall(-1);}
+      }
+      draw();gmRAF=requestAnimationFrame(loop);
+    }
+    gmGame={destroy:function(){}};gmSetScore(0);gmStatus('W/S=left  ↑/↓=right  space=start');
+    lastTime=performance.now();gmRAF=requestAnimationFrame(loop);
+  }
+
+  // ── minesweeper ──
+  function startMinesweeper(){
+    const cv=$m('mm-gamecanvas'),ctx=cv.getContext('2d');
+    const W=cv.width,H=cv.height;
+    const SZ=Math.floor(Math.min(W,H-40)/16);
+    const COLS=Math.floor(W/SZ),ROWS=Math.floor((H-40)/SZ);
+    const MINES=Math.floor(COLS*ROWS*0.16);
+    let grid=[],revealed=[],flagged=[],gameOver=false,won=false,firstClick=true,mineCount=MINES,startTime=null;
+    const NC=['','#60a5fa','#4ade80','#f87171','#a78bfa','#fb923c','#22d3ee','#facc15','#e2e8f0'];
+    function initGrid(sx,sy){
+      grid=Array.from({length:ROWS},function(){return Array(COLS).fill(0);});
+      revealed=Array.from({length:ROWS},function(){return Array(COLS).fill(false);});
+      flagged=Array.from({length:ROWS},function(){return Array(COLS).fill(false);});
+      let p=0;
+      while(p<MINES){const r=Math.floor(Math.random()*ROWS),c=Math.floor(Math.random()*COLS);if(grid[r][c]===-1)continue;if(Math.abs(r-sy)<=1&&Math.abs(c-sx)<=1)continue;grid[r][c]=-1;p++;}
+      for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(grid[r][c]===-1)continue;let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const nr=r+dr,nc=c+dc;if(nr>=0&&nr<ROWS&&nc>=0&&nc<COLS&&grid[nr][nc]===-1)n++;}grid[r][c]=n;}
+    }
+    function reveal(r,c){if(r<0||r>=ROWS||c<0||c>=COLS||revealed[r][c]||flagged[r][c])return;revealed[r][c]=true;if(grid[r][c]===0)for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)reveal(r+dr,c+dc);}
+    function draw(){
+      ctx.fillStyle='#0a0a0e';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='rgba(255,255,255,0.2)';ctx.font='11px Geist Mono,monospace';ctx.textAlign='left';
+      ctx.fillText('💣 '+mineCount,8,22);
+      if(startTime){ctx.textAlign='right';ctx.fillText('⏱ '+Math.floor((Date.now()-startTime)/1000)+'s',W-8,22);}
+      for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+        const x=c*SZ,y=r*SZ+30;
+        if(revealed[r][c]){
+          ctx.fillStyle='rgba(255,255,255,0.05)';ctx.fillRect(x+1,y+1,SZ-2,SZ-2);
+          if(grid[r][c]>0){ctx.fillStyle=NC[grid[r][c]]||'#fff';ctx.font='bold '+(SZ-4)+'px Geist Mono,monospace';ctx.textAlign='center';ctx.fillText(grid[r][c],x+SZ/2,y+SZ-4);}
+          else if(grid[r][c]===-1){ctx.fillStyle='#f87171';ctx.fillRect(x+1,y+1,SZ-2,SZ-2);ctx.font=(SZ-4)+'px sans-serif';ctx.textAlign='center';ctx.fillText('💣',x+SZ/2,y+SZ-2);}
+        }else{
+          ctx.fillStyle='rgba(255,255,255,0.07)';ctx.fillRect(x+1,y+1,SZ-2,SZ-2);
+          if(flagged[r][c]){ctx.font=(SZ-4)+'px sans-serif';ctx.textAlign='center';ctx.fillText('🚩',x+SZ/2,y+SZ-2);}
+        }
+      }
+      if(gameOver||won){ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,H/2-28,W,56);ctx.fillStyle=won?'#4ade80':'#f87171';ctx.font='bold 14px Geist,sans-serif';ctx.textAlign='center';ctx.fillText(won?'YOU WIN! — click to restart':'BOOM! — click to restart',W/2,H/2+6);}
+    }
+    function clickHandler(e){
+      if(gameOver||won){gameOver=false;won=false;firstClick=true;mineCount=MINES;startTime=null;gmSetScore(0);draw();return;}
+      const rect=cv.getBoundingClientRect();
+      const mx=Math.floor((e.clientX-rect.left)/SZ),my=Math.floor((e.clientY-rect.top-30)/SZ);
+      if(my<0||my>=ROWS||mx<0||mx>=COLS||flagged[my][mx])return;
+      if(firstClick){firstClick=false;initGrid(mx,my);startTime=Date.now();}
+      if(grid[my][mx]===-1){revealed[my][mx]=true;gameOver=true;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(grid[r][c]===-1)revealed[r][c]=true;showToast('err','BOOM!','you hit a mine');}
+      else{reveal(my,mx);if(revealed.flat().filter(Boolean).length>=COLS*ROWS-MINES){won=true;gmSetScore(gmScore+1000);showToast('ok','you win!','minesweeper cleared');}}
+    }
+    function ctxHandler(e){
+      e.preventDefault();if(gameOver||won||firstClick)return;
+      const rect=cv.getBoundingClientRect();
+      const mx=Math.floor((e.clientX-rect.left)/SZ),my=Math.floor((e.clientY-rect.top-30)/SZ);
+      if(my<0||my>=ROWS||mx<0||mx>=COLS||revealed[my][mx])return;
+      flagged[my][mx]=!flagged[my][mx];mineCount+=flagged[my][mx]?-1:1;
+    }
+    cv.addEventListener('click',clickHandler);cv.addEventListener('contextmenu',ctxHandler);
+    function loop(){if(!gmGame)return;draw();gmRAF=requestAnimationFrame(loop);}
+    gmGame={destroy:function(){cv.removeEventListener('click',clickHandler);cv.removeEventListener('contextmenu',ctxHandler);}};
+    gmStatus('left=reveal  right click=flag');draw();gmRAF=requestAnimationFrame(loop);
+  }
 
   function startTetris(){
     const cv=$m('mm-gamecanvas'),ctx=cv.getContext('2d');
