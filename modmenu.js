@@ -56,6 +56,8 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     #__modmenu__ .mm-tab.mm-notepad.mm-active { color: #facc15; border-bottom-color: #facc15; }
     #__modmenu__ .mm-tab.mm-timer.mm-active { color: #fb923c; border-bottom-color: #fb923c; }
     #__modmenu__ .mm-tab.mm-privacy.mm-active { color: #f87171; border-bottom-color: #f87171; }
+    #__modmenu__ .mm-tab.mm-music.mm-active { color: #1db954; border-bottom-color: #1db954; }
+    #__modmenu__ .mm-tab.mm-misc.mm-active { color: #e2e8f0; border-bottom-color: #e2e8f0; }
 
     #__modmenu__ #mm-panels { flex: 1; overflow: hidden; }
     #__modmenu__ .mm-panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
@@ -311,6 +313,8 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
       <div class="mm-tab mm-notepad" data-tab="notepad">notepad</div>
       <div class="mm-tab mm-timer" data-tab="timer">timer</div>
       <div class="mm-tab mm-privacy" data-tab="privacy">privacy</div>
+      <div class="mm-tab mm-music" data-tab="music">🎵 music</div>
+      <div class="mm-tab mm-misc" data-tab="misc">misc</div>
     </div>
     <div id="mm-panels">
 
@@ -706,6 +710,122 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
               <span class="bl-badge" style="background:rgba(74,222,128,0.1);color:#4ade80">safe</span>
             </button>
           </div>
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-music">
+        <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0e;overflow:hidden">
+
+          <!-- Search bar -->
+          <div style="display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;background:#111118">
+            <input id="mu-search" type="text" placeholder="Search songs, artists, albums..." autocomplete="off"
+              style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 11px;color:#e2e8f0;font-family:'Geist',sans-serif;font-size:11.5px;outline:none"/>
+            <button id="mu-search-btn" style="background:rgba(29,185,84,0.15);color:#1db954;border:1px solid rgba(29,185,84,0.3);border-radius:7px;padding:6px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;cursor:pointer">Search</button>
+          </div>
+
+          <!-- Now playing bar -->
+          <div id="mu-player" style="display:none;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.07);padding:10px 12px;background:#111118">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img id="mu-art" src="" style="width:40px;height:40px;border-radius:5px;object-fit:cover;background:#1a1a24;flex-shrink:0"/>
+              <div style="flex:1;min-width:0">
+                <div id="mu-track-name" style="font-size:11.5px;font-weight:500;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+                <div id="mu-artist-name" style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <button id="mu-prev" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:14px;cursor:pointer;padding:2px">⏮</button>
+                <button id="mu-play" style="background:#1db954;border:none;border-radius:50%;width:28px;height:28px;color:#000;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">▶</button>
+                <button id="mu-next" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:14px;cursor:pointer;padding:2px">⏭</button>
+                <button id="mu-fav-track" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:14px;cursor:pointer;padding:2px">♡</button>
+              </div>
+            </div>
+            <!-- Progress bar -->
+            <div style="margin-top:8px;display:flex;align-items:center;gap:7px">
+              <span id="mu-cur-time" style="font-size:9px;color:rgba(255,255,255,0.25);font-family:monospace;min-width:28px">0:00</span>
+              <div id="mu-progress-bar" style="flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;cursor:pointer;position:relative">
+                <div id="mu-progress-fill" style="height:100%;background:#1db954;border-radius:2px;width:0%;transition:width .5s linear"></div>
+              </div>
+              <span id="mu-dur-time" style="font-size:9px;color:rgba(255,255,255,0.25);font-family:monospace;min-width:28px;text-align:right">0:00</span>
+              <input id="mu-vol" type="range" min="0" max="100" value="80" style="width:55px;accent-color:#1db954;cursor:pointer"/>
+            </div>
+          </div>
+
+          <!-- Content area -->
+          <div id="mu-content" style="flex:1;overflow-y:auto;padding:6px 8px"></div>
+          <div id="mu-status" style="padding:4px 10px;font-family:monospace;font-size:10px;color:rgba(255,255,255,0.2);flex-shrink:0;border-top:1px solid rgba(255,255,255,0.05)">music — search to find tracks</div>
+
+          <!-- Hidden audio element -->
+          <audio id="mu-audio" style="display:none"></audio>
+        </div>
+      </div>
+
+      <div class="mm-panel" id="mm-panel-misc">
+        <div style="flex:1;overflow-y:auto;padding:10px 12px">
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(226,232,240,0.4)">tools</div>
+            <button class="bl-btn" id="mc-stickynote">
+              <span class="bl-icon">📝</span>
+              <div class="bl-info"><div class="bl-name">sticky note</div><div class="bl-desc">Add a draggable note to the page</div></div>
+              <span class="bl-badge" style="background:rgba(250,204,21,0.1);color:#facc15">add</span>
+            </button>
+            <button class="bl-btn" id="mc-eyedropper">
+              <span class="bl-icon">🔬</span>
+              <div class="bl-info"><div class="bl-name">eyedropper</div><div class="bl-desc">Pick any color from screen</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">pick</span>
+            </button>
+            <button class="bl-btn" id="mc-screenshot">
+              <span class="bl-icon">📸</span>
+              <div class="bl-info"><div class="bl-name">screenshot</div><div class="bl-desc">Capture page to clipboard</div></div>
+              <span class="bl-badge" style="background:rgba(74,222,128,0.1);color:#4ade80">capture</span>
+            </button>
+          </div>
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(226,232,240,0.4)">generators</div>
+            <button class="bl-btn" id="mc-password">
+              <span class="bl-icon">🔑</span>
+              <div class="bl-info"><div class="bl-name">password generator</div><div class="bl-desc">Generate secure passwords</div></div>
+              <span class="bl-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">gen</span>
+            </button>
+            <button class="bl-btn" id="mc-qr">
+              <span class="bl-icon">◼</span>
+              <div class="bl-info"><div class="bl-name">QR code generator</div><div class="bl-desc">Generate QR from any text or URL</div></div>
+              <span class="bl-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">gen</span>
+            </button>
+            <button class="bl-btn" id="mc-lorem">
+              <span class="bl-icon">📄</span>
+              <div class="bl-info"><div class="bl-name">lorem ipsum</div><div class="bl-desc">Generate placeholder text</div></div>
+              <span class="bl-badge" style="background:rgba(167,139,250,0.1);color:#a78bfa">gen</span>
+            </button>
+          </div>
+          <div class="bl-section">
+            <div class="bl-title" style="color:rgba(226,232,240,0.4)">converters</div>
+            <button class="bl-btn" id="mc-base64">
+              <span class="bl-icon">🔄</span>
+              <div class="bl-info"><div class="bl-name">base64 encoder/decoder</div><div class="bl-desc">Encode or decode base64 text</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">tool</span>
+            </button>
+            <button class="bl-btn" id="mc-json">
+              <span class="bl-info"><div class="bl-name">JSON formatter</div><div class="bl-desc">Paste JSON to pretty-print and validate</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">tool</span>
+            </button>
+            <button class="bl-btn" id="mc-regex">
+              <span class="bl-icon">.*</span>
+              <div class="bl-info"><div class="bl-name">regex tester</div><div class="bl-desc">Test patterns with live highlighting</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">tool</span>
+            </button>
+            <button class="bl-btn" id="mc-markdown">
+              <span class="bl-icon">Md</span>
+              <div class="bl-info"><div class="bl-name">markdown previewer</div><div class="bl-desc">Write markdown, see rendered output</div></div>
+              <span class="bl-badge" style="background:rgba(34,211,238,0.1);color:#22d3ee">tool</span>
+            </button>
+          </div>
+          <!-- Expandable boxes -->
+          <div id="mc-password-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-qr-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-lorem-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-base64-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-json-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-regex-box" style="display:none;margin-top:6px"></div>
+          <div id="mc-markdown-box" style="display:none;margin-top:6px"></div>
         </div>
       </div>
 
@@ -2965,6 +3085,523 @@ javascript:(function(){if(document.getElementById('__modmenu__')){document.getEl
     }
     patchVwHistory();
     updateLibBadge();
+  })();
+
+
+  // ── music player ──
+  (function(){
+    const audio=document.getElementById('mu-audio');
+    const player=document.getElementById('mu-player');
+    const content=document.getElementById('mu-content');
+    const statusEl=document.getElementById('mu-status');
+    if(!audio||!content)return;
+
+    let queue=[],queueIdx=0,favTracks=[];
+    const FAV_KEY='__mm_mu_favs__';
+    try{favTracks=JSON.parse(localStorage.getItem(FAV_KEY)||'[]');}catch(e){}
+    function saveFavs(){try{localStorage.setItem(FAV_KEY,JSON.stringify(favTracks));}catch(e){}}
+
+    function muStatus(t){if(statusEl)statusEl.textContent=t;}
+    function fmtTime(s){s=Math.floor(s||0);return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+
+    // Jamendo public API — free/open licensed music, no key needed, CORS allowed
+    const JAMENDO='https://api.jamendo.com/v3.0';
+    const CLIENT_ID='b6747d04'; // public demo client id
+
+    async function muFetch(url){
+      const ctrl=new AbortController();
+      const t=setTimeout(()=>ctrl.abort(),6000);
+      try{const r=await fetch(url,{signal:ctrl.signal});clearTimeout(t);return r.ok?r.json():null;}
+      catch(e){clearTimeout(t);return null;}
+    }
+
+    function muCard(track,idx){
+      const card=document.createElement('div');
+      card.style.cssText='display:flex;align-items:center;gap:9px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:background .12s;margin-bottom:3px';
+      const isFav=favTracks.some(f=>f.id===track.id);
+      const thumb=track.album_image||track.image||'';
+      card.innerHTML='<div style="width:40px;height:40px;border-radius:5px;overflow:hidden;background:#1a1a24;flex-shrink:0;display:flex;align-items:center;justify-content:center">'
+        +(thumb?'<img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>':'<span style="font-size:18px;opacity:.3">♪</span>')
+        +'</div>'
+        +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:11.5px;font-weight:500;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(track.name||'Unknown')+'</div>'
+        +'<div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(track.artist_name||'')+(track.album_name?' · '+track.album_name:'')+'</div>'
+        +'</div>'
+        +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+        +'<span style="font-size:9.5px;color:rgba(255,255,255,0.2);font-family:monospace">'+fmtTime(track.duration)+'</span>'
+        +'<button class="mu-fav-btn" data-id="'+track.id+'" style="background:none;border:none;color:'+(isFav?'#1db954':'rgba(255,255,255,0.2)')+';font-size:14px;cursor:pointer;padding:2px;line-height:1">'+(isFav?'♥':'♡')+'</button>'
+        +'</div>';
+      card.addEventListener('mouseenter',()=>card.style.background='rgba(255,255,255,0.05)');
+      card.addEventListener('mouseleave',()=>card.style.background='');
+      card.addEventListener('click',e=>{
+        if(e.target.classList.contains('mu-fav-btn'))return;
+        queue=Array.from(content.querySelectorAll('[data-track-idx]')).map(el=>JSON.parse(el.dataset.trackObj||'null')).filter(Boolean);
+        queueIdx=idx;
+        muPlay(track);
+      });
+      card.querySelector('.mu-fav-btn').addEventListener('click',e=>{
+        e.stopPropagation();
+        const existing=favTracks.findIndex(f=>f.id===track.id);
+        if(existing>=0){favTracks.splice(existing,1);e.target.style.color='rgba(255,255,255,0.2)';e.target.textContent='♡';}
+        else{favTracks.unshift(track);e.target.style.color='#1db954';e.target.textContent='♥';}
+        saveFavs();
+        showToast('ok',existing>=0?'removed from likes':'saved to likes',track.name);
+      });
+      card.dataset.trackIdx=idx;
+      card.dataset.trackObj=JSON.stringify(track);
+      return card;
+    }
+
+    function muSectionHeader(text){
+      const h=document.createElement('div');
+      h.style.cssText='font-size:9.5px;color:rgba(29,185,84,0.6);text-transform:uppercase;letter-spacing:.1em;font-weight:600;padding:8px 4px 5px;font-family:sans-serif';
+      h.textContent=text;return h;
+    }
+
+    function muPlay(track){
+      if(!track||!track.audio)return;
+      audio.src=track.audio;
+      audio.volume=(document.getElementById('mu-vol')||{value:80}).value/100;
+      audio.play().catch(e=>muStatus('playback blocked: '+e.message));
+      player.style.display='block';
+      const art=document.getElementById('mu-art');
+      if(art)art.src=track.album_image||track.image||'';
+      const tn=document.getElementById('mu-track-name');
+      if(tn)tn.textContent=track.name||'Unknown';
+      const an=document.getElementById('mu-artist-name');
+      if(an)an.textContent=track.artist_name||'';
+      document.getElementById('mu-play').textContent='⏸';
+      muStatus('playing: '+track.name);
+      // Update fav button
+      const fb=document.getElementById('mu-fav-track');
+      if(fb){const isFav=favTracks.some(f=>f.id===track.id);fb.textContent=isFav?'♥':'♡';fb.style.color=isFav?'#1db954':'rgba(255,255,255,0.3)';}
+    }
+
+    // Audio events
+    audio.addEventListener('timeupdate',()=>{
+      const pf=document.getElementById('mu-progress-fill');
+      const ct=document.getElementById('mu-cur-time');
+      if(audio.duration){
+        if(pf)pf.style.width=(audio.currentTime/audio.duration*100)+'%';
+        if(ct)ct.textContent=fmtTime(audio.currentTime);
+        const dt=document.getElementById('mu-dur-time');
+        if(dt)dt.textContent=fmtTime(audio.duration);
+      }
+    });
+    audio.addEventListener('ended',()=>{
+      if(queueIdx<queue.length-1){queueIdx++;muPlay(queue[queueIdx]);}
+      else{document.getElementById('mu-play').textContent='▶';muStatus('queue ended');}
+    });
+
+    // Controls
+    document.getElementById('mu-play').addEventListener('click',()=>{
+      if(audio.paused){audio.play();document.getElementById('mu-play').textContent='⏸';}
+      else{audio.pause();document.getElementById('mu-play').textContent='▶';}
+    });
+    document.getElementById('mu-prev').addEventListener('click',()=>{
+      if(audio.currentTime>3){audio.currentTime=0;return;}
+      if(queueIdx>0){queueIdx--;muPlay(queue[queueIdx]);}
+    });
+    document.getElementById('mu-next').addEventListener('click',()=>{
+      if(queueIdx<queue.length-1){queueIdx++;muPlay(queue[queueIdx]);}
+    });
+    document.getElementById('mu-vol').addEventListener('input',e=>{audio.volume=e.target.value/100;});
+    document.getElementById('mu-progress-bar').addEventListener('click',e=>{
+      const rect=e.currentTarget.getBoundingClientRect();
+      const pct=(e.clientX-rect.left)/rect.width;
+      if(audio.duration)audio.currentTime=pct*audio.duration;
+    });
+    document.getElementById('mu-fav-track').addEventListener('click',()=>{
+      const tn=(document.getElementById('mu-track-name')||{}).textContent;
+      if(!tn)return;
+      // find current track in queue
+      const track=queue[queueIdx];
+      if(!track)return;
+      const existing=favTracks.findIndex(f=>f.id===track.id);
+      const btn=document.getElementById('mu-fav-track');
+      if(existing>=0){favTracks.splice(existing,1);btn.textContent='♡';btn.style.color='rgba(255,255,255,0.3)';}
+      else{favTracks.unshift(track);btn.textContent='♥';btn.style.color='#1db954';}
+      saveFavs();
+      showToast('ok',existing>=0?'removed from likes':'saved to likes',track.name);
+    });
+
+    function renderTracks(tracks,label){
+      content.innerHTML='';
+      if(!tracks||!tracks.length){content.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px">No results found</div>';return;}
+      content.appendChild(muSectionHeader(label||'tracks'));
+      tracks.forEach((t,i)=>content.appendChild(muCard(t,i)));
+      queue=tracks;
+    }
+
+    async function muSearch(q){
+      content.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:monospace">searching...</div>';
+      muStatus('searching "'+q+'"...');
+      const data=await muFetch(JAMENDO+'/tracks/?client_id='+CLIENT_ID+'&format=json&limit=20&search='+encodeURIComponent(q)+'&include=musicinfo&imagesize=100&audioformat=mp31');
+      if(data&&data.results&&data.results.length){
+        renderTracks(data.results,'results for "'+q+'"');
+        muStatus(data.results.length+' tracks found');
+      } else {
+        content.innerHTML='<div style="padding:16px;font-size:11px;color:rgba(255,255,255,0.3);font-family:sans-serif;line-height:1.8">No tracks found.<br><span style="font-size:10px;color:rgba(255,255,255,0.18)">Music via Jamendo — free & open licensed</span></div>';
+        muStatus('no results');
+      }
+    }
+
+    async function muLoadHome(){
+      content.innerHTML='<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:monospace">loading...</div>';
+      muStatus('loading...');
+
+      // Genre pills
+      const genres=['pop','rock','electronic','jazz','classical','hip-hop','ambient','lofi','indie','metal'];
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;flex-wrap:wrap;gap:5px;padding:4px 2px 10px';
+      genres.forEach(g=>{
+        const btn=document.createElement('button');
+        btn.textContent=g;
+        btn.style.cssText='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:4px 11px;font-family:sans-serif;font-size:10.5px;color:rgba(255,255,255,0.5);cursor:pointer';
+        btn.addEventListener('mouseenter',()=>{btn.style.background='rgba(29,185,84,0.1)';btn.style.borderColor='rgba(29,185,84,0.3)';btn.style.color='#1db954';});
+        btn.addEventListener('mouseleave',()=>{btn.style.background='rgba(255,255,255,0.05)';btn.style.borderColor='rgba(255,255,255,0.09)';btn.style.color='rgba(255,255,255,0.5)';});
+        btn.addEventListener('click',()=>{document.getElementById('mu-search').value=g;muSearch(g);});
+        row.appendChild(btn);
+      });
+      content.innerHTML='';
+      content.appendChild(row);
+
+      // Liked songs section
+      if(favTracks.length){
+        content.appendChild(muSectionHeader('♥ liked songs ('+favTracks.length+')'));
+        favTracks.slice(0,6).forEach((t,i)=>content.appendChild(muCard(t,i)));
+        if(favTracks.length>6){
+          const more=document.createElement('div');
+          more.style.cssText='font-size:10px;color:rgba(29,185,84,0.6);cursor:pointer;padding:4px 6px;font-family:sans-serif';
+          more.textContent='+ '+(favTracks.length-6)+' more liked songs';
+          more.addEventListener('click',()=>renderTracks(favTracks,'♥ liked songs'));
+          content.appendChild(more);
+        }
+      }
+
+      // Featured / trending from Jamendo
+      const data=await muFetch(JAMENDO+'/tracks/?client_id='+CLIENT_ID+'&format=json&limit=12&featured=1&imagesize=100&audioformat=mp31&order=popularity_week');
+      if(data&&data.results&&data.results.length){
+        content.appendChild(muSectionHeader('trending this week'));
+        data.results.forEach((t,i)=>content.appendChild(muCard(t,i)));
+        queue=data.results;
+        muStatus('jamendo — free & open licensed music');
+      } else {
+        const hint=document.createElement('div');
+        hint.style.cssText='padding:10px 4px;font-size:10.5px;color:rgba(255,255,255,0.2);font-family:sans-serif;line-height:1.7';
+        hint.textContent='Search above or pick a genre to start listening.';
+        content.appendChild(hint);
+        muStatus('search to find music');
+      }
+    }
+
+    // Search events
+    document.getElementById('mu-search-btn').addEventListener('click',()=>{const q=document.getElementById('mu-search').value.trim();if(q)muSearch(q);});
+    document.getElementById('mu-search').addEventListener('keydown',e=>{if(e.key==='Enter'){const q=e.target.value.trim();if(q)muSearch(q);}});
+
+    // Load home when tab is clicked
+    document.querySelectorAll('#__modmenu__ .mm-tab').forEach(t=>{
+      if(t.dataset.tab==='music')t.addEventListener('click',()=>{if(!content.children.length)muLoadHome();});
+    });
+  })();
+
+  // ── misc ──
+  (function(){
+    function mcBox(id,show){
+      const ids=['mc-password-box','mc-qr-box','mc-lorem-box','mc-base64-box','mc-json-box','mc-regex-box','mc-markdown-box'];
+      ids.forEach(i=>{const el=document.getElementById(i);if(el)el.style.display=(i===id&&show)?'block':'none';});
+    }
+    function boxStyle(){return 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;';}
+    function inputStyle(){return 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 9px;color:#e2e8f0;font-family:monospace;font-size:11px;outline:none;width:100%;box-sizing:border-box;';}
+    function btnStyle(color){return 'background:rgba('+color+',0.12);border:1px solid rgba('+color+',0.25);border-radius:6px;padding:5px 12px;color:rgb('+color+');font-family:sans-serif;font-size:11px;cursor:pointer;';}
+
+    // ── Sticky Notes ──
+    let noteCount=0;
+    document.getElementById('mc-stickynote').addEventListener('click',()=>{
+      noteCount++;
+      const note=document.createElement('div');
+      const hue=Math.floor(Math.random()*360);
+      note.style.cssText='position:fixed;top:'+(80+noteCount*20)+'px;left:'+(80+noteCount*15)+'px;width:200px;min-height:120px;background:hsl('+hue+',70%,92%);border-radius:4px;padding:0;z-index:2147483644;box-shadow:3px 3px 10px rgba(0,0,0,0.3);display:flex;flex-direction:column;font-family:sans-serif;';
+      note.innerHTML='<div id="sn-bar-'+noteCount+'" style="background:hsl('+hue+',60%,80%);padding:5px 8px;border-radius:4px 4px 0 0;cursor:grab;display:flex;justify-content:space-between;align-items:center;user-select:none;font-size:10px;color:rgba(0,0,0,0.5)">'
+        +'<span>note '+noteCount+'</span>'
+        +'<span id="sn-close-'+noteCount+'" style="cursor:pointer;font-size:13px;color:rgba(0,0,0,0.4)">×</span>'
+        +'</div>'
+        +'<textarea style="flex:1;background:transparent;border:none;outline:none;resize:none;padding:8px;font-family:sans-serif;font-size:12px;color:rgba(0,0,0,0.7);min-height:90px;border-radius:0 0 4px 4px" placeholder="Type your note..."></textarea>';
+      document.body.appendChild(note);
+      // Drag
+      const bar=note.querySelector('[id^="sn-bar-"]');
+      let drag=false,ox=0,oy=0;
+      bar.addEventListener('mousedown',e=>{drag=true;ox=e.clientX-note.offsetLeft;oy=e.clientY-note.offsetTop;bar.style.cursor='grabbing';});
+      document.addEventListener('mousemove',e=>{if(drag){note.style.left=(e.clientX-ox)+'px';note.style.top=(e.clientY-oy)+'px';}});
+      document.addEventListener('mouseup',()=>{drag=false;bar.style.cursor='grab';});
+      note.querySelector('[id^="sn-close-"]').addEventListener('click',()=>note.remove());
+      showToast('ok','sticky note added','drag to move, × to close');
+    });
+
+    // ── Eyedropper ──
+    document.getElementById('mc-eyedropper').addEventListener('click',async()=>{
+      if(!window.EyeDropper){showToast('err','not supported','EyeDropper API requires Chrome 95+');return;}
+      try{
+        const dropper=new window.EyeDropper();
+        const result=await dropper.open();
+        navigator.clipboard.writeText(result.sRGBHex).catch(()=>{});
+        showToast('ok','color picked',result.sRGBHex);
+        log('[Eyedropper] '+result.sRGBHex,'i');
+      }catch(e){showToast('err','cancelled','');}
+    });
+
+    // ── Screenshot ──
+    document.getElementById('mc-screenshot').addEventListener('click',async()=>{
+      muStatus&&muStatus('');
+      showToast('ok','loading html2canvas...','');
+      try{
+        const m=await import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        const canvas=await (m.default||window.html2canvas)(document.body);
+        canvas.toBlob(async blob=>{
+          try{
+            await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+            showToast('ok','screenshot copied','clipboard contains PNG');
+          }catch(e){
+            // fallback: open in new tab
+            window.open(canvas.toDataURL(),'_blank');
+            showToast('ok','screenshot opened','in new tab');
+          }
+        });
+      }catch(e){showToast('err','screenshot failed',e.message);}
+    });
+
+    // ── Password Generator ──
+    document.getElementById('mc-password').addEventListener('click',()=>{
+      const box=document.getElementById('mc-password-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">'
+        +'<label style="font-size:10px;color:rgba(255,255,255,0.4);font-family:sans-serif;display:flex;align-items:center;gap:4px"><input type="number" id="pw-len" value="16" min="4" max="128" style="width:44px;'+inputStyle()+'margin-bottom:0"/> length</label>'
+        +'<label style="font-size:10px;color:rgba(255,255,255,0.4);font-family:sans-serif;display:flex;align-items:center;gap:4px"><input type="checkbox" id="pw-upper" checked/> A-Z</label>'
+        +'<label style="font-size:10px;color:rgba(255,255,255,0.4);font-family:sans-serif;display:flex;align-items:center;gap:4px"><input type="checkbox" id="pw-num" checked/> 0-9</label>'
+        +'<label style="font-size:10px;color:rgba(255,255,255,0.4);font-family:sans-serif;display:flex;align-items:center;gap:4px"><input type="checkbox" id="pw-sym" checked/> !@#</label>'
+        +'</div>'
+        +'<div style="display:flex;gap:6px;margin-bottom:6px">'
+        +'<input id="pw-out" type="text" readonly style="'+inputStyle()+'flex:1;letter-spacing:.05em" placeholder="click generate"/>'
+        +'<button id="pw-gen" style="'+btnStyle('167,139,250')+'white-space:nowrap">generate</button>'
+        +'<button id="pw-copy" style="'+btnStyle('34,211,238')+'white-space:nowrap">copy</button>'
+        +'</div>'
+        +'<div id="pw-strength" style="height:3px;background:rgba(255,255,255,0.08);border-radius:2px"><div id="pw-str-bar" style="height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%"></div></div>'
+        +'</div>';
+      mcBox('mc-password-box',true);
+      function genPw(){
+        let chars='abcdefghijklmnopqrstuvwxyz';
+        if(document.getElementById('pw-upper').checked)chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if(document.getElementById('pw-num').checked)chars+='0123456789';
+        if(document.getElementById('pw-sym').checked)chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';
+        const len=parseInt(document.getElementById('pw-len').value)||16;
+        let pw='';for(let i=0;i<len;i++)pw+=chars[Math.floor(Math.random()*chars.length)];
+        document.getElementById('pw-out').value=pw;
+        // Strength
+        const score=Math.min(100,len*4+(document.getElementById('pw-upper').checked?15:0)+(document.getElementById('pw-num').checked?15:0)+(document.getElementById('pw-sym').checked?20:0));
+        const bar=document.getElementById('pw-str-bar');
+        bar.style.width=score+'%';
+        bar.style.background=score>75?'#4ade80':score>45?'#fb923c':'#f87171';
+      }
+      document.getElementById('pw-gen').addEventListener('click',genPw);
+      document.getElementById('pw-copy').addEventListener('click',()=>{
+        const val=document.getElementById('pw-out').value;
+        if(!val)return;
+        navigator.clipboard.writeText(val).then(()=>showToast('ok','password copied',val.length+' chars')).catch(()=>showToast('err','clipboard blocked',''));
+      });
+      genPw();
+    });
+
+    // ── QR Code ──
+    document.getElementById('mc-qr').addEventListener('click',()=>{
+      const box=document.getElementById('mc-qr-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<input id="qr-input" type="text" placeholder="Enter text or URL..." style="'+inputStyle()+'margin-bottom:8px"/>'
+        +'<div style="display:flex;gap:6px;margin-bottom:10px">'
+        +'<button id="qr-gen" style="'+btnStyle('167,139,250')+'">generate</button>'
+        +'<button id="qr-copy" style="'+btnStyle('34,211,238')+'" disabled>copy PNG</button>'
+        +'</div>'
+        +'<div id="qr-out" style="display:flex;justify-content:center"></div>'
+        +'</div>';
+      mcBox('mc-qr-box',true);
+      document.getElementById('qr-input').value=location.href;
+      let lastUrl='';
+      document.getElementById('qr-gen').addEventListener('click',()=>{
+        const txt=document.getElementById('qr-input').value.trim();if(!txt)return;
+        const url='https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(txt);
+        const out=document.getElementById('qr-out');
+        out.innerHTML='<img src="'+url+'" style="border-radius:6px;background:#fff;padding:6px" id="qr-img"/>';
+        lastUrl=url;
+        document.getElementById('qr-copy').disabled=false;
+        document.getElementById('qr-copy').addEventListener('click',()=>{window.open(lastUrl,'_blank');showToast('ok','QR opened in new tab','right-click to save');});
+      });
+      // Auto-generate with current URL
+      document.getElementById('qr-gen').click();
+    });
+
+    // ── Lorem Ipsum ──
+    document.getElementById('mc-lorem').addEventListener('click',()=>{
+      const box=document.getElementById('mc-lorem-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      const LOREM=['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.','Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.','Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.','Pellentesque habitant morbi tristique senectus et netus et malesuada fames.','Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.','Nullam varius, turpis molestie dictum semper, nisl lectus rhoncus orci.','Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere.','Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer.'];
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap">'
+        +'<select id="lo-type" style="'+inputStyle()+'width:auto;flex-shrink:0"><option value="words">words</option><option value="sentences">sentences</option><option value="paragraphs">paragraphs</option></select>'
+        +'<input id="lo-count" type="number" value="50" min="1" max="500" style="'+inputStyle()+'width:55px;flex-shrink:0"/>'
+        +'<button id="lo-gen" style="'+btnStyle('167,139,250')+'white-space:nowrap">generate</button>'
+        +'<button id="lo-copy" style="'+btnStyle('34,211,238')+'white-space:nowrap">copy</button>'
+        +'</div>'
+        +'<textarea id="lo-out" readonly style="'+inputStyle()+'height:90px;resize:vertical;display:block"></textarea>'
+        +'</div>';
+      mcBox('mc-lorem-box',true);
+      function genLorem(){
+        const type=document.getElementById('lo-type').value;
+        const count=parseInt(document.getElementById('lo-count').value)||50;
+        let out='';
+        if(type==='words'){
+          const words=LOREM.join(' ').replace(/[.,]/g,'').split(' ');
+          const arr=[];for(let i=0;i<count;i++)arr.push(words[i%words.length]);
+          out=arr.join(' ');
+        }else if(type==='sentences'){
+          const arr=[];for(let i=0;i<count;i++)arr.push(LOREM[i%LOREM.length]);
+          out=arr.join(' ');
+        }else{
+          const arr=[];for(let i=0;i<count;i++)arr.push(LOREM.slice(0,Math.floor(Math.random()*4)+3).join(' '));
+          out=arr.join('\n\n');
+        }
+        document.getElementById('lo-out').value=out;
+      }
+      document.getElementById('lo-gen').addEventListener('click',genLorem);
+      document.getElementById('lo-copy').addEventListener('click',()=>{
+        const val=document.getElementById('lo-out').value;
+        navigator.clipboard.writeText(val).then(()=>showToast('ok','copied',val.length+' chars')).catch(()=>showToast('err','clipboard blocked',''));
+      });
+      genLorem();
+    });
+
+    // ── Base64 ──
+    document.getElementById('mc-base64').addEventListener('click',()=>{
+      const box=document.getElementById('mc-base64-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<textarea id="b64-in" placeholder="Enter text to encode or base64 to decode..." style="'+inputStyle()+'height:70px;resize:vertical;display:block;margin-bottom:6px"></textarea>'
+        +'<div style="display:flex;gap:6px;margin-bottom:8px">'
+        +'<button id="b64-enc" style="'+btnStyle('34,211,238')+'">encode</button>'
+        +'<button id="b64-dec" style="'+btnStyle('167,139,250')+'">decode</button>'
+        +'<button id="b64-copy" style="'+btnStyle('74,222,128')+'">copy</button>'
+        +'<button id="b64-swap" style="'+btnStyle('255,255,255')+'">swap</button>'
+        +'</div>'
+        +'<textarea id="b64-out" readonly placeholder="Output..." style="'+inputStyle()+'height:70px;resize:vertical;display:block"></textarea>'
+        +'</div>';
+      mcBox('mc-base64-box',true);
+      document.getElementById('b64-enc').addEventListener('click',()=>{try{document.getElementById('b64-out').value=btoa(unescape(encodeURIComponent(document.getElementById('b64-in').value)));showToast('ok','encoded','');}catch(e){showToast('err','encode failed',e.message);}});
+      document.getElementById('b64-dec').addEventListener('click',()=>{try{document.getElementById('b64-out').value=decodeURIComponent(escape(atob(document.getElementById('b64-in').value)));showToast('ok','decoded','');}catch(e){showToast('err','invalid base64',e.message);}});
+      document.getElementById('b64-copy').addEventListener('click',()=>{const v=document.getElementById('b64-out').value;if(v)navigator.clipboard.writeText(v).then(()=>showToast('ok','copied','')).catch(()=>showToast('err','clipboard blocked',''));});
+      document.getElementById('b64-swap').addEventListener('click',()=>{const a=document.getElementById('b64-in').value,b=document.getElementById('b64-out').value;document.getElementById('b64-in').value=b;document.getElementById('b64-out').value=a;});
+    });
+
+    // ── JSON Formatter ──
+    document.getElementById('mc-json').addEventListener('click',()=>{
+      const box=document.getElementById('mc-json-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<textarea id="jf-in" placeholder="Paste JSON here..." style="'+inputStyle()+'height:80px;resize:vertical;display:block;margin-bottom:6px"></textarea>'
+        +'<div style="display:flex;gap:6px;margin-bottom:8px">'
+        +'<button id="jf-fmt" style="'+btnStyle('34,211,238')+'">format</button>'
+        +'<button id="jf-min" style="'+btnStyle('167,139,250')+'">minify</button>'
+        +'<button id="jf-copy" style="'+btnStyle('74,222,128')+'">copy</button>'
+        +'</div>'
+        +'<pre id="jf-out" style="'+inputStyle()+'height:100px;overflow:auto;white-space:pre-wrap;word-break:break-all;font-size:10px;line-height:1.5;display:block;margin:0"></pre>'
+        +'</div>';
+      mcBox('mc-json-box',true);
+      function parseJSON(){try{return JSON.parse(document.getElementById('jf-in').value);}catch(e){showToast('err','invalid JSON',e.message);return null;}}
+      document.getElementById('jf-fmt').addEventListener('click',()=>{const d=parseJSON();if(d!==null){document.getElementById('jf-out').textContent=JSON.stringify(d,null,2);showToast('ok','formatted','');}});
+      document.getElementById('jf-min').addEventListener('click',()=>{const d=parseJSON();if(d!==null){document.getElementById('jf-out').textContent=JSON.stringify(d);showToast('ok','minified','');}});
+      document.getElementById('jf-copy').addEventListener('click',()=>{const v=document.getElementById('jf-out').textContent;if(v)navigator.clipboard.writeText(v).then(()=>showToast('ok','copied','')).catch(()=>showToast('err','clipboard blocked',''));});
+    });
+
+    // ── Regex Tester ──
+    document.getElementById('mc-regex').addEventListener('click',()=>{
+      const box=document.getElementById('mc-regex-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+'">'
+        +'<div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">'
+        +'<span style="font-size:13px;color:rgba(255,255,255,0.3);font-family:monospace">/</span>'
+        +'<input id="rx-pat" type="text" placeholder="pattern" style="'+inputStyle()+'flex:1"/>'
+        +'<span style="font-size:13px;color:rgba(255,255,255,0.3);font-family:monospace">/</span>'
+        +'<input id="rx-flags" type="text" value="gi" placeholder="flags" style="'+inputStyle()+'width:42px"/>'
+        +'</div>'
+        +'<textarea id="rx-test" placeholder="Test string..." style="'+inputStyle()+'height:60px;resize:vertical;display:block;margin-bottom:6px"></textarea>'
+        +'<div id="rx-out" style="font-size:10.5px;font-family:monospace;color:rgba(255,255,255,0.5);min-height:20px;padding:4px 0"></div>'
+        +'</div>';
+      mcBox('mc-regex-box',true);
+      function testRx(){
+        const pat=document.getElementById('rx-pat').value;
+        const flags=document.getElementById('rx-flags').value||'g';
+        const str=document.getElementById('rx-test').value;
+        const out=document.getElementById('rx-out');
+        if(!pat){out.textContent='';return;}
+        try{
+          const rx=new RegExp(pat,flags);
+          const matches=[...str.matchAll(new RegExp(pat,flags.includes('g')?flags:flags+'g'))];
+          if(matches.length){
+            out.innerHTML='<span style="color:#4ade80">'+matches.length+' match'+(matches.length>1?'es':'')+'</span>: '
+              +matches.slice(0,5).map(m=>'<span style="background:rgba(250,204,21,0.2);color:#facc15;border-radius:3px;padding:0 3px">'+m[0]+'</span>').join(' ');
+          }else{out.innerHTML='<span style="color:#f87171">no matches</span>';}
+        }catch(e){out.innerHTML='<span style="color:#f87171">invalid: '+e.message+'</span>';}
+      }
+      document.getElementById('rx-pat').addEventListener('input',testRx);
+      document.getElementById('rx-flags').addEventListener('input',testRx);
+      document.getElementById('rx-test').addEventListener('input',testRx);
+    });
+
+    // ── Markdown Previewer ──
+    document.getElementById('mc-markdown').addEventListener('click',()=>{
+      const box=document.getElementById('mc-markdown-box');
+      if(box.style.display==='block'){mcBox('',false);return;}
+      box.innerHTML='<div style="'+boxStyle()+';padding:0;overflow:hidden">'
+        +'<div style="display:flex;border-bottom:1px solid rgba(255,255,255,0.08)">'
+        +'<button id="md-tab-edit" style="flex:1;padding:7px;background:rgba(255,255,255,0.05);border:none;color:#e2e8f0;font-family:sans-serif;font-size:10.5px;cursor:pointer;border-right:1px solid rgba(255,255,255,0.08)">✏ edit</button>'
+        +'<button id="md-tab-prev" style="flex:1;padding:7px;background:none;border:none;color:rgba(255,255,255,0.4);font-family:sans-serif;font-size:10.5px;cursor:pointer">👁 preview</button>'
+        +'</div>'
+        +'<textarea id="md-in" placeholder="# Heading" style="height:110px;resize:vertical;display:block;width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:none;border-radius:0 0 8px 8px;padding:6px 9px;color:#e2e8f0;font-family:monospace;font-size:11px;outline:none"></textarea>'
+
+
+        +'<div id="md-out" style="display:none;height:110px;overflow:auto;padding:10px 12px;font-family:sans-serif;font-size:12px;line-height:1.6;color:#e2e8f0;background:rgba(255,255,255,0.02)"></div>'
+        +'</div>';
+      mcBox('mc-markdown-box',true);
+      function renderMd(){
+        const src=document.getElementById('md-in').value;
+        // Simple markdown parser
+        let html=src
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/^### (.+)$/gm,'<h3 style="color:#e2e8f0;margin:6px 0 3px;font-size:13px">$1</h3>')
+          .replace(/^## (.+)$/gm,'<h2 style="color:#e2e8f0;margin:8px 0 4px;font-size:15px">$1</h2>')
+          .replace(/^# (.+)$/gm,'<h1 style="color:#e2e8f0;margin:8px 0 4px;font-size:17px">$1</h1>')
+          .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+          .replace(/\*(.+?)\*/g,'<em>$1</em>')
+          .replace(/`([^`]+)`/g,'<code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px">$1</code>')
+          .replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" style="color:#60a5fa">$1</a>')
+          .replace(/^- (.+)$/gm,'<li style="margin:2px 0;padding-left:4px">$1</li>')
+          .replace(/^&gt; (.+)$/gm,'<blockquote style="border-left:2px solid rgba(255,255,255,0.2);padding-left:8px;color:rgba(255,255,255,0.5);margin:4px 0">$1</blockquote>')
+          .replace(/\n/g,'<br>');
+        document.getElementById('md-out').innerHTML=html;
+      }
+      document.getElementById('md-tab-edit').addEventListener('click',()=>{
+        document.getElementById('md-in').style.display='block';
+        document.getElementById('md-out').style.display='none';
+        document.getElementById('md-tab-edit').style.background='rgba(255,255,255,0.05)';
+        document.getElementById('md-tab-prev').style.background='none';
+      });
+      document.getElementById('md-tab-prev').addEventListener('click',()=>{
+        renderMd();
+        document.getElementById('md-in').style.display='none';
+        document.getElementById('md-out').style.display='block';
+        document.getElementById('md-tab-prev').style.background='rgba(255,255,255,0.05)';
+        document.getElementById('md-tab-edit').style.background='none';
+      });
+    });
   })();
 
   // ── games ──
